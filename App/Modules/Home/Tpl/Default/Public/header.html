@@ -1,0 +1,32 @@
+<header>
+    <div class="container">
+        <nav>
+            <ul class="nav nav-pills pull-right">  
+                <volist name="navigation" id="vo">
+                    <li <if condition="$vo['class_id'] eq $_GET['cid'] || (empty($_GET['cid']) && $i eq 1)">class="active"</if>><a href="{:U('Index/'.strtolower($vo['class_module']),array('cid'=>$vo['class_id']))}">{$vo.class_name}</a></li>
+                </volist>
+            </ul>
+        </nav>
+        <div class="masthead">
+            <a href="http://{$Think.server.server_name}" title="{$config.web_name}"><img src="{$config.web_logo}" width="300" height="29"/></a>
+        </div>
+    </div>
+</header>
+<hr/>
+
+<include file="./App/Tpl/Default/Public/banner.html" />
+
+
+<!--
+<nav>
+    <div class="container">
+        <ul class="nav nav-pills">  
+            <volist name="navigation" id="vo">
+                <li><a href="{:U(strtolower($vo['class_module']))}">{$vo.class_name}</a></li>
+            </volist>
+        </ul>
+
+    </div>
+</nav>
+-->
+

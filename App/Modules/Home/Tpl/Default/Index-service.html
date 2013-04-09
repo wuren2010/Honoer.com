@@ -1,0 +1,18 @@
+<div class="dx-service">
+    <volist name="data" id="service">
+        <ul class="thumbnails">
+            <volist name="service['Article']" id="vo">
+                <li class="span4">
+                    <div class="thumbnail">
+                        <a class="thumbnail" target="_blank" href="{:U(ucfirst(ACTION_NAME).'/read',array('cid'=>$_GET['cid'],'aid'=>$vo['article_id']))}" title="{$vo.article_title}"><img src="{$vo.article_pic}" height="138"></a>
+                        <div class="caption">
+                            <h4>{$vo.article_title}</h4>
+                            {$vo.article_content}
+                            <p class="text-right"><a target="_blank" class="btn btn-primary" href="{:U(ucfirst(ACTION_NAME).'/read',array('cid'=>$_GET['cid'],'aid'=>$vo['article_id']))}">查看更多...</a></p>
+                        </div>
+                    </div>
+                </li>
+            </volist>
+        </ul>
+    </volist>
+</div>
