@@ -1,0 +1,14 @@
+
+<div class="container">
+    <div class="row">
+        <include file="Public:left" />
+        <div class="span9 bs-docs-box">
+            <include file="Public:crumbs" />
+            <div class="tab-content">
+                <volist name="data" id="vo" key="k">
+                    {$vo.article_content}
+                </volist>
+            </div>
+        </div>
+    </div>
+</div>
