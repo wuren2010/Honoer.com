@@ -2,40 +2,34 @@
 
 class IndexAction extends PublicAction {
 
-    public function index(){
-        echo 1;
-        $this->display();
-    }
-    public function index1() {
-//        pre($_SESSION['my_info']);
-        //服务器信息
-        
+    //服务器信息检测
+    public function index() {
         if (function_exists('gd_info')) {
             $gd = gd_info();
-            $gd = $gd['GD Version'];
+            $gd_version = $gd['GD Version'];
         } else {
-            $gd = "不支持";
+            $gd_version = "不支持";
         }
-        $info = array(
-            '操作系统' => PHP_OS,
-            '主机名IP端口' => $_SERVER['SERVER_NAME'] . ' (' . $_SERVER['SERVER_ADDR'] . ':' . $_SERVER['SERVER_PORT'] . ')',
-            '运行环境' => $_SERVER["SERVER_SOFTWARE"],
-            'PHP运行方式' => php_sapi_name(),
-            '程序目录' => WEB_ROOT,
-            'MYSQL版本' => function_exists("mysql_close") ? mysql_get_client_info() : '不支持',
-            'GD库版本' => $gd,
-//            'MYSQL版本' => mysql_get_server_info(),
-            '上传附件限制' => ini_get('upload_max_filesize'),
-            '执行时间限制' => ini_get('max_execution_time') . "秒",
-            '剩余空间' => round((@disk_free_space(".") / (1024 * 1024)), 2) . 'M',
-            '服务器时间' => date("Y年n月j日 H:i:s"),
-            '北京时间' => gmdate("Y年n月j日 H:i:s", time() + 8 * 3600),
-            '采集函数检测' => ini_get('allow_url_fopen') ? '支持' : '不支持',
-            'register_globals' => get_cfg_var("register_globals") == "1" ? "ON" : "OFF",
-            'magic_quotes_gpc' => (1 === get_magic_quotes_gpc()) ? 'YES' : 'NO',
+        $server_info = array(
+            '操作系统'          => PHP_OS,
+            '主机名IP端口'      => $_SERVER['SERVER_NAME'] . ' (' . $_SERVER['SERVER_ADDR'] . ':' . $_SERVER['SERVER_PORT'] . ')',
+            '运行环境'          => $_SERVER["SERVER_SOFTWARE"],
+            'PHP运行方式'       => php_sapi_name(),
+            '程序目录'          => __ROOT__,
+            'MYSQL版本'         => function_exists("mysql_close") ? mysql_get_client_info() : '不支持',
+            'GD库版本'          => $gd_version,
+            'MYSQL版本'         => mysql_get_server_info(),
+            '上传附件限制'      => ini_get('upload_max_filesize'),
+            '执行时间限制'      => ini_get('max_execution_time') . "秒",
+            '剩余空间'          => round((@disk_free_space(".") / (1024 * 1024)), 2) . 'M',
+            '服务器时间'        => date("Y年n月j日 H:i:s"),
+            '北京时间'          => gmdate("Y年n月j日 H:i:s", time() + 8 * 3600),
+            '采集函数检测'      => ini_get('allow_url_fopen') ? '支持' : '不支持',
+            'register_globals'  => get_cfg_var("register_globals") == "1" ? "ON" : "OFF",
+            'magic_quotes_gpc'  => (1 === get_magic_quotes_gpc()) ? 'YES' : 'NO',
             'magic_quotes_runtime' => (1 === get_magic_quotes_runtime()) ? 'YES' : 'NO',
         );
-        $this->assign('server_info', $info);
+        $this->assign('server_info', $server_info);
         $this->display();
     }
 
@@ -76,7 +70,7 @@ class IndexAction extends PublicAction {
             }
 //            pre($_POST);
 //            $this->checkToken();
-            echo json_encode(array("status"=>1,"info"=>"缓存文件已清除"));
+            echo json_encode(array("status" => 1, "info" => "缓存文件已清除"));
         } else {
             $this->assign("caches", $caches);
             $this->display();
