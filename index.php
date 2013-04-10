@@ -1,7 +1,7 @@
 <?php
 
 header('Content-Type:text/html;charset=utf-8');
-if (!file_exists("config.inc.php"))
+if (!file_exists("db.config.php"))
     header("location: Install/index.php");
 
 //定义项目名称和路径

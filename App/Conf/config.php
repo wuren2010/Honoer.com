@@ -1,7 +1,8 @@
 <?php
 
-$db_config = require __ROOT__ . '/config.inc.php';
-//项目配置
+$db_config = require __ROOT__ . '/db.config.php';
+$web_config = require __ROOT__ . '/web.config.php';
+//项目配置文件
 $app_config = array(
     'URL_MODEL' => 3, // 如果你的环境不支持PATHINFO 请设置为3
     'APP_AUTOLOAD_PATH' => '@.TagLib',
@@ -11,5 +12,5 @@ $app_config = array(
     'SHOW_PAGE_TRACE' => 0//显示调试信息
 );
 
-return array_merge($db_config, $app_config);
+return array_merge($db_config, $app_config, $web_config);
 ?>
