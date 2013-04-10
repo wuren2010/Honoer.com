@@ -15,7 +15,7 @@ class IndexAction extends PublicAction {
             '主机名IP端口'      => $_SERVER['SERVER_NAME'] . ' (' . $_SERVER['SERVER_ADDR'] . ':' . $_SERVER['SERVER_PORT'] . ')',
             '运行环境'          => $_SERVER["SERVER_SOFTWARE"],
             'PHP运行方式'       => php_sapi_name(),
-            '程序目录'          => __ROOT__,
+            '程序目录'          => SITE_PATH,
             'MYSQL版本'         => function_exists("mysql_close") ? mysql_get_client_info() : '不支持',
             'GD库版本'          => $gd_version,
             'MYSQL版本'         => mysql_get_server_info(),

@@ -5,6 +5,7 @@ if (!file_exists("db.config.php"))
     header("location: Install/index.php");
 
 //定义项目名称和路径
+define('SITE_PATH', dirname(__FILE__));
 define('THINK_PATH', './ThinkPHP/');
 define('APP_NAME', 'App');
 define('APP_PATH', './App/');
