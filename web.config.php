@@ -2,8 +2,8 @@
 
 //web配置文件
 return array(
-    'WEB_LOGO' => '', //./Public/Images/logo.png',
-    'WEB_NAME' => '', //'深圳市典信科技有限公司',
+    'WEB_LOGO' => './Public/Images/logo.png',
+    'WEB_NAME' => '深圳市典信科技有限公司',
     'LICENSE_NO' => '粤ICP备:11086626号-2',
     'WEB_ADDRESS' => '深圳市宝安区2区龙井二路62号6楼',
     'WEB_EMAIL' => 'jeffyli@basicredit.com',
