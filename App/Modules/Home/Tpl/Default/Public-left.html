@@ -1,0 +1,10 @@
+<div class="span3">
+    <div class="docs-sidebar">
+        <ul class="nav nav-tabs nav-stacked box-shadow">
+            <volist name="sliderBar" id="vo">
+                <li <if condition="$_GET['cid'] eq $vo['class_id'] || empty($_GET['cid']) && $i eq 1">class="active"</if>><a href="{:U('read',array('cid'=>$vo['class_id']))}">{$vo.class_name}<i class="icon-chevron-right"></i></a></li>
+            </volist>
+        </ul>
+        <notempty name="config.conpany_weibo"><div class="weibo">{$config.conpany_weibo}</div></notempty>
+    </div>
+</div>

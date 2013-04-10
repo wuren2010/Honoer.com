@@ -19,8 +19,11 @@ class ArticleModel extends RelationModel {
         return $result;
     }
 
-    public function getDetail($id = 0) {
-        
+    public function getDetail($where) {
+        $result = $this->field(true)
+                ->where($where)
+                ->find();
+        return $result;
     }
 
 }

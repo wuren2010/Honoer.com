@@ -1,4 +1,4 @@
-header{height:80px;}
+header{height:80px;background: white #5bccfe;}
 footer{height:80px;background: #F2F2F2;}
 .masthead {height:80px;line-height: 80px;float: left;}
 
@@ -78,18 +78,3 @@ a.banner {
     height:138px;
     overflow:hidden;
 }
-
-.dx-service .caption{
-    height:170px;
-    overflow: hidden;
-}
-
-.dx-service .span4 {
-    width: 313px;
-}
-
-nav {float: right;height:80px;line-height: 80px;background: white #5bccfe;}
-nav ul{
-    margin-bottom: 0;margin-top: 30px;
-}
-

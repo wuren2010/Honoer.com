@@ -27,18 +27,20 @@ class ClassModel extends RelationModel {
         return $result;
     }
 
-    public function getPath($cid) {
-        $path = $this->getDetail(array('class_id' => $cid));
+    public function getPath($args) {
+        $path = $this->getDetail($args);
         $where['class_path'] = array('like', "%{$path['class_pid']}-{$path['class_id']}%");
         $result = $this->getList($where);
+        //dump($this->getLastSql());
         return $result;
     }
 
-    public function getCrumbs($cid) {
-        $path = $this->getDetail(array('class_id' => $cid));
-        $ids = join(',', explode('-', $path['class_path'])) . ',' . $cid;
+    public function getCrumbs($args) {
+        $path = $this->getDetail($args);
+        $ids = join(',', explode('-', $path['class_path'])) . ',' . $path['class_id'];
         $where = array('class_id' => array('in', $ids));
         $result = $this->getList($where);
+        //dump($this->getLastSql());
         return $result;
     }
 
