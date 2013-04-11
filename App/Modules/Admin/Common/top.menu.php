@@ -11,7 +11,7 @@ return array(
     ),
     'admin_sub_menu' => array(
         'Common' => array(
-            'Index/myInfo' => '修改密码',
+            'Index/personal' => '修改密码',
             'Index/cache' => '缓存清理',
             'News/add' => '新闻发布'
         ),
