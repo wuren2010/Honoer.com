@@ -8,8 +8,10 @@ $app_config = array(
     'APP_AUTOLOAD_PATH' => '@.TagLib',
     'APP_GROUP_LIST' => 'Home,Admin',
     'DEFAULT_GROUP' => 'Home',
-    'APP_GROUP_MODE' => 1,
-    'SHOW_PAGE_TRACE' => 0//显示调试信息
+    'SHOW_PAGE_TRACE' => 0, //显示调试信息
+    'DEFAULT_THEME' => 'Default',
+    'LAYOUT_ON' => true,
+    'TMPL_FILE_DEPR' => '-',
 );
 
 return array_merge($db_config, $app_config, $web_config);

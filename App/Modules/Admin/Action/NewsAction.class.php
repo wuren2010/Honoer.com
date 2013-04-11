@@ -26,10 +26,8 @@ class NewsAction extends CommonAction {
         if (IS_POST) {
             echo json_encode(D("Home/Class")->addNews());
         } else {
-            $Class = D("Home/Class");
-            dump($Class);
+            $Class = D("Class");
             $list = $Class->getPath(array('class_module' => 'News'));
-            dump($list);
             $this->assign("list", $list);
             $this->display();
         }
