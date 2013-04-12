@@ -1,0 +1,57 @@
+
+<div class="mainBody"> 
+    <include file="Common:left" />
+    <div id="Right">
+        <div class="contentArea">
+            <div class="Item hr">
+                <div class="current">站点配置</div>
+            </div>
+            <form action="" method="post">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1">
+                    <tr>
+                        <th width="120">站点名称：</th>
+                        <td><input name="name" type="text" class="input" size="40" value="{$Think.config.WEB_NAME}" /></td>
+                    </tr>
+                    <tr>
+                        <th width="120">网站版本：</th>
+                        <td><input name="version" type="text" class="input" size="40" value="{$Think.config.WEB_NAME}" /></td>
+                    </tr>
+                    <tr>
+                        <th>ICP备案：</th>
+                        <td><input class="input" name="icp" type="text" size="40" value="{$Think.config.LICENSE_NO}" /></td>
+                    </tr>
+                    <tr>
+                        <th>客服邮箱：</th>
+                        <td><input class="input" name="service" type="text" size="40" value="{$Think.config.WEB_EMAIL}" /></td>
+                    </tr>
+                    <tr>
+                        <th>公司地址：</th>
+                        <td><input class="input" name="address" type="text" size="40" value="{$Think.config.WEB_ADDRESS}" /></td>
+                    </tr>
+                    <tr>
+                        <th>邮政编码：</th>
+                        <td><input class="input" name="postcode" type="text" size="40" value="{$Think.config.WEB_NAME}" /></td>
+                    </tr>
+                    <tr>
+                        <th>网站关键字：</th>
+                        <td><input class="input" name="keyword" type="text" size="40" value="{$Think.config.WEB_KEYWORD}" /></td>
+                    </tr>
+                    <tr>
+                        <th>网站简介：</th>
+                        <td><textarea name="description" cols="100" rows="3">{$Think.config.WEB_DESCRIPTION}</textarea></td>
+                    </tr>
+                </table>
+            </form>
+            <div class="commonBtnArea" >
+                <button class="btn submit">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(".submit").click(function(){
+        commonAjaxSubmit();
+    });
+</script>
+

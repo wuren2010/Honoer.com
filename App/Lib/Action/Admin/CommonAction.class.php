@@ -8,7 +8,7 @@ class CommonAction extends Action {
     public function _initialize() {
         header("Content-Type:text/html; charset=utf-8");
         header('Content-Type:application/json; charset=utf-8');
-        $this->adminMenu = require APP_PATH . 'Modules/Admin/Common/top.menu.php';
+        $this->adminMenu = require COMMON_PATH . 'menu.config.php';
         $this->header();
         $this->left();
     }

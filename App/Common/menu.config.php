@@ -6,7 +6,7 @@ return array(
         'Member' => '用户管理',
         'News' => '资讯管理',
         'Webinfo' => '系统设置',
-        'SysData' => '数据管理',
+        'Sysdata' => '数据管理',
         'Access' => '权限管理',
     ),
     'admin_sub_menu' => array(
@@ -28,7 +28,7 @@ return array(
             'category' => '新闻分类管理',
             'add' => '发布新闻',
         ),
-        'SysData' => array(
+        'Sysdata' => array(
             'index' => '数据库备份',
             'restore' => '数据库导入',
             'zipList' => '数据库压缩包',
