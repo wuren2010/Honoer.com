@@ -4,7 +4,9 @@ return array(
     'admin_big_menu' => array(
         'Index' => '首页',
         'Member' => '用户管理',
+        'Class' => '分类管理',
         'News' => '资讯管理',
+        'Product' => '产品管理',
         'Webinfo' => '系统设置',
         'Sysdata' => '数据管理',
         'Access' => '权限管理',
@@ -23,10 +25,18 @@ return array(
         'Member' => array(
             'index' => '注册用户列表',
         ),
+        'Class' => array(
+            'index' => '分类列表',
+        ),
         'News' => array(
             'index' => '新闻列表',
             'category' => '新闻分类管理',
             'add' => '发布新闻',
+        ),
+        'Product' => array(
+            'index' => '产品列表',
+            'category' => '分类管理',
+            'add' => '添加产品',
         ),
         'Sysdata' => array(
             'index' => '数据库备份',

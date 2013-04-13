@@ -2,6 +2,10 @@ header{height:80px;background: white #5bccfe;}
 footer{height:80px;background: #F2F2F2;}
 .masthead {height:80px;line-height: 80px;float: left;}
 
+header .masthead img{
+    max-height:100px;
+} 
+
 header .nav {
     margin-top:45px;
     margin-bottom: 0;
@@ -15,7 +19,7 @@ header .nav li {
 }
 
 .thumbnails {
-  margin-left: -12px;
+    margin-left: -12px;
 }
 
 .blue {
@@ -47,9 +51,8 @@ header .nav li {
     border-radius: 6px 6px 6px 6px;
     border:1px solid #CCC;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
-    padding:20px 10px;
+    padding:10px;
 }
-
 
 .nav-stacked {
     background-color: #FFFFFF;
@@ -57,13 +60,14 @@ header .nav li {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
     margin: 0;
     padding: 0;
-    width: 228px;
 }
 
 .nav-stacked > li:first-child > a {
+    -webkit-border-radius:6px 6px 0 0;
     border-radius: 6px 6px 0 0;
 }
 .nav-stacked > li:last-child > a {
+    -webkit-border-radius: 0 0 6px 6px;	
     border-radius: 0 0 6px 6px;
 }
 .nav-stacked > .active > a {
@@ -92,8 +96,8 @@ header .nav li {
     opacity: 0.25;
 }
 
-.docs-sidebar{
-    width: 240px;
+.bs-docs-sidebar {
+    min-width: 229px;
 }
 
 .nav-tabs > li > a i{
@@ -113,7 +117,7 @@ a.banner {
 
 
 .nav-pills > li > a {
-    width: 60px;
+    width: 80px;
     display: block;
     text-align: center;
     color: #333;

@@ -5,7 +5,7 @@ function deleteFile($path, $delDir = FALSE) {
     if ($handle) {
         while (false !== ( $item = readdir($handle) )) {
             if ($item != "." && $item != "..")
-                is_dir("$path/$item") ? delDirAndFile("$path/$item", $delDir) : unlink("$path/$item");
+                is_dir("$path/$item") ? deleteFile("$path/$item", $delDir) : unlink("$path/$item");
         }
         closedir($handle);
         if ($delDir)
@@ -18,4 +18,5 @@ function deleteFile($path, $delDir = FALSE) {
         }
     }
 }
+
 ?>

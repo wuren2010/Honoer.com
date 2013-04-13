@@ -1,9 +1,9 @@
 <?php
 
-class NewsAction extends CommonAction {
+class ProductAction extends CommonAction {
 
     public function index() {
-        $this->assign('currentNav', '资讯管理 > 资讯列表');
+        $this->assign('currentNav', '产品管理 > 产品列表');
         $class = D("Class")->getPath(array('class_module' => MODULE_NAME));
         foreach ($class as $key => $value) {
             $classIds[] = $value['class_id'];
@@ -49,7 +49,7 @@ class NewsAction extends CommonAction {
                 $this->error("不存在该记录!");
             }
             $this->assign("info", $info);
-            $this->display('News:add');
+            $this->display('Product:add');
         }
     }
 
@@ -62,5 +62,4 @@ class NewsAction extends CommonAction {
             echo json_encode(array("status" => 0, "info" => "删除失败，可能是不存在该ID的记录！"));
         }
     }
-
 }

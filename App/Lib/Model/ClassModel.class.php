@@ -12,6 +12,7 @@ class ClassModel extends RelationModel {
     );
 
     public function getList($where, $order = null, $limit = null) {
+        $where['class_using'] = 1;
         $result = $this->field(true)
                 ->where($where)
                 ->order($order)

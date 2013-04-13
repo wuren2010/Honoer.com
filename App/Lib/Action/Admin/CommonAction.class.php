@@ -5,9 +5,20 @@ class CommonAction extends Action {
     public $loginMarked;
     public $adminMenu = array();
 
+    public function _empty() {
+        $this->redirect('Empty/index');
+    }
+
     public function _initialize() {
         header("Content-Type:text/html; charset=utf-8");
         header('Content-Type:application/json; charset=utf-8');
+        //检测是否登录
+        if (empty($_SESSION) || !$_SESSION['_login']) {
+            //$this->error('您没有登录，或登录失效，请重新登录！');
+            echo '您没有登录，或登录失效，请重新登录！';
+            exit();
+        }
+
         $this->adminMenu = require COMMON_PATH . 'menu.config.php';
         $this->header();
         $this->left();
@@ -49,6 +60,10 @@ class CommonAction extends Action {
             $sub_menu[] = array('url' => '#', 'title' => "该菜单组不存在");
         }
         $this->assign('sub_menu', $sub_menu);
+    }
+
+    public function checkTitle($title, $cid) {
+        echo D('Article')->checkTitle($title, $cid);
     }
 
 }

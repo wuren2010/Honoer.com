@@ -154,7 +154,7 @@ option{ height: 16px;}
     line-height: 24px;
     padding: 5px 10px 7px;
 }
-.table1 tr { background:url(/Public/Img/Bg/hr.png) repeat-x bottom; }
+.table1 tr { background:url(../Img/Bg/hr.png) repeat-x bottom; }
 .table2{}
 
 .tab {

@@ -33,7 +33,7 @@ class NewsAction extends CommonAction {
         }
     }
 
-    public function checkNewsTitle() {
+    public function checkTitle() {
         $M = M("News");
         $where = "title='" . $this->_get('title') . "'";
         if (!empty($_GET['id'])) {

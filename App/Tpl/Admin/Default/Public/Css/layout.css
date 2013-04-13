@@ -1,3 +1,16 @@
+.blue {
+    color:#0088CC;
+}
+
+.page {
+    text-align: right;
+    margin-right: 10px;
+}
+img {
+    vertical-align: middle;
+}
+
+
 * {
     margin:0;
     padding:0;
@@ -38,17 +51,25 @@ html, body {
     padding-right: 10px;
 }
 #Bottom {
-    line-height:20px;
+    height:28px;
+    line-height:28px;
     bottom:0;
-    background: #F9F7EA;
-    border-top: 1px solid #EFE6BB;
+    background: #F8F8F8;
+    border-top: 1px solid #E3E3E3;
     bottom: 0;
-    color: #B9DDFF;
-    font-size: 11px;
+    color: #666;
+    font-size: 12px;
     text-align: center;
     position: fixed;
     width:100%;
 }
+#Bottom a{
+    color:#333;
+}
+#Bottom a:hover{
+    text-decoration:underline;
+}
+
 /*#Right .contentArea { padding-bottom:80px;}*/
 .commonBtnArea {
     border-top:1px solid #D8D8D8;
@@ -65,14 +86,14 @@ html, body {
     position:absolute;
     left:0px;
     top:0px;
-    width:200px;
+    width:220px;
     height:65px;
     line-height:65px;
     overflow:hidden;
     text-align:center;
     vertical-align:bottom;
 }
-.logo img { vertical-align:bottom; margin: 5px 0 0 10px; }
+.logo img { vertical-align: middle;}
 .help {
     position:absolute;
     right:50px;
@@ -113,7 +134,7 @@ html, body {
     color:#fff;
     text-shadow: none;
 }
- .menu li span {
+.menu li span {
     padding-right:0px;
     display:block;
 }

@@ -21,8 +21,9 @@ function commonAjaxSubmit(url,formObj){
     if(!formObj||formObj==''){
         var formObj="form";
     }
-    if(!url||url==''){
-        var url=document.URL;
+    if((!url||url=='') && formObj==''){
+        //var url=document.URL;
+        url = $(formObj).attr('action');
     }
     $(formObj).ajaxSubmit({
         url:url,
@@ -41,10 +42,14 @@ function commonAjaxSubmit(url,formObj){
                 },2000);
             }
             if(data.url&&data.url!=''){
-                setTimeout(function(){top.window.location.href=data.url; },2000);
+                setTimeout(function(){
+                    top.window.location.href=data.url;
+                },2000);
             }
             if(data.url==''){
-                setTimeout(function(){top.window.location.reload();},1000);
+                setTimeout(function(){
+                    top.window.location.reload();
+                },1000);
             }
         }
     });

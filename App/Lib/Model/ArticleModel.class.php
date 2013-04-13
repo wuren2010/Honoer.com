@@ -38,10 +38,32 @@ class ArticleModel extends RelationModel {
         $data['create_time'] = date('Y-m-d H:i:s', time());
         if ($this->create($data)) {
             if ($this->add()) {
-                return array('status' => 1, 'info' => '发布成功!文章ID：' . $this->getLastInsID(), 'url' => U('News/index'));
+                return array('status' => 1, 'info' => '发布成功!文章ID：' . $this->getLastInsID(), 'url' => U('index'));
             } else {
                 return array('status' => 0, 'info' => "发布失败，请刷新页面尝试操作");
             }
+        }
+    }
+
+    public function editArticle($data) {
+        if ($this->create($data)) {
+            if ($this->save()) {
+                return array('status' => 1, 'info' => '修改成功!', 'url' => U('index'));
+            } else {
+                return array('status' => 0, 'info' => "修改失败，请刷新页面尝试操作");
+            }
+        }
+    }
+
+    public function checkTitle($title, $cid) {
+        $where['article_title'] = $title;
+        if (!empty($cid)) {
+            $where['article_id'] = array('neq', $cid);
+        }
+        if (M("Article")->where($where)->count() > 0) {
+            return json_encode(array("status" => 0, "info" => "标题已存在"));
+        } else {
+            return json_encode(array("status" => 1, "info" => "可以使用"));
         }
     }
 
