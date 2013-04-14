@@ -2,12 +2,19 @@
 
 class EmptyAction extends Action {
 
+    //模块错误
     public function _empty() {
-        echo '404->没有操作';
+        echo '找不到模块';
+        $this->notfound();
     }
 
     public function index() {
-        echo '404->没有模块';
+        echo '找不到操作';
+        $this->notfound();
+    }
+
+    public function notfound() {
+        $this->display('Empty:notfound');
     }
 
 }

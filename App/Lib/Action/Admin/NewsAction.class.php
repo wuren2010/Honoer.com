@@ -3,28 +3,37 @@
 class NewsAction extends CommonAction {
 
     public function index() {
-        $this->assign('currentNav', '资讯管理 > 资讯列表');
-        $class = D("Class")->getPath(array('class_module' => MODULE_NAME));
-        foreach ($class as $key => $value) {
-            $classIds[] = $value['class_id'];
-        }
-        array_shift($classIds);
-        $where = array('class_id' => array('in', $classIds));
-        $order = array('article_id' => 'DESC');
-        $count = D("Article")->where($where)->count();
-
-        import("ORG.Util.Page");       //载入分页类
-        $page = new Page($count, C('PAGE_NUM'));
-        $showPage = $page->show();
-        $limit = $page->firstRow . ',' . $page->listRows;
-        $list = D("Article")->relation(true)->getList($where, $order, $limit);
-        $this->assign("page", $showPage);
+        $this->assign('currentNav', '内容管理 > 资讯列表');
+        $article = new ArticleAction();
+        $list = $article->getIndexList('News', &$page);
+        $this->assign("page", $page);
         $this->assign("list", $list);
         $this->display();
     }
 
+    public function stance() {
+        $this->assign('currentNav', '内容管理 > 网站内容');
+        $article = new ArticleAction();
+        $list = $article->getIndexList('About', &$page);
+        $this->assign("page", $page);
+        $this->assign("list", $list);
+        $this->display('index');
+    }
+
+    public function service() {
+        $this->assign('currentNav', '内容管理 > 服务列表');
+        $article = new ArticleAction();
+        $list = $article->getIndexList('Service', &$page);
+        $this->assign("page", $page);
+        $this->assign("list", $list);
+        $this->display('index');
+    }
+
     public function category() {
-        $list = D("Class")->getPath(array('class_module' => MODULE_NAME));
+        $list_service = D("Class")->getPath(array('class_module' => 'Service'));
+        $list_about = D("Class")->getPath(array('class_module' => 'About'));
+        $list_news = D("Class")->getPath(array('class_module' => 'News'));
+        $list = array_merge($list_about, $list_news, $list_service);
         $this->assign("list", $list);
     }
 
@@ -45,6 +54,7 @@ class NewsAction extends CommonAction {
             echo json_encode(D("Article")->editArticle($this->_post()));
         } else {
             $info = D("Article")->getDetail(array('article_id' => $this->_get('aid')));
+            $this->category();
             if (empty($info)) {
                 $this->error("不存在该记录!");
             }

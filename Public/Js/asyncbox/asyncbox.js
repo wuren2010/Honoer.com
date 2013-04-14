@@ -406,7 +406,7 @@ window.popup=window.asyncbox = {
 	N = F.documentElement,
 	O,
 	P = document.createElement("link"),
-	Q = document.createElement("licai"),
+	Q = document.createElement("asyncbox"),
 	R = document.createElement("ab_skins"),
 	S = document.createElement("ab_modal"),
 	T = document.createElement("ab_clone"),
@@ -443,8 +443,6 @@ window.popup=window.asyncbox = {
 	if (document.compatMode == "CSS1Compat" && $) {
 		var ba = "expression(documentElement.",
 		cb = ["position:", Y ? "absolute;": "fixed;", Y ? "top:" + ba + "scrollTop);": "top:0px;", Y ? "left:" + ba + "scrollLeft);": "left:0px;", Y ? "width:" + ba + "clientWidth);": "width:100%;", Y ? "height:" + ba + "clientHeight);": "height:100%;", "background:" + D.Cover.background + ";opacity:" + D.Cover.opacity + ";filter:alpha(opacity=" + D.Cover.opacity * 100 + ");", "display:none;overflow:hidden;"].join("");
-		Q.setAttribute("version", "1.5"),
-		Q.setAttribute("url", "http://blog.51edm.org"),
 		R.innerHTML = "<ul><li><a><b></b></a></li></ul>",
 		R.style.cssText = "position:absolute;top:-5000px;left:-5000px",
 		S.style.cssText = cb,

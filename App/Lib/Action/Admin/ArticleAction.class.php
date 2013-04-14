@@ -2,9 +2,9 @@
 
 class ArticleAction extends CommonAction {
 
-    public function index($name) {
+    public function getIndexList($name, $page) {
         $class = D("Class")->getPath(array('class_module' => $name));
-        foreach ($class as $key => $value) {
+        foreach ($class as $value) {
             $classIds[] = $value['class_id'];
         }
         array_shift($classIds);
@@ -13,12 +13,11 @@ class ArticleAction extends CommonAction {
         $count = D("Article")->where($where)->count();
 
         import("ORG.Util.Page");       //载入分页类
-        $page = new Page($count, C('PAGE_NUM'));
-        $showPage = $page->show();
-        $limit = $page->firstRow . ',' . $page->listRows;
+        $Pages = new Page($count, C('PAGE_NUM'));
+        $page = $Pages->show();
+        $limit = $Pages->firstRow . ',' . $Pages->listRows;
         $list = D("Article")->relation(true)->getList($where, $order, $limit);
-        $this->assign("page", $showPage);
-        $this->assign("list", $list);
+        return $list;
     }
 
 }

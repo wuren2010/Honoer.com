@@ -12,6 +12,9 @@ $app_config = array(
     'DEFAULT_THEME' => 'Default',
     'LAYOUT_ON' => true,
     'TMPL_FILE_DEPR' => '-',
+    'TMPL_ACTION_ERROR' => TMPL_PATH . 'dispatch_jump.html', //错误页面
+    'TMPL_ACTION_SUCCESS' => TMPL_PATH . 'dispatch_jump.html', //成功页面
+    'TMPL_EXCEPTION_FILE' => TMPL_PATH . '404.html', //异常页面
 );
 
 return array_merge($db_config, $app_config, $web_config);

@@ -20,8 +20,8 @@
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tab">
             <thead>
                 <tr align="center">
-                    <td width="10%">原分类CID</td>
-                    <td width="30%">原分类结构 <b title="单击分类隐藏/显示该分类下在子类">[i]</b></td>
+                    <td width="10%">分类ID</td>
+                    <td width="30%">分类结构</td>
                     <td width="20%" align="left">操作属性</td>
                     <!--                    <td width="20%">新分类</td>-->
                     <td width="30%">修改后的名称</td>
@@ -34,7 +34,7 @@
                     <td width="10%" align="center">{$vo.class_id}<input type="hidden" name="cid" value="{$vo.class_id}"/></td>
                 <php>$mark = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',substr_count($vo['class_path'],'-'))</php>
                 <if condition="$vo['class_pid'] eq 0">
-                    <td width="20%" class="tree" style="cursor: pointer;"><span class="blue">{$mark}├{$vo.class_name}</span></td>
+                    <td title="单击分类隐藏/显示该分类下在子类" width="20%" class="tree" style="cursor: pointer;"><span class="blue">{$mark}├{$vo.class_name}</span></td>
                     <else />
                     <td width="20%" class="tree" style="cursor: pointer;">{$mark}├{$vo.class_name}</td>
                 </if>

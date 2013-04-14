@@ -1,6 +1,10 @@
 .blue {
     color:#0088CC;
 }
+.add-news{
+    float:right;
+    padding-right: 30px;
+}
 
 .page {
     text-align: right;
@@ -55,7 +59,7 @@ html, body {
     line-height:28px;
     bottom:0;
     background: #F8F8F8;
-    border-top: 1px solid #E3E3E3;
+    border-top: 1px solid #BBB;
     bottom: 0;
     color: #666;
     font-size: 12px;
@@ -249,7 +253,7 @@ html, body {
     text-indent:50px;
 }
 #Left li {
-    line-height:28px;
+    line-height:30px;
     text-indent:30px;
     border-bottom:1px solid #2d689f;
 }
@@ -257,4 +261,10 @@ html, body {
     background:url(../Img/ico-y.gif) no-repeat 15px 12px;
     color:#b9ddff;
     display:block;
+}
+#Left li.active {
+    background:url(../Img/x-bg.gif) 0 -1px repeat-x;
+}
+#Left li.active a{
+    color:#333;
 }

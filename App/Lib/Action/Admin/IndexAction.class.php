@@ -4,6 +4,7 @@ class IndexAction extends CommonAction {
 
     //服务器信息检测
     public function index() {
+        $this->assign('currentNav', '后台管理 > 基本信息');
         if (function_exists('gd_info')) {
             $gd = gd_info();
             $gd_version = $gd['GD Version'];
@@ -34,8 +35,7 @@ class IndexAction extends CommonAction {
     }
 
     public function personal() {
-        $currentNav = '网站管理 > 个人信息';
-        $this->assign('currentNav', $currentNav);
+        $this->assign('currentNav', '网站管理 > 个人信息');
         if (IS_POST) {
             echo json_encode(D("Index")->editPersonal($_POST));
         } else {
@@ -44,8 +44,7 @@ class IndexAction extends CommonAction {
     }
 
     public function cache() {
-        $currentNav = '网站管理 > 缓存管理';
-        $this->assign('currentNav', $currentNav);
+        $this->assign('currentNav', '网站管理 > 缓存管理');
         $caches = array(
             "HomeCache" => array("name" => "网站前台缓存文件", "path" => RUNTIME_PATH . "Cache/Home/"),
             "AdminCache" => array("name" => "网站后台缓存文件", "path" => RUNTIME_PATH . "Cache/Admin/"),
@@ -68,6 +67,21 @@ class IndexAction extends CommonAction {
             $this->assign("caches", $caches);
             $this->display();
         }
+    }
+
+    public function bakup() {
+        $this->assign('currentNav', '网站管理 > 数据库备份');
+        $Model = new Model();
+        $tables = $Model->query('SHOW TABLE STATUS');
+        $total = 0;
+        foreach ($tables as $key => $value) {
+            $tables[$key]['size'] = $value['Data_length'] + $value['Index_length'];
+            $total+=$value['Data_length'] + $value['Index_length'];
+        }
+        $this->assign("list", $tables);
+        $this->assign("total", $total);
+        $this->assign("tables", count($tables));
+        $this->display();
     }
 
 }

@@ -4,7 +4,7 @@
         <div class="itemTitle"><if condition="MODULE_NAME eq 'Index'">常用操作<else/>子菜单</if> </div>
         <ul>
             <volist name="sub_menu" id="vo">
-                <li><a href="{$vo.url}">{$vo.title}</a></li>
+                <li <if condition="__SELF__ eq $vo['url']">class="active"</if>><a href="{$vo.url}">{$vo.title}</a></li>
             </volist>
         </ul>
     </div>

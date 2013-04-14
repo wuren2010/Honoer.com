@@ -1,0 +1,14 @@
+<tr>
+    <th>所属分类：</th>
+    <td>
+        <select name="class_id">
+            <option value="">请选择分类</option>>
+            <volist name="list" id="vo">
+                <option 
+            <if condition="$vo['class_id'] eq $info['class_id']"> selected="selected"</if> 
+            <if condition="$vo['class_pid'] eq 0"> disabled</if> 
+            value="{$vo.class_id}" ><if condition="$vo['class_pid'] eq 0"> ├{$vo.class_name}<else />&nbsp;&nbsp;&nbsp;├{$vo.class_name}</if></option>
+        </volist>
+    </select>
+</td>
+</tr>

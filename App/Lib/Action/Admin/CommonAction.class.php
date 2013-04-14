@@ -14,11 +14,9 @@ class CommonAction extends Action {
         header('Content-Type:application/json; charset=utf-8');
         //检测是否登录
         if (empty($_SESSION) || !$_SESSION['_login']) {
-            //$this->error('您没有登录，或登录失效，请重新登录！');
-            echo '您没有登录，或登录失效，请重新登录！';
+            $this->error('您没有登录，或登录失效，请重新登录！', U('Public/login'));
             exit();
         }
-
         $this->adminMenu = require COMMON_PATH . 'menu.config.php';
         $this->header();
         $this->left();
