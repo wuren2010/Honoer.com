@@ -6,7 +6,7 @@ header .masthead img{
     max-height:100px;
 } 
 
-header .nav {
+header ul.nav {
     margin-top:45px;
     margin-bottom: 0;
 }

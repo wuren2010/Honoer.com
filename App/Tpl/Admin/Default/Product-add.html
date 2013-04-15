@@ -60,7 +60,10 @@
     $(function(){
         var  content ;
         KindEditor.ready(function(K) {
-            content = K.create('#content');
+            content = K.create('#content',{
+                uploadJson : "{:U('Upload/upload_json')}",
+                fileManagerJson : "{:U('Upload/file_manager_json')}"
+            });
         });
         $("input[name='article_title']").blur(function(){
             var title=$("#title").val();

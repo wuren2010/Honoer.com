@@ -36,6 +36,9 @@ class ArticleModel extends RelationModel {
 
     public function addArticle($data) {
         $data['create_time'] = date('Y-m-d H:i:s', time());
+        if (empty($data['class_id'])) {
+            return array('status' => 0, 'info' => '没有所属分类');
+        }
         if ($this->create($data)) {
             if ($this->add()) {
                 return array('status' => 1, 'info' => '发布成功!文章ID：' . $this->getLastInsID(), 'url' => U('index'));
