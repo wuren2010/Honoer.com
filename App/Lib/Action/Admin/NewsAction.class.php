@@ -63,13 +63,11 @@ class NewsAction extends CommonAction {
         }
     }
 
-    public function del($aid) {
-        $where = array('article_id' => (int) $this->_get('aid'));
-        if (M("Article")->where($where)->delete()) {
-            echo json_encode(array("status" => 1, "info" => "删除成功！"));
-            $this->success('删除成功！');
+    public function del() {
+        if (IS_POST) {
+            echo json_encode(D('Article')->delArticle($this->_get('aid')));
         } else {
-            echo json_encode(array("status" => 0, "info" => "删除失败，可能是不存在该ID的记录！"));
+            $this->display('index');
         }
     }
 
