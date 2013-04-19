@@ -1,10 +1,13 @@
-header{height:80px;background: white #5bccfe;}
+/*header{height:80px;background: white #5bccfe;}*/
+header{height:80px;background: url("../Images/headerbg.png") repeat;}
 footer{height:80px;background: #F2F2F2;}
 .masthead {height:80px;line-height: 80px;float: left;}
 
 header .masthead img{
     max-height:100px;
 } 
+
+hr{height:1px;border-bottom: 1px solid #B3B3B3;box-shadow: 0 0 5px #C3C3C3;margin: 20px 0;z-index: 15;}
 
 header ul.nav {
     margin-top:45px;
