@@ -3,8 +3,6 @@
 /**
  * 本页仅供测试
  */
-
-
 class IndexAction extends Action {
 
     protected function _initialize() {
@@ -28,8 +26,8 @@ class IndexAction extends Action {
         echo "<div>请结合源码观看效果</div>";
         echo "<h3><a href='" . __URL__ . "/mysql' target='_blank'>数据库</a>  <a href='" . __URL__ . "/scache' target='_blank'>S缓存</a>   <a href='" . __URL__ . "/fcache' target='_blank'>F缓存</a> <a href='" . __URL__ . "/upload' target='_blank'>上传文件</a>  <a href='" . __URL__ . "/image' target='_blank'>图片处理</a>  <a href='" . __URL__ . "/log' target='_blank'>查看日志</a></h3>";
     }
-    
-    public function mysql(){
+
+    public function mysql() {
         echo '数据操作使用了SaeMysql服务，做到了分布式和读写分离,可以通过查看配置得知,在本地和SAE环境下查看会是不一样的结果：<br />';
         echo '是否分布式连接：';
         dump(C('DB_DEPLOY_TYPE'));
@@ -39,60 +37,59 @@ class IndexAction extends Action {
         dump(C('DB_RW_SEPARATE'));
     }
 
-    public function new_features(){
+    public function new_features() {
         echo "<h2>新功能测试：</h2>";
         echo "<div>请结合源码观看效果</div>";
         echo "<h3><a href='" . __URL__ . "/sms_alert' target='_blank'>短信预警</a>  <a href='" . __URL__ . "/send_sms' target='_blank'>发送短信</a>  <a href='" . __URL__ . "/sae_runtime' target='_blank'>SAE Runtime模式</a>   <a href='" . __URL__ . "/spare_db' target='_blank'>备用数据库</a></h3>";
     }
 
-    public function sms_alert(){
-        if(!IS_SAE){
+    public function sms_alert() {
+        if (!IS_SAE) {
             exit('  请在SAE环境下测试短信预警功能~');
         }
-            echo '
-                请先配置'.CONF_PATH.'config_sae.php 文件。<br />
+        echo '
+                请先配置' . CONF_PATH . 'config_sae.php 文件。<br />
                 设置： SMS_ALERT_ON 为true 开启短信预警功能。<br />
                 设置 :   SMS_ALERT_MOBILE  为你的接收短信的手机号。<br />
                 另外还要在SAE平台对当前应用开启短信服务。<br /><br />
                 ';
 
-    if(C('SMS_ALERT_ON')){
-      //  M('unkowntable')->select();//执行一段有问题的代码。 数据库表不存在
-     // unkownfunction();//fatalError ， 请先注释上一行， 在去掉本行注释再测试下。
-        echo $undefinedvar;
-        echo '看看你有没有收到短信， 每次发短信间隔最小时间为15秒，请15秒后再测试。<br />
+        if (C('SMS_ALERT_ON')) {
+            //  M('unkowntable')->select();//执行一段有问题的代码。 数据库表不存在
+            // unkownfunction();//fatalError ， 请先注释上一行， 在去掉本行注释再测试下。
+            echo $undefinedvar;
+            echo '看看你有没有收到短信， 每次发短信间隔最小时间为15秒，请15秒后再测试。<br />
         短信中只会显示部分提示信息，你需要到SAE的日志中心，查看debug日志看详细报警信息<br />
         你还可以增加发送短信的间隔时间， 配置项 SMS_INTERVAL。 在正式项目中，增加短信发送的间隔时间将会为你节约短信费用
         ';
+        }
     }
 
+    public function send_sms() {
+        if (!IS_SAE && !C('SAE_AKEY')) {
+            exit('在本地执行发送短信函数，需要配置SAE_AKEY和SAE_SKEY<br />');
+        }
+        $ret = send_sms(18611052787, '发送一条短信');
+        if (!$ret) {
+            $this->show('短信发送失败，请在trace信息中看失败原因');
+        } else {
+            $this->show('短信发送成功');
+        }
     }
 
-    public function send_sms(){
-            if(!IS_SAE && !C('SAE_AKEY')){
-                    exit('在本地执行发送短信函数，需要配置SAE_AKEY和SAE_SKEY<br />');
-            }
-            $ret=send_sms(18611052787,'发送一条短信');
-            if(!$ret){
-                $this->show('短信发送失败，请在trace信息中看失败原因');
-            }else{
-                $this->show('短信发送成功');  
-            }
-    }
-
-    public function sae_runtime(){
+    public function sae_runtime() {
         echo '请在入口文件定义常量，SAE_RUNTIME为true<br />';
         echo '请在本地打开命令行， cd 到项目所在文件夹，执行命令： php index.php <br />';
-        echo '此时会在'.APP_PATH.'Sae_Runtime目录下批量生成缓存文件， 请将生成的缓存文件上传到SAE<br />';
+        echo '此时会在' . APP_PATH . 'Sae_Runtime目录下批量生成缓存文件， 请将生成的缓存文件上传到SAE<br />';
         echo '开启Sae Runtime模式后 ， 在SAE上运行框架将不会占用Memcache，能节约云豆并能避免Memcache的瓶颈';
     }
 
-    public function spare_db(){
-          if(!IS_SAE){
+    public function spare_db() {
+        if (!IS_SAE) {
             exit('  请在SAE环境下测试备用数据库功能~');
         }
 
-               echo  '请先配置'.CONF_PATH.'config_sae.php 文件 配置你的备用数据库信息。<br />
+        echo '请先配置' . CONF_PATH . 'config_sae.php 文件 配置你的备用数据库信息。<br />
                 并设置 SPARE_DB_DEBUG 为true 进行调试，此时将模拟mysql超额被禁用的状态。 调试完后在设置SPARE_DB_DEBUG为false。<br />
                 开启备用数据库后，myql因超额被禁用，自动访问备用数据库，保证网站正常浏览。<br />
                 注意：备用数据库要进行跨应用授权，详情见：<a href="http://sae.sina.com.cn/?m=devcenter&catId=192" target="_blank">http://sae.sina.com.cn/?m=devcenter&catId=192</a><br /><br />
@@ -100,8 +97,8 @@ class IndexAction extends Action {
                 在备用数据库和当前项目数据库中都建立一个think_spare表, 输入不同的数据。 测试一下看看 数据是显示的哪个数据库的
                 ';
 
-                $data=M('Spare')->select();// 在备用数据库和当前项目数据库中都建立一个think_spare表, 输入不同的数据。 测试一下看看 数据是显示的哪个数据库的
-                dump($data);
+        $data = M('Spare')->select(); // 在备用数据库和当前项目数据库中都建立一个think_spare表, 输入不同的数据。 测试一下看看 数据是显示的哪个数据库的
+        dump($data);
     }
 
     public function log() {
@@ -125,7 +122,7 @@ class IndexAction extends Action {
         if (IS_SAE) {
             echo '您正在SAE环境下测试，您的缓存数据将保存在Memcache中<br />';
             $m = memcache_init();
-            echo '用Mecache获得的值为：' . $m->get($_SERVER['HTTP_APPVERSION'].'/test') . '<br />';
+            echo '用Mecache获得的值为：' . $m->get($_SERVER['HTTP_APPVERSION'] . '/test') . '<br />';
             echo '用S函数获得的值为：' . S('test') . '<br />';
         } else {
             echo '您正在本地环境进行测试， 你的缓存数据保存在了' . DATA_PATH . '目录下<br />';
@@ -140,7 +137,7 @@ class IndexAction extends Action {
             echo '您正在SAE环境下测试，您的数据将保存在KVDB中<br />';
             $kv = new SaeKvClient();
             $kv->init();
-            echo '使用KVDB获得的值：' . $kv->get($_SERVER['HTTP_APPVERSION'].'/test2') . '<br />';
+            echo '使用KVDB获得的值：' . $kv->get($_SERVER['HTTP_APPVERSION'] . '/test2') . '<br />';
             echo '使用F函数获得值为：' . F('test2');
         } else {
             echo '您正在本地环境下测试，您的数据将保存在' . DATA_PATH . '目录下<br />';
@@ -153,16 +150,16 @@ class IndexAction extends Action {
     public function upload() {
         if (!empty($_FILES)) {
             import("@.ORG.UploadFile");
-            $config=array(
-                'allowExts'=>array('jpg','gif','png'),
-                'savePath'=>'./Public/upload/',
-                'saveRule'=>'time',
+            $config = array(
+                'allowExts' => array('jpg', 'gif', 'png'),
+                'savePath' => './Public/upload/',
+                'saveRule' => 'time',
             );
             $upload = new UploadFile($config);
-            $upload->imageClassPath="@.ORG.Image";
-            $upload->thumb=true;
-            $upload->thumbMaxHeight=100;
-            $upload->thumbMaxWidth=100;
+            $upload->imageClassPath = "@.ORG.Image";
+            $upload->thumb = true;
+            $upload->thumbMaxHeight = 100;
+            $upload->thumbMaxWidth = 100;
             if (!$upload->upload()) {
                 $this->error($upload->getErrorMsg());
             } else {
@@ -238,9 +235,9 @@ class IndexAction extends Action {
         if (!$t->push()) {
             echo '出错:' . $t->errmsg();
         } else {
-            if(IS_SAE){
+            if (IS_SAE) {
                 echo '请查看SAE的日志中心执行，选择类型为debug';
-            }else{
+            } else {
                 echo '执行成功！请查看[' . LOG_PATH . 'sae_debug.log' . ']文件中的日志';
             }
         }

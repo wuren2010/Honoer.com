@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -28,8 +29,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Value_ByteArray 
-{
+class Zend_Amf_Value_ByteArray {
+
     /**
      * @var string ByteString Data
      */
@@ -41,8 +42,7 @@ class Zend_Amf_Value_ByteArray
      * @param  string $data
      * @return void
      */
-    public function __construct($data)
-    {
+    public function __construct($data) {
         $this->_data = $data;
     }
 
@@ -51,8 +51,8 @@ class Zend_Amf_Value_ByteArray
      *
      * @return string
      */
-    public function getData()
-    {
+    public function getData() {
         return $this->_data;
     }
+
 }

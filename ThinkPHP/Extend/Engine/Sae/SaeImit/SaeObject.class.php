@@ -47,11 +47,11 @@ class SaeObject {
     }
 
     protected function createTable() {
-        $sql = file_get_contents(dirname(__FILE__).'/sae.sql');
+        $sql = file_get_contents(dirname(__FILE__) . '/sae.sql');
         $tablepre = C('DB_PREFIX');
         $tablesuf = C('DB_SUFFIX');
         $dbcharset = C('DB_CHARSET');
-        $sql = str_replace("\r", "\n",$sql);
+        $sql = str_replace("\r", "\n", $sql);
         $ret = array();
         $num = 0;
         foreach (explode(";\n", trim($sql)) as $query) {

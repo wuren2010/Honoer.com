@@ -1,4 +1,5 @@
 <?php
+
 echo xxtea_decrypt(xxtea_encrypt("", ""), "");
 echo xxtea_decrypt(xxtea_encrypt("1", ""), "");
 echo xxtea_decrypt(xxtea_encrypt("1", "1"), "1");

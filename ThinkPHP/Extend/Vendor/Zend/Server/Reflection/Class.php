@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,6 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
 /**
  * Zend_Server_Reflection_Method
  */
@@ -36,8 +36,8 @@ require_once 'Zend/Server/Reflection/Method.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id: Class.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-class Zend_Server_Reflection_Class
-{
+class Zend_Server_Reflection_Class {
+
     /**
      * Optional configuration parameters; accessible via {@link __get} and
      * {@link __set()}
@@ -74,8 +74,7 @@ class Zend_Server_Reflection_Class
      * @param mixed $argv
      * @return void
      */
-    public function __construct(ReflectionClass $reflection, $namespace = null, $argv = false)
-    {
+    public function __construct(ReflectionClass $reflection, $namespace = null, $argv = false) {
         $this->_reflection = $reflection;
         $this->setNamespace($namespace);
 
@@ -99,8 +98,7 @@ class Zend_Server_Reflection_Class
      * @param array $args
      * @return mixed
      */
-    public function __call($method, $args)
-    {
+    public function __call($method, $args) {
         if (method_exists($this->_reflection, $method)) {
             return call_user_func_array(array($this->_reflection, $method), $args);
         }
@@ -118,8 +116,7 @@ class Zend_Server_Reflection_Class
      * @param string $key
      * @return mixed
      */
-    public function __get($key)
-    {
+    public function __get($key) {
         if (isset($this->_config[$key])) {
             return $this->_config[$key];
         }
@@ -136,8 +133,7 @@ class Zend_Server_Reflection_Class
      * @param mixed $value
      * @return void
      */
-    public function __set($key, $value)
-    {
+    public function __set($key, $value) {
         $this->_config[$key] = $value;
     }
 
@@ -147,8 +143,7 @@ class Zend_Server_Reflection_Class
      * @access public
      * @return array
      */
-    public function getMethods()
-    {
+    public function getMethods() {
         return $this->_methods;
     }
 
@@ -157,8 +152,7 @@ class Zend_Server_Reflection_Class
      *
      * @return string
      */
-    public function getNamespace()
-    {
+    public function getNamespace() {
         return $this->_namespace;
     }
 
@@ -168,8 +162,7 @@ class Zend_Server_Reflection_Class
      * @param string $namespace
      * @return void
      */
-    public function setNamespace($namespace)
-    {
+    public function setNamespace($namespace) {
         if (empty($namespace)) {
             $this->_namespace = '';
             return;
@@ -191,8 +184,8 @@ class Zend_Server_Reflection_Class
      *
      * @return void
      */
-    public function __wakeup()
-    {
+    public function __wakeup() {
         $this->_reflection = new ReflectionClass($this->getName());
     }
+
 }

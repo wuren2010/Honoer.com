@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty Internal Plugin Compile Function Plugin
  *
@@ -24,6 +25,7 @@ class Smarty_Internal_Compile_Private_Function_Plugin extends Smarty_Internal_Co
      * @see Smarty_Internal_CompileBase
      */
     public $required_attributes = array();
+
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -42,8 +44,7 @@ class Smarty_Internal_Compile_Private_Function_Plugin extends Smarty_Internal_Co
      * @param string $function PHP function name
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter, $tag, $function)
-    {
+    public function compile($args, $compiler, $parameter, $tag, $function) {
         // This tag does create output
         $compiler->has_output = true;
 

@@ -8,7 +8,7 @@ class AboutAction extends PublicAction {
         $data = $result['Article'];
         $this->assign('data', $data);
         $cid = $data[0]['class_id'];
-        
+
         $this->left($cid);
         $this->display();
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -28,8 +29,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Server_Reflection_Node
-{
+class Zend_Server_Reflection_Node {
+
     /**
      * Node value
      * @var mixed
@@ -55,8 +56,7 @@ class Zend_Server_Reflection_Node
      * @param Zend_Server_Reflection_Node $parent Optional
      * @return Zend_Server_Reflection_Node
      */
-    public function __construct($value, Zend_Server_Reflection_Node $parent = null)
-    {
+    public function __construct($value, Zend_Server_Reflection_Node $parent = null) {
         $this->_value = $value;
         if (null !== $parent) {
             $this->setParent($parent, true);
@@ -73,8 +73,7 @@ class Zend_Server_Reflection_Node
      * and should always be attached
      * @return void
      */
-    public function setParent(Zend_Server_Reflection_Node $node, $new = false)
-    {
+    public function setParent(Zend_Server_Reflection_Node $node, $new = false) {
         $this->_parent = $node;
 
         if ($new) {
@@ -90,8 +89,7 @@ class Zend_Server_Reflection_Node
      * @access public
      * @return Zend_Server_Reflection_Node New child node
      */
-    public function createChild($value)
-    {
+    public function createChild($value) {
         $child = new self($value, $this);
 
         return $child;
@@ -103,8 +101,7 @@ class Zend_Server_Reflection_Node
      * @param Zend_Server_Reflection_Node $node
      * @return void
      */
-    public function attachChild(Zend_Server_Reflection_Node $node)
-    {
+    public function attachChild(Zend_Server_Reflection_Node $node) {
         $this->_children[] = $node;
 
         if ($node->getParent() !== $this) {
@@ -117,8 +114,7 @@ class Zend_Server_Reflection_Node
      *
      * @return array
      */
-    public function getChildren()
-    {
+    public function getChildren() {
         return $this->_children;
     }
 
@@ -127,8 +123,7 @@ class Zend_Server_Reflection_Node
      *
      * @return boolean
      */
-    public function hasChildren()
-    {
+    public function hasChildren() {
         return count($this->_children) > 0;
     }
 
@@ -137,8 +132,7 @@ class Zend_Server_Reflection_Node
      *
      * @return null|Zend_Server_Reflection_Node
      */
-    public function getParent()
-    {
+    public function getParent() {
         return $this->_parent;
     }
 
@@ -147,8 +141,7 @@ class Zend_Server_Reflection_Node
      *
      * @return mixed
      */
-    public function getValue()
-    {
+    public function getValue() {
         return $this->_value;
     }
 
@@ -158,8 +151,7 @@ class Zend_Server_Reflection_Node
      * @param mixed $value
      * @return void
      */
-    public function setValue($value)
-    {
+    public function setValue($value) {
         $this->_value = $value;
     }
 
@@ -172,8 +164,7 @@ class Zend_Server_Reflection_Node
      *
      * @return array
      */
-    public function getEndPoints()
-    {
+    public function getEndPoints() {
         $endPoints = array();
         if (!$this->hasChildren()) {
             return $endPoints;
@@ -185,8 +176,7 @@ class Zend_Server_Reflection_Node
             if (null === $value) {
                 $endPoints[] = $this;
             } elseif ((null !== $value)
-                && $child->hasChildren())
-            {
+                    && $child->hasChildren()) {
                 $childEndPoints = $child->getEndPoints();
                 if (!empty($childEndPoints)) {
                     $endPoints = array_merge($endPoints, $childEndPoints);
@@ -198,4 +188,5 @@ class Zend_Server_Reflection_Node
 
         return $endPoints;
     }
+
 }

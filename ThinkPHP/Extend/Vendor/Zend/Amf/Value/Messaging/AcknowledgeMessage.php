@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -19,7 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: AcknowledgeMessage.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-
 /** Zend_Amf_Value_Messaging_AsyncMessage */
 require_once 'Zend/Amf/Value/Messaging/AsyncMessage.php';
 
@@ -35,26 +35,26 @@ require_once 'Zend/Amf/Value/Messaging/AsyncMessage.php';
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Value_Messaging_AcknowledgeMessage extends Zend_Amf_Value_Messaging_AsyncMessage
-{
+class Zend_Amf_Value_Messaging_AcknowledgeMessage extends Zend_Amf_Value_Messaging_AsyncMessage {
+
     /**
      * Create a new Acknowledge Message
      *
      * @param unknown_type $message
      */
-    public function __construct($message)
-    {
-        $this->clientId    = $this->generateId();
+    public function __construct($message) {
+        $this->clientId = $this->generateId();
         $this->destination = null;
-        $this->messageId   = $this->generateId();
-        $this->timestamp   = time().'00';
-        $this->timeToLive  = 0;
-        $this->headers     = new STDClass();
-        $this->body        = null;
+        $this->messageId = $this->generateId();
+        $this->timestamp = time() . '00';
+        $this->timeToLive = 0;
+        $this->headers = new STDClass();
+        $this->body = null;
 
         // correleate the two messages
         if ($message && isset($message->messageId)) {
             $this->correlationId = $message->messageId;
         }
     }
+
 }

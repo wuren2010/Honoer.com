@@ -62,4 +62,5 @@ class ProductAction extends CommonAction {
             echo json_encode(array("status" => 0, "info" => "删除失败，可能是不存在该ID的记录！"));
         }
     }
+
 }

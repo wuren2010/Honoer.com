@@ -24,7 +24,7 @@ class SaeStorage extends SaeObject {
     private $domainSizeFlag = "";
 
     //todu 增加api文档没有的函数
-    public function __construct($_accessKey='', $_secretKey='') {
+    public function __construct($_accessKey = '', $_secretKey = '') {
         global $sae_config;
         $this->domainDir = $sae_config['storage_dir'];
         $this->url = $sae_config['storage_url'];
@@ -92,7 +92,7 @@ class SaeStorage extends SaeObject {
         return file_exists($filepath);
     }
 
-    public function getAttr($domain, $filename, $attrKey=array()) {
+    public function getAttr($domain, $filename, $attrKey = array()) {
         $filepath = $this->domainDir . $domain . "/" . $filename;
         if (!is_file($filepath)) {
             $this->errno = -1;
@@ -124,7 +124,7 @@ class SaeStorage extends SaeObject {
         return $this->domainSize[$domain];
     }
 
-    public function getFilesNum($domain, $path=NULL) {
+    public function getFilesNum($domain, $path = NULL) {
         static $filesNum = array();
         if (isset($filesNum[md5($domin . $path)]))
             return $filesNum[md5($domin . $path)];
@@ -134,7 +134,7 @@ class SaeStorage extends SaeObject {
         return $filesNum[md5($domin . $path)];
     }
 
-    public function getList($domain, $prefix='*', $limit=10, $offset=0) {
+    public function getList($domain, $prefix = '*', $limit = 10, $offset = 0) {
         $domain = trim($domain);
         if (Empty($domain)) {
             $this->errMsg = Imit_L("_SAE_STORAGE_PARAM_EMPTY_") . '[the value of parameter (domain) can not be empty!]';
@@ -153,7 +153,7 @@ class SaeStorage extends SaeObject {
     }
 
     //获得所有文件
-    private function getAllList($path, $prefix, &$files=array()) {
+    private function getAllList($path, $prefix, &$files = array()) {
         $list = glob($path . "/" . $prefix);
         //循环处理，创建数组
         $dirs = array();
@@ -201,7 +201,7 @@ class SaeStorage extends SaeObject {
         return true;
     }
 
-    public function getListByPath($domain, $path=NULL, $limit=100, $offset=0, $fold=true) {
+    public function getListByPath($domain, $path = NULL, $limit = 100, $offset = 0, $fold = true) {
         $filepath = $this->domainDir . $domain . "/" . $path;
         $list = scandir($filepath);
         //读取非折叠数据
@@ -257,7 +257,7 @@ class SaeStorage extends SaeObject {
     public function getUrl($domain, $filename) {
         $domain = trim($domain);
         $filename = $this->formatFilename($filename);
-        return $this->url. $domain . "/" . $filename;
+        return $this->url . $domain . "/" . $filename;
     }
 
     public function read($domain, $filename) {
@@ -272,17 +272,17 @@ class SaeStorage extends SaeObject {
         return file_get_contents($filepath);
     }
 
-    public function setDomainAttr($domain, $attr=array()) {
+    public function setDomainAttr($domain, $attr = array()) {
         //pass
         return true;
     }
 
-    public function setFileAttr($domain, $filename, $attr=array()) {
+    public function setFileAttr($domain, $filename, $attr = array()) {
         //pass
         return true;
     }
 
-    public function upload($domain, $destFileName, $srcFileName, $attr=array()) {
+    public function upload($domain, $destFileName, $srcFileName, $attr = array()) {
         $domain = trim($domain);
         $destFileName = $this->formatFilename($destFileName);
         if (Empty($domain) || Empty($destFileName) || Empty($srcFileName)) {
@@ -290,10 +290,10 @@ class SaeStorage extends SaeObject {
             $this->errno = -101;
             return false;
         }
-		return $this->write($domain,$destFileName,file_get_contents($srcFileName));
+        return $this->write($domain, $destFileName, file_get_contents($srcFileName));
     }
 
-    public function write($domain, $destFileName, $content, $size=-1, $attr=array(), $compress=false) {
+    public function write($domain, $destFileName, $content, $size = -1, $attr = array(), $compress = false) {
         if (Empty($domain) || Empty($destFileName)) {
             $this->errmsg = Imit_L("_SAE_STORAGE_PARAM_EMPTY_") . "[the value of parameter (domain,destFileName,content) can not be empty!]";
             $this->errno = -101;

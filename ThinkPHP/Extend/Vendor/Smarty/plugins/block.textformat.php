@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty plugin to format text blocks
  *
@@ -32,8 +33,7 @@
  * @return string content re-formatted
  * @author Monte Ohrt <monte at ohrt dot com>
  */
-function smarty_block_textformat($params, $content, $template, &$repeat)
-{
+function smarty_block_textformat($params, $content, $template, &$repeat) {
     if (is_null($content)) {
         return;
     }
@@ -53,17 +53,17 @@ function smarty_block_textformat($params, $content, $template, &$repeat)
             case 'indent_char':
             case 'wrap_char':
             case 'assign':
-                $$_key = (string)$_val;
+                $$_key = (string) $_val;
                 break;
 
             case 'indent':
             case 'indent_first':
             case 'wrap':
-                $$_key = (int)$_val;
+                $$_key = (int) $_val;
                 break;
 
             case 'wrap_cut':
-                $$_key = (bool)$_val;
+                $$_key = (bool) $_val;
                 break;
 
             default:
@@ -90,7 +90,7 @@ function smarty_block_textformat($params, $content, $template, &$repeat)
             $_paragraph = str_repeat($indent_char, $indent_first) . $_paragraph;
         }
         // wordwrap sentences
-        if (SMARTY_MBSTRING /* ^phpunit */&&empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
+        if (SMARTY_MBSTRING /* ^phpunit */ && empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
             require_once(SMARTY_PLUGINS_DIR . 'shared.mb_wordwrap.php');
             $_paragraph = smarty_mb_wordwrap($_paragraph, $wrap - $indent, $wrap_char, $wrap_cut);
         } else {
@@ -102,7 +102,7 @@ function smarty_block_textformat($params, $content, $template, &$repeat)
         }
     }
     $_output = implode($wrap_char . $wrap_char, $_paragraphs);
-    
+
     if ($assign) {
         $template->assign($assign, $_output);
     } else {

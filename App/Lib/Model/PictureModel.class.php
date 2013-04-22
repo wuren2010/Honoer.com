@@ -2,15 +2,21 @@
 
 class PictureModel extends Model {
 
-    public function showPicture($path, $width, $height) {
-        import('ORG.Util.Image');
-        if (empty($width) && empty($height)) {
-            $info = Image::getImageInfo($path);
-            $width = $info['width'];
-            $height = $info['height'];
-        }
-        $image = Image::thumb($path, '', '', $width, $height);
-        Image::output($image);
+    public function getList($where, $order = null, $limit = null) {
+        $where['picture_using'] = 1;
+        $result = $this->field(true)
+                ->where($where)
+                ->order($order)
+                ->limit($limit)
+                ->select();
+        return $result;
+    }
+
+    public function getDetail($where) {
+        $result = $this->field(true)
+                ->where($where)
+                ->find();
+        return $result;
     }
 
 }

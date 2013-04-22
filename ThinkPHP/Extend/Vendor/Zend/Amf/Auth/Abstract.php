@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -18,7 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: Abstract.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-
 /** Zend_Auth_Adapter_Interface */
 require_once 'Zend/Auth/Adapter/Interface.php';
 
@@ -30,13 +30,14 @@ require_once 'Zend/Auth/Adapter/Interface.php';
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class Zend_Amf_Auth_Abstract implements Zend_Auth_Adapter_Interface
-{
+abstract class Zend_Amf_Auth_Abstract implements Zend_Auth_Adapter_Interface {
+
     protected $_username;
     protected $_password;
-    
+
     public function setCredentials($username, $password) {
-		$this->_username = $username;
-		$this->_password = $password;
-	}
+        $this->_username = $username;
+        $this->_password = $password;
+    }
+
 }

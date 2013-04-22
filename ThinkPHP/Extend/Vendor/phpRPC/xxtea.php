@@ -1,26 +1,27 @@
 <?php
-/**********************************************************\
-|                                                          |
-| The implementation of PHPRPC Protocol 3.0                |
-|                                                          |
-| xxtea.php                                                |
-|                                                          |
-| Release 3.0.1                                            |
-| Copyright by Team-PHPRPC                                 |
-|                                                          |
-| WebSite:  http://www.phprpc.org/                         |
-|           http://www.phprpc.net/                         |
-|           http://www.phprpc.com/                         |
-|           http://sourceforge.net/projects/php-rpc/       |
-|                                                          |
-| Authors:  Ma Bingyao <andot@ujn.edu.cn>                  |
-|                                                          |
-| This file may be distributed and/or modified under the   |
-| terms of the GNU General Public License (GPL) version    |
-| 2.0 as published by the Free Software Foundation and     |
-| appearing in the included file LICENSE.                  |
-|                                                          |
-\**********************************************************/
+
+/* * ********************************************************\
+  |                                                          |
+  | The implementation of PHPRPC Protocol 3.0                |
+  |                                                          |
+  | xxtea.php                                                |
+  |                                                          |
+  | Release 3.0.1                                            |
+  | Copyright by Team-PHPRPC                                 |
+  |                                                          |
+  | WebSite:  http://www.phprpc.org/                         |
+  |           http://www.phprpc.net/                         |
+  |           http://www.phprpc.com/                         |
+  |           http://sourceforge.net/projects/php-rpc/       |
+  |                                                          |
+  | Authors:  Ma Bingyao <andot@ujn.edu.cn>                  |
+  |                                                          |
+  | This file may be distributed and/or modified under the   |
+  | terms of the GNU General Public License (GPL) version    |
+  | 2.0 as published by the Free Software Foundation and     |
+  | appearing in the included file LICENSE.                  |
+  |                                                          |
+  \********************************************************* */
 
 /* XXTEA encryption arithmetic library.
  *
@@ -30,12 +31,14 @@
  * This library is free.  You can redistribute it and/or modify it under GPL.
  */
 if (!extension_loaded('xxtea')) {
+
     function long2str($v, $w) {
         $len = count($v);
         $n = ($len - 1) << 2;
         if ($w) {
             $m = $v[$len - 1];
-            if (($m < $n - 3) || ($m > $n)) return false;
+            if (($m < $n - 3) || ($m > $n))
+                return false;
             $n = $m;
         }
         $s = array();
@@ -44,14 +47,13 @@ if (!extension_loaded('xxtea')) {
         }
         if ($w) {
             return substr(join('', $s), 0, $n);
-        }
-        else {
+        } else {
             return join('', $s);
         }
     }
 
     function str2long($s, $w) {
-        $v = unpack("V*", $s. str_repeat("\0", (4 - strlen($s) % 4) & 3));
+        $v = unpack("V*", $s . str_repeat("\0", (4 - strlen($s) % 4) & 3));
         $v = array_values($v);
         if ($w) {
             $v[count($v)] = strlen($s);
@@ -60,9 +62,11 @@ if (!extension_loaded('xxtea')) {
     }
 
     function int32($n) {
-        while ($n >= 2147483648) $n -= 4294967296;
-        while ($n <= -2147483649) $n += 4294967296;
-        return (int)$n;
+        while ($n >= 2147483648)
+            $n -= 4294967296;
+        while ($n <= -2147483649)
+            $n += 4294967296;
+        return (int) $n;
     }
 
     function xxtea_encrypt($str, $key) {
@@ -130,5 +134,6 @@ if (!extension_loaded('xxtea')) {
         }
         return long2str($v, true);
     }
+
 }
 ?>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,6 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
 /**
  * Zend_Server_Reflection_Function_Abstract
  */
@@ -34,8 +34,8 @@ require_once 'Zend/Server/Reflection/Function/Abstract.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id: Method.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-class Zend_Server_Reflection_Method extends Zend_Server_Reflection_Function_Abstract
-{
+class Zend_Server_Reflection_Method extends Zend_Server_Reflection_Function_Abstract {
+
     /**
      * Parent class name
      * @var string
@@ -57,10 +57,9 @@ class Zend_Server_Reflection_Method extends Zend_Server_Reflection_Function_Abst
      * @param array $argv
      * @return void
      */
-    public function __construct(Zend_Server_Reflection_Class $class, ReflectionMethod $r, $namespace = null, $argv = array())
-    {
+    public function __construct(Zend_Server_Reflection_Class $class, ReflectionMethod $r, $namespace = null, $argv = array()) {
         $this->_classReflection = $class;
-        $this->_reflection      = $r;
+        $this->_reflection = $r;
 
         $classNamespace = $class->getNamespace();
 
@@ -88,8 +87,7 @@ class Zend_Server_Reflection_Method extends Zend_Server_Reflection_Function_Abst
      *
      * @return Zend_Server_Reflection_Class
      */
-    public function getDeclaringClass()
-    {
+    public function getDeclaringClass() {
         return $this->_classReflection;
     }
 
@@ -101,8 +99,7 @@ class Zend_Server_Reflection_Method extends Zend_Server_Reflection_Function_Abst
      *
      * @return void
      */
-    public function __wakeup()
-    {
+    public function __wakeup() {
         $this->_classReflection = new Zend_Server_Reflection_Class(new ReflectionClass($this->_class), $this->getNamespace(), $this->getInvokeArguments());
         $this->_reflection = new ReflectionMethod($this->_classReflection->getName(), $this->getName());
     }

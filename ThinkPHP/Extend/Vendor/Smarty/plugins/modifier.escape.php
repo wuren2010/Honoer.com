@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty plugin
  *
@@ -21,8 +22,7 @@
  * @param boolean $double_encode encode already encoded entitites again, used for htmlspecialchars() or htmlentities()
  * @return string escaped input string
  */
-function smarty_modifier_escape($string, $esc_type = 'html', $char_set = null, $double_encode = true)
-{
+function smarty_modifier_escape($string, $esc_type = 'html', $char_set = null, $double_encode = true) {
     if (!$char_set) {
         $char_set = SMARTY_RESOURCE_CHAR_SET;
     }

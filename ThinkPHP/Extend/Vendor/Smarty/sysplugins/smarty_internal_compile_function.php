@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty Internal Plugin Compile Function
  *
@@ -24,6 +25,7 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase {
      * @see Smarty_Internal_CompileBase
      */
     public $required_attributes = array('name');
+
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -31,6 +33,7 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase {
      * @see Smarty_Internal_CompileBase
      */
     public $shorttag_order = array('name');
+
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -47,8 +50,7 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase {
      * @param array $parameter array with compilation parameter
      * @return boolean true
      */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
@@ -66,7 +68,7 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase {
         $compiler->template->properties['function'][$_name]['parameter'] = array();
         $_smarty_tpl = $compiler->template;
         foreach ($_attr as $_key => $_data) {
-            eval ('$tmp='.$_data.';');
+            eval('$tmp=' . $_data . ';');
             $compiler->template->properties['function'][$_name]['parameter'][$_key] = $tmp;
         }
         $compiler->smarty->template_functions[$_name]['parameter'] = $compiler->template->properties['function'][$_name]['parameter'];
@@ -107,8 +109,7 @@ class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase 
      * @param array $parameter array with compilation parameter
      * @return boolean true
      */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         $_attr = $this->getAttributes($compiler, $args);
         $saved_data = $this->closeTag($compiler, array('function'));
         $_name = trim($saved_data[0]['name'], "'\"");
@@ -116,8 +117,8 @@ class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase 
         $plugins_string = '';
         if (!empty($compiler->template->required_plugins['compiled'])) {
             $plugins_string = '<?php ';
-            foreach($compiler->template->required_plugins['compiled'] as $tmp) {
-                foreach($tmp as $data) {
+            foreach ($compiler->template->required_plugins['compiled'] as $tmp) {
+                foreach ($tmp as $data) {
                     $plugins_string .= "if (!is_callable('{$data['function']}')) include '{$data['file']}';\n";
                 }
             }
@@ -125,22 +126,22 @@ class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase 
         }
         if (!empty($compiler->template->required_plugins['nocache'])) {
             $plugins_string .= "<?php echo '/*%%SmartyNocache:{$compiler->template->properties['nocache_hash']}%%*/<?php ";
-            foreach($compiler->template->required_plugins['nocache'] as $tmp) {
-                foreach($tmp as $data) {
+            foreach ($compiler->template->required_plugins['nocache'] as $tmp) {
+                foreach ($tmp as $data) {
                     $plugins_string .= "if (!is_callable(\'{$data['function']}\')) include \'{$data['file']}\';\n";
                 }
             }
             $plugins_string .= "?>/*/%%SmartyNocache:{$compiler->template->properties['nocache_hash']}%%*/';?>\n";
         }
-         // remove last line break from function definition
-         $last = count($compiler->parser->current_buffer->subtrees) - 1;
-         if ($compiler->parser->current_buffer->subtrees[$last] instanceof _smarty_linebreak) {
-             unset($compiler->parser->current_buffer->subtrees[$last]);
-         }
+        // remove last line break from function definition
+        $last = count($compiler->parser->current_buffer->subtrees) - 1;
+        if ($compiler->parser->current_buffer->subtrees[$last] instanceof _smarty_linebreak) {
+            unset($compiler->parser->current_buffer->subtrees[$last]);
+        }
         // if caching save template function for possible nocache call
         if ($compiler->template->caching) {
             $compiler->template->properties['function'][$_name]['compiled'] .= $plugins_string
-             . $compiler->parser->current_buffer->to_smarty_php();
+                    . $compiler->parser->current_buffer->to_smarty_php();
             $compiler->template->properties['function'][$_name]['nocache_hash'] = $compiler->template->properties['nocache_hash'];
             $compiler->template->properties['function'][$_name]['has_nocache_code'] = $compiler->template->has_nocache_code;
             $compiler->template->properties['function'][$_name]['called_functions'] = $compiler->called_functions;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -18,7 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: Response.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-
 /** Zend_Amf_Constants */
 require_once 'Zend/Amf/Constants.php';
 
@@ -35,8 +35,8 @@ require_once 'Zend/Amf/Parse/Amf0/Serializer.php';
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Response
-{
+class Zend_Amf_Response {
+
     /**
      * @var int Object encoding for response
      */
@@ -64,8 +64,7 @@ class Zend_Amf_Response
      *
      * @return Zend_Amf_Response
      */
-    public function finalize()
-    {
+    public function finalize() {
         $this->_outputStream = new Zend_Amf_Parse_OutputStream();
         $this->writeMessage($this->_outputStream);
         return $this;
@@ -78,8 +77,7 @@ class Zend_Amf_Response
      * @param  Zend_Amf_Parse_OutputStream $stream
      * @return Zend_Amf_Response
      */
-    public function writeMessage(Zend_Amf_Parse_OutputStream $stream)
-    {
+    public function writeMessage(Zend_Amf_Parse_OutputStream $stream) {
         $objectEncoding = $this->_objectEncoding;
 
         //Write encoding to start of stream. Preamble byte is written of two byte Unsigned Short
@@ -105,11 +103,11 @@ class Zend_Amf_Response
             $stream->writeUTF($body->getTargetURI());
             $stream->writeUTF($body->getResponseURI());
             $stream->writeLong(Zend_Amf_Constants::UNKNOWN_CONTENT_LENGTH);
-            if($this->_objectEncoding == Zend_Amf_Constants::AMF0_OBJECT_ENCODING) {
+            if ($this->_objectEncoding == Zend_Amf_Constants::AMF0_OBJECT_ENCODING) {
                 $serializer->writeTypeMarker($body->getData());
             } else {
                 // Content is AMF3
-                $serializer->writeTypeMarker($body->getData(),Zend_Amf_Constants::AMF0_AMF3);
+                $serializer->writeTypeMarker($body->getData(), Zend_Amf_Constants::AMF0_AMF3);
             }
         }
 
@@ -121,8 +119,7 @@ class Zend_Amf_Response
      *
      * @return string The contents of the output stream
      */
-    public function getResponse()
-    {
+    public function getResponse() {
         return $this->_outputStream->getStream();
     }
 
@@ -131,8 +128,7 @@ class Zend_Amf_Response
      *
      * @return string
      */
-    public function __toString()
-    {
+    public function __toString() {
         return $this->getResponse();
     }
 
@@ -142,8 +138,7 @@ class Zend_Amf_Response
      * @param  Zend_Amf_Value_MessageBody $body
      * @return Zend_Amf_Response
      */
-    public function addAmfBody(Zend_Amf_Value_MessageBody $body)
-    {
+    public function addAmfBody(Zend_Amf_Value_MessageBody $body) {
         $this->_bodies[] = $body;
         return $this;
     }
@@ -153,8 +148,7 @@ class Zend_Amf_Response
      *
      * @return array
      */
-    public function getAmfBodies()
-    {
+    public function getAmfBodies() {
         return $this->_bodies;
     }
 
@@ -164,8 +158,7 @@ class Zend_Amf_Response
      * @param  Zend_Amf_Value_MessageHeader $header
      * @return Zend_Amf_Response
      */
-    public function addAmfHeader(Zend_Amf_Value_MessageHeader $header)
-    {
+    public function addAmfHeader(Zend_Amf_Value_MessageHeader $header) {
         $this->_headers[] = $header;
         return $this;
     }
@@ -175,8 +168,7 @@ class Zend_Amf_Response
      * 
      * @return array Array of Zend_Amf_Value_MessageHeader objects
      */
-    public function getAmfHeaders()
-    {
+    public function getAmfHeaders() {
         return $this->_headers;
     }
 
@@ -186,9 +178,9 @@ class Zend_Amf_Response
      * @param  int $encoding
      * @return Zend_Amf_Response
      */
-    public function setObjectEncoding($encoding)
-    {
+    public function setObjectEncoding($encoding) {
         $this->_objectEncoding = $encoding;
         return $this;
     }
+
 }

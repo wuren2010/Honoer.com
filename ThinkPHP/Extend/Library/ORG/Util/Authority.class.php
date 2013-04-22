@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -26,45 +27,44 @@
  * @subpackage Util
  * @author luofei614<www.3g4k.com>
  */
-
 //数据库
 /*
--- ----------------------------
--- think_auth_rule，规则表，
--- id:主键，name：规则唯一标识, title：规则中文名称 type:类型（0存在规则就通过，1按规则表达时进行认证），condition：规则表达式
--- ----------------------------
- DROP TABLE IF EXISTS `think_auth_rule`;
-CREATE TABLE `think_auth_rule` (
+  -- ----------------------------
+  -- think_auth_rule，规则表，
+  -- id:主键，name：规则唯一标识, title：规则中文名称 type:类型（0存在规则就通过，1按规则表达时进行认证），condition：规则表达式
+  -- ----------------------------
+  DROP TABLE IF EXISTS `think_auth_rule`;
+  CREATE TABLE `think_auth_rule` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(10) NOT NULL DEFAULT '',
   `title` char(20) NOT NULL DEFAULT '',
   `type` tinyint(1) NOT NULL DEFAULT '0',
   `condition` char(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8; 
--- ----------------------------
--- think_auth_group 用户组表， 
--- id：主键， title:用户组中文名称， rules：用户组拥有的规则id， 多个规则用“,”隔开
--- ----------------------------
- DROP TABLE IF EXISTS `think_auth_group`;
-CREATE TABLE `think_auth_group` (
+  ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  -- ----------------------------
+  -- think_auth_group 用户组表，
+  -- id：主键， title:用户组中文名称， rules：用户组拥有的规则id， 多个规则用“,”隔开
+  -- ----------------------------
+  DROP TABLE IF EXISTS `think_auth_group`;
+  CREATE TABLE `think_auth_group` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `title` char(100) NOT NULL DEFAULT '',
   `rules` char(80) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
--- ----------------------------
--- think_auth_group_access 用户组明细表
--- uid:用户id，group_id：用户组id
--- ----------------------------
-DROP TABLE IF EXISTS `think_auth_group_access`;
-CREATE TABLE `think_auth_group_access` (
+  ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  -- ----------------------------
+  -- think_auth_group_access 用户组明细表
+  -- uid:用户id，group_id：用户组id
+  -- ----------------------------
+  DROP TABLE IF EXISTS `think_auth_group_access`;
+  CREATE TABLE `think_auth_group_access` (
   `uid` mediumint(8) unsigned NOT NULL,
   `group_id` mediumint(8) unsigned NOT NULL,
   UNIQUE KEY `uid_2` (`uid`,`group_id`),
   KEY `uid` (`uid`),
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
  */
 
@@ -88,7 +88,7 @@ class Authority {
     }
 
     //获得权限$name 可以是字符串或数组或逗号分割， uid为 认证的用户id， $or 是否为or关系，为true是， name为数组，只要数组中有一个条件通过则通过，如果为false需要全部条件通过。
-    public function getAuth($name, $uid, $relation='or') {
+    public function getAuth($name, $uid, $relation = 'or') {
         if (!$this->_config['AUTH_ON'])
             return true;
         $authList = $this->getAuthList($uid);
@@ -104,11 +104,11 @@ class Authority {
             if (in_array($val, $name))
                 $list[] = $val;
         }
-        if ($relation=='or' and !empty($list)) {
+        if ($relation == 'or' and !empty($list)) {
             return true;
         }
         $diff = array_diff($name, $list);
-        if ($relation=='and' and empty($diff)) {
+        if ($relation == 'and' and empty($diff)) {
             return true;
         }
         return false;
@@ -119,7 +119,7 @@ class Authority {
         static $groups = array();
         if (!empty($groups[$uid]))
             return $groups[$uid];
-        $groups[$uid] = M()->table($this->_config['AUTH_GROUP_ACCESS'] . ' a')->where("a.uid='$uid'")->join($this->_config['AUTH_GROUP']." g on a.group_id=g.id")->select();
+        $groups[$uid] = M()->table($this->_config['AUTH_GROUP_ACCESS'] . ' a')->where("a.uid='$uid'")->join($this->_config['AUTH_GROUP'] . " g on a.group_id=g.id")->select();
         return $groups[$uid];
     }
 
@@ -129,8 +129,8 @@ class Authority {
         if (isset($_authList[$uid])) {
             return $_authList[$uid];
         }
-        if(isset($_SESSION['_AUTH_LIST_'.$uid])){
-            return $_SESSION['_AUTH_LIST_'.$uid];
+        if (isset($_SESSION['_AUTH_LIST_' . $uid])) {
+            return $_SESSION['_AUTH_LIST_' . $uid];
         }
         //读取用户所属用户组
         $groups = $this->getGroups($uid);
@@ -164,17 +164,18 @@ class Authority {
             }
         }
         $_authList[$uid] = $authList;
-        if($this->_config['AUTH_TYPE']==2){
+        if ($this->_config['AUTH_TYPE'] == 2) {
             //session结果
-            $_SESSION['_AUTH_LIST_'.$uid]=$authList;
+            $_SESSION['_AUTH_LIST_' . $uid] = $authList;
         }
         return $authList;
     }
+
     //获得用户资料,根据自己的情况读取数据库
     protected function getUserInfo($uid) {
-        static $userinfo=array();
-        if(!isset($userinfo[$uid])){
-             $userinfo[$uid]=M()->table($this->_config['AUTH_USER'])->find($uid);
+        static $userinfo = array();
+        if (!isset($userinfo[$uid])) {
+            $userinfo[$uid] = M()->table($this->_config['AUTH_USER'])->find($uid);
         }
         return $userinfo[$uid];
     }

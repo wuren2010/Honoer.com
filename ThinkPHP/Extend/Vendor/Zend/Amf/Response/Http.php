@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -19,7 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: Http.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-
 /** Zend_Amf_Response */
 require_once 'Zend/Amf/Response.php';
 
@@ -31,15 +31,14 @@ require_once 'Zend/Amf/Response.php';
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Response_Http extends Zend_Amf_Response
-{
+class Zend_Amf_Response_Http extends Zend_Amf_Response {
+
     /**
      * Create the application response header for AMF and sends the serialized AMF string
      *
      * @return string
      */
-    public function getResponse()
-    {
+    public function getResponse() {
         if (!headers_sent()) {
             header('Cache-Control: cache, must-revalidate');
             header('Pragma: public');
@@ -47,4 +46,5 @@ class Zend_Amf_Response_Http extends Zend_Amf_Response
         }
         return parent::getResponse();
     }
+
 }

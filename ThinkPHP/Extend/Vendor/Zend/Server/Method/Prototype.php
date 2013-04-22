@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -29,8 +30,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Server_Method_Prototype
-{
+class Zend_Server_Method_Prototype {
+
     /**
      * @var string Return type
      */
@@ -52,8 +53,7 @@ class Zend_Server_Method_Prototype
      * @param  null|array $options 
      * @return void
      */
-    public function __construct($options = null)
-    {
+    public function __construct($options = null) {
         if ((null !== $options) && is_array($options)) {
             $this->setOptions($options);
         }
@@ -65,8 +65,7 @@ class Zend_Server_Method_Prototype
      * @param  string $returnType
      * @return Zend_Server_Method_Prototype
      */
-    public function setReturnType($returnType)
-    {
+    public function setReturnType($returnType) {
         $this->_returnType = $returnType;
         return $this;
     }
@@ -76,8 +75,7 @@ class Zend_Server_Method_Prototype
      *
      * @return string
      */
-    public function getReturnType()
-    {
+    public function getReturnType() {
         return $this->_returnType;
     }
 
@@ -87,8 +85,7 @@ class Zend_Server_Method_Prototype
      * @param  string $parameter 
      * @return Zend_Server_Method_Prototype
      */
-    public function addParameter($parameter)
-    {
+    public function addParameter($parameter) {
         if ($parameter instanceof Zend_Server_Method_Parameter) {
             $this->_parameters[] = $parameter;
             if (null !== ($name = $parameter->getName())) {
@@ -97,8 +94,8 @@ class Zend_Server_Method_Prototype
         } else {
             require_once 'Zend/Server/Method/Parameter.php';
             $parameter = new Zend_Server_Method_Parameter(array(
-                'type' => (string) $parameter,
-            ));
+                        'type' => (string) $parameter,
+                    ));
             $this->_parameters[] = $parameter;
         }
         return $this;
@@ -110,8 +107,7 @@ class Zend_Server_Method_Prototype
      * @param  array $parameter 
      * @return Zend_Server_Method_Prototype
      */
-    public function addParameters(array $parameters)
-    {
+    public function addParameters(array $parameters) {
         foreach ($parameters as $parameter) {
             $this->addParameter($parameter);
         }
@@ -124,9 +120,8 @@ class Zend_Server_Method_Prototype
      * @param  array $parameters
      * @return Zend_Server_Method_Prototype
      */
-    public function setParameters(array $parameters)
-    {
-        $this->_parameters       = array();
+    public function setParameters(array $parameters) {
+        $this->_parameters = array();
         $this->_parameterNameMap = array();
         $this->addParameters($parameters);
         return $this;
@@ -137,8 +132,7 @@ class Zend_Server_Method_Prototype
      *
      * @return array
      */
-    public function getParameters()
-    {
+    public function getParameters() {
         $types = array();
         foreach ($this->_parameters as $parameter) {
             $types[] = $parameter->getType();
@@ -151,8 +145,7 @@ class Zend_Server_Method_Prototype
      * 
      * @return array
      */
-    public function getParameterObjects()
-    {
+    public function getParameterObjects() {
         return $this->_parameters;
     }
 
@@ -162,8 +155,7 @@ class Zend_Server_Method_Prototype
      * @param  string|int $index 
      * @return null|Zend_Server_Method_Parameter
      */
-    public function getParameter($index)
-    {
+    public function getParameter($index) {
         if (!is_string($index) && !is_numeric($index)) {
             return null;
         }
@@ -182,8 +174,7 @@ class Zend_Server_Method_Prototype
      * @param  array $options 
      * @return Zend_Server_Method_Prototype
      */
-    public function setOptions(array $options)
-    {
+    public function setOptions(array $options) {
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
             if (method_exists($this, $method)) {
@@ -198,11 +189,11 @@ class Zend_Server_Method_Prototype
      * 
      * @return array
      */
-    public function toArray()
-    {
+    public function toArray() {
         return array(
             'returnType' => $this->getReturnType(),
             'parameters' => $this->getParameters(),
         );
     }
+
 }

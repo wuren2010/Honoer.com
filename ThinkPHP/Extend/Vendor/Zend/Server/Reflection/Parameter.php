@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -30,8 +31,8 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id: Parameter.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-class Zend_Server_Reflection_Parameter
-{
+class Zend_Server_Reflection_Parameter {
+
     /**
      * @var ReflectionParameter
      */
@@ -62,8 +63,7 @@ class Zend_Server_Reflection_Parameter
      * @param string $type Parameter type
      * @param string $description Parameter description
      */
-    public function __construct(ReflectionParameter $r, $type = 'mixed', $description = '')
-    {
+    public function __construct(ReflectionParameter $r, $type = 'mixed', $description = '') {
         $this->_reflection = $r;
         $this->setType($type);
         $this->setDescription($description);
@@ -76,8 +76,7 @@ class Zend_Server_Reflection_Parameter
      * @param array $args
      * @return mixed
      */
-    public function __call($method, $args)
-    {
+    public function __call($method, $args) {
         if (method_exists($this->_reflection, $method)) {
             return call_user_func_array(array($this->_reflection, $method), $args);
         }
@@ -91,8 +90,7 @@ class Zend_Server_Reflection_Parameter
      *
      * @return string
      */
-    public function getType()
-    {
+    public function getType() {
         return $this->_type;
     }
 
@@ -102,8 +100,7 @@ class Zend_Server_Reflection_Parameter
      * @param string|null $type
      * @return void
      */
-    public function setType($type)
-    {
+    public function setType($type) {
         if (!is_string($type) && (null !== $type)) {
             require_once 'Zend/Server/Reflection/Exception.php';
             throw new Zend_Server_Reflection_Exception('Invalid parameter type');
@@ -117,8 +114,7 @@ class Zend_Server_Reflection_Parameter
      *
      * @return string
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->_description;
     }
 
@@ -128,8 +124,7 @@ class Zend_Server_Reflection_Parameter
      * @param string|null $description
      * @return void
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         if (!is_string($description) && (null !== $description)) {
             require_once 'Zend/Server/Reflection/Exception.php';
             throw new Zend_Server_Reflection_Exception('Invalid parameter description');
@@ -144,8 +139,7 @@ class Zend_Server_Reflection_Parameter
      * @param int $index
      * @return void
      */
-    public function setPosition($index)
-    {
+    public function setPosition($index) {
         $this->_position = (int) $index;
     }
 
@@ -154,8 +148,8 @@ class Zend_Server_Reflection_Parameter
      *
      * @return int
      */
-    public function getPosition()
-    {
+    public function getPosition() {
         return $this->_position;
     }
+
 }

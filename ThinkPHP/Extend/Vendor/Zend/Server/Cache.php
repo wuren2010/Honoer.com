@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -27,8 +28,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Server_Cache
-{
+class Zend_Server_Cache {
+
     /**
      * @var array Methods to skip when caching server
      */
@@ -47,11 +48,9 @@ class Zend_Server_Cache
      * @param  Zend_Server_Interface $server
      * @return bool
      */
-    public static function save($filename, Zend_Server_Interface $server)
-    {
+    public static function save($filename, Zend_Server_Interface $server) {
         if (!is_string($filename)
-            || (!file_exists($filename) && !is_writable(dirname($filename))))
-        {
+                || (!file_exists($filename) && !is_writable(dirname($filename)))) {
             return false;
         }
 
@@ -106,12 +105,10 @@ class Zend_Server_Cache
      * @param  Zend_Server_Interface $server
      * @return bool
      */
-    public static function get($filename, Zend_Server_Interface $server)
-    {
+    public static function get($filename, Zend_Server_Interface $server) {
         if (!is_string($filename)
-            || !file_exists($filename)
-            || !is_readable($filename))
-        {
+                || !file_exists($filename)
+                || !is_readable($filename)) {
             return false;
         }
 
@@ -135,8 +132,7 @@ class Zend_Server_Cache
      * @param  string $filename
      * @return boolean
      */
-    public static function delete($filename)
-    {
+    public static function delete($filename) {
         if (is_string($filename) && file_exists($filename)) {
             unlink($filename);
             return true;
@@ -144,4 +140,5 @@ class Zend_Server_Cache
 
         return false;
     }
+
 }

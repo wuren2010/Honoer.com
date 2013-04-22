@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -9,6 +10,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 define("BCCOMP_LARGER", 1);
+
 /**
  * Rsa 加密实现类
  * @category   ORG
@@ -65,12 +67,12 @@ class Rsa {
         $factors = array();
         $div = $q;
         $power_of_two = 0;
-        while(bccomp($div, "0") == BCCOMP_LARGER)
-        {
+        while (bccomp($div, "0") == BCCOMP_LARGER) {
             $rem = bcmod($div, 2);
             $div = bcdiv($div, 2);
 
-            if($rem) array_push($factors, $power_of_two);
+            if ($rem)
+                array_push($factors, $power_of_two);
             $power_of_two++;
         }
         // Calculate partial results for each factor, using each partial result as a
@@ -79,10 +81,8 @@ class Rsa {
         $partial_results = array();
         $part_res = $p;
         $idx = 0;
-        foreach($factors as $factor)
-        {
-            while($idx < $factor)
-            {
+        foreach ($factors as $factor) {
+            while ($idx < $factor) {
                 $part_res = bcpow($part_res, "2");
                 $part_res = bcmod($part_res, $r);
 
@@ -92,8 +92,7 @@ class Rsa {
         }
         // Calculate final result
         $result = "1";
-        foreach($partial_results as $part_res)
-        {
+        foreach ($partial_results as $part_res) {
             $result = bcmul($result, $part_res);
             $result = bcmod($result, $r);
         }
@@ -107,19 +106,15 @@ class Rsa {
     function add_PKCS1_padding($data, $isPublicKey, $blocksize) {
         $pad_length = $blocksize - 3 - strlen($data);
 
-        if($isPublicKey)
-        {
+        if ($isPublicKey) {
             $block_type = "\x02";
 
             $padding = "";
-            for($i = 0; $i < $pad_length; $i++)
-            {
+            for ($i = 0; $i < $pad_length; $i++) {
                 $rnd = mt_rand(1, 255);
                 $padding .= chr($rnd);
             }
-        }
-        else
-        {
+        } else {
             $block_type = "\x01";
             $padding = str_repeat("\xFF", $pad_length);
         }
@@ -135,14 +130,14 @@ class Rsa {
         $data = substr($data, 1);
 
         // We cannot deal with block type 0
-    if($data{0} == '\0')
+        if ($data{0} == '\0')
             die("Block type 0 not implemented.");
 
         // Then the block type must be 1 or 2
-    assert(($data{0} == "\x01") || ($data{0} == "\x02"));
+        assert(($data{0} == "\x01") || ($data{0} == "\x02"));
 
         // Remove the padding
-    $offset = strpos($data, "\0", 1);
+        $offset = strpos($data, "\0", 1);
         return substr($data, $offset + 1);
     }
 
@@ -154,8 +149,7 @@ class Rsa {
         $radix = "1";
         $result = "0";
 
-        for($i = strlen($data) - 1; $i >= 0; $i--)
-        {
+        for ($i = strlen($data) - 1; $i >= 0; $i--) {
             $digit = ord($data{$i});
             $part_res = bcmul($digit, $radix);
             $result = bcadd($result, $part_res);
@@ -171,8 +165,7 @@ class Rsa {
         $base = "256";
         $result = "";
         $div = $number;
-        while($div > 0)
-        {
+        while ($div > 0) {
             $mod = bcmod($div, $base);
             $div = bcdiv($div, $base);
 

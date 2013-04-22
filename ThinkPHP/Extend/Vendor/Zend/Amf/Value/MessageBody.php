@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -36,8 +37,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Value_MessageBody
-{
+class Zend_Amf_Value_MessageBody {
+
     /**
      * A string describing which operation, function, or method
      * is to be remotley invoked.
@@ -86,8 +87,7 @@ class Zend_Amf_Value_MessageBody
      * @param  string $data 
      * @return void
      */
-    public function __construct($targetUri, $responseUri, $data)
-    {
+    public function __construct($targetUri, $responseUri, $data) {
         $this->setTargetUri($targetUri);
         $this->setResponseUri($responseUri);
         $this->setData($data);
@@ -98,8 +98,7 @@ class Zend_Amf_Value_MessageBody
      * 
      * @return string
      */
-    public function getTargetUri()
-    {
+    public function getTargetUri() {
         return $this->_targetUri;
     }
 
@@ -109,8 +108,7 @@ class Zend_Amf_Value_MessageBody
      * @param  string $targetUri 
      * @return Zend_Amf_Value_MessageBody
      */
-    public function setTargetUri($targetUri)
-    {
+    public function setTargetUri($targetUri) {
         if (null === $targetUri) {
             $targetUri = '';
         }
@@ -123,8 +121,7 @@ class Zend_Amf_Value_MessageBody
      * 
      * @return string
      */
-    public function getResponseUri()
-    {
+    public function getResponseUri() {
         return $this->_responseUri;
     }
 
@@ -134,8 +131,7 @@ class Zend_Amf_Value_MessageBody
      * @param  string $responseUri 
      * @return Zend_Amf_Value_MessageBody
      */
-    public function setResponseUri($responseUri)
-    {
+    public function setResponseUri($responseUri) {
         if (null === $responseUri) {
             $responseUri = '';
         }
@@ -148,8 +144,7 @@ class Zend_Amf_Value_MessageBody
      * 
      * @return string
      */
-    public function getData()
-    {
+    public function getData() {
         return $this->_data;
     }
 
@@ -159,8 +154,7 @@ class Zend_Amf_Value_MessageBody
      * @param  mixed $data 
      * @return Zend_Amf_Value_MessageBody
      */
-    public function setData($data)
-    {
+    public function setData($data) {
         $this->_data = $data;
         return $this;
     }
@@ -171,12 +165,12 @@ class Zend_Amf_Value_MessageBody
      * @param  string $methodName 
      * @return Zend_Amf_Value_MessageBody
      */
-    public function setReplyMethod($methodName)
-    {
+    public function setReplyMethod($methodName) {
         if (!preg_match('#^[/?]#', $methodName)) {
             $this->_targetUri = rtrim($this->_targetUri, '/') . '/';
         }
         $this->_targetUri = $this->_targetUri . $methodName;
         return $this;
     }
+
 }

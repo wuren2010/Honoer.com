@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -28,8 +29,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class Zend_Amf_Parse_Serializer
-{
+abstract class Zend_Amf_Parse_Serializer {
+
     /**
      * Refrence to the current output stream being constructed
      *
@@ -43,8 +44,7 @@ abstract class Zend_Amf_Parse_Serializer
      * @param  Zend_Amf_Parse_OutputStream $stream 
      * @return void
      */
-    public function __construct(Zend_Amf_Parse_OutputStream $stream)
-    {
+    public function __construct(Zend_Amf_Parse_OutputStream $stream) {
         $this->_stream = $stream;
     }
 
@@ -55,5 +55,5 @@ abstract class Zend_Amf_Parse_Serializer
      * @param  int $markerType
      * @return void
      */
-    public abstract function writeTypeMarker($content, $markerType=null);
+    public abstract function writeTypeMarker($content, $markerType = null);
 }

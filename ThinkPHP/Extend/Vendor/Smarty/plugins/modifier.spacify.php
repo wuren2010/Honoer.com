@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty plugin
  * @package Smarty
@@ -18,10 +19,9 @@
  * @param string $spacify_char string to insert between characters.
  * @return string
  */
-function smarty_modifier_spacify($string, $spacify_char = ' ')
-{
+function smarty_modifier_spacify($string, $spacify_char = ' ') {
     // well… what about charsets besides latin and UTF-8?
     return implode($spacify_char, preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY));
-} 
+}
 
 ?>

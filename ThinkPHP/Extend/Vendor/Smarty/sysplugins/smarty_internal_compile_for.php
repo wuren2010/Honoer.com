@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty Internal Plugin Compile For
  *
@@ -36,8 +37,7 @@ class Smarty_Internal_Compile_For extends Smarty_Internal_CompileBase {
      * @param array  $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         if ($parameter == 0) {
             $this->required_attributes = array('start', 'to');
             $this->optional_attributes = array('max', 'step');
@@ -100,10 +100,9 @@ class Smarty_Internal_Compile_Forelse extends Smarty_Internal_CompileBase {
      * @param array  $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         // check and get attributes
-        $_attr  = $this->getAttributes($compiler, $args);
+        $_attr = $this->getAttributes($compiler, $args);
 
         list($openTag, $nocache) = $this->closeTag($compiler, array('for'));
         $this->openTag($compiler, 'forelse', array('forelse', $nocache));
@@ -128,8 +127,7 @@ class Smarty_Internal_Compile_Forclose extends Smarty_Internal_CompileBase {
      * @param array  $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         // must endblock be nocache?

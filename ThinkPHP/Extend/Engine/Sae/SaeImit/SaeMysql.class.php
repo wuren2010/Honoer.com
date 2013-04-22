@@ -15,7 +15,8 @@ class SaeMysql extends SaeObject {
     //连接数据库
     protected function connect() {
         global $sae_config;
-        if(empty($sae_config['db_name'])) die(Imit_L('_SAE_PLEASE_CONFIG_DB_'));
+        if (empty($sae_config['db_name']))
+            die(Imit_L('_SAE_PLEASE_CONFIG_DB_'));
         self::$link = mysql_connect(SAE_MYSQL_HOST_M, SAE_MYSQL_USER, SAE_MYSQL_PASS) or die(Imit_L('_SAE_CONNECT_DB_ERR_'));
         mysql_select_db(SAE_MYSQL_DB, self::$link);
         mysql_query("set names " . self::$charset, self::$link);
@@ -45,7 +46,7 @@ class SaeMysql extends SaeObject {
     public function getData($sql) {
         $this->last_sql = $sql;
         $result = mysql_query($sql, self::$link);
-        if(!$result){
+        if (!$result) {
             return false;
         }
         $this->save_error();

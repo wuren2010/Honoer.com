@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -19,7 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: Deserializer.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-
 /** Zend_Amf_Parse_Deserializer */
 require_once 'Zend/Amf/Parse/Deserializer.php';
 
@@ -33,8 +33,8 @@ require_once 'Zend/Amf/Parse/Deserializer.php';
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
-{
+class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer {
+
     /**
      * An array of objects used for recursivly deserializing an object.
      * @var array
@@ -59,13 +59,12 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      * @return mixed whatever the data type is of the marker in php
      * @throws Zend_Amf_Exception for invalid type
      */
-    public function readTypeMarker($typeMarker = null)
-    {
+    public function readTypeMarker($typeMarker = null) {
         if ($typeMarker === null) {
             $typeMarker = $this->_stream->readByte();
         }
 
-        switch($typeMarker) {
+        switch ($typeMarker) {
             // number
             case Zend_Amf_Constants::AMF0_NUMBER:
                 return $this->_stream->readDouble();
@@ -143,16 +142,15 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      * @param  array|null $object
      * @return object
      */
-    public function readObject($object = null)
-    {
+    public function readObject($object = null) {
         if ($object === null) {
             $object = array();
         }
 
         while (true) {
-            $key        = $this->_stream->readUTF();
+            $key = $this->_stream->readUTF();
             $typeMarker = $this->_stream->readByte();
-            if ($typeMarker != Zend_Amf_Constants::AMF0_OBJECTTERM ){
+            if ($typeMarker != Zend_Amf_Constants::AMF0_OBJECTTERM) {
                 //Recursivly call readTypeMarker to get the types of properties in the object
                 $object[$key] = $this->readTypeMarker($typeMarker);
             } else {
@@ -173,12 +171,11 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      * @return object
      * @throws Zend_Amf_Exception for invalid reference keys
      */
-    public function readReference()
-    {
+    public function readReference() {
         $key = $this->_stream->readInt();
         if (!array_key_exists($key, $this->_reference)) {
             require_once 'Zend/Amf/Exception.php';
-            throw new Zend_Amf_Exception('Invalid reference key: '. $key);
+            throw new Zend_Amf_Exception('Invalid reference key: ' . $key);
         }
         return $this->_reference[$key];
     }
@@ -193,8 +190,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      *         in Flash Player 10 this may need to be reconsidered.
      * @return array
      */
-    public function readMixedArray()
-    {
+    public function readMixedArray() {
         $length = $this->_stream->readLong();
         return $this->readObject();
     }
@@ -206,8 +202,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      *
      * @return array
      */
-    public function readArray()
-    {
+    public function readArray() {
         $length = $this->_stream->readLong();
         $array = array();
         while ($length--) {
@@ -221,8 +216,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      *
      * @return Zend_Date
      */
-    public function readDate()
-    {
+    public function readDate() {
         // get the unix time stamp. Not sure why ActionScript does not use
         // milliseconds
         $timestamp = floor($this->_stream->readDouble() / 1000);
@@ -232,7 +226,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
         $offset = $this->_stream->readInt();
 
         require_once 'Zend/Date.php';
-        $date   = new Zend_Date($timestamp);
+        $date = new Zend_Date($timestamp);
         return $date;
     }
 
@@ -242,8 +236,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      *
      * @return SimpleXml Object
      */
-    public function readXmlString()
-    {
+    public function readXmlString() {
         $string = $this->_stream->readLongUTF();
         return simplexml_load_string($string);
     }
@@ -257,22 +250,21 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      * @return object|array
      * @throws Zend_Amf_Exception if unable to load type
      */
-    public function readTypedObject()
-    {
-         require_once 'Zend/Amf/Parse/TypeLoader.php';
+    public function readTypedObject() {
+        require_once 'Zend/Amf/Parse/TypeLoader.php';
         // get the remote class name
         $className = $this->_stream->readUTF();
         $loader = Zend_Amf_Parse_TypeLoader::loadType($className);
         $returnObject = new $loader();
         $properties = get_object_vars($this->readObject());
-        foreach($properties as $key=>$value) {
-            if($key) {
+        foreach ($properties as $key => $value) {
+            if ($key) {
                 $returnObject->$key = $value;
             }
         }
-	   if($returnObject instanceof Zend_Amf_Value_Messaging_ArrayCollection) {
-			$returnObject = get_object_vars($returnObject);
-	   }
+        if ($returnObject instanceof Zend_Amf_Value_Messaging_ArrayCollection) {
+            $returnObject = get_object_vars($returnObject);
+        }
         return $returnObject;
     }
 
@@ -282,9 +274,8 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      *
      * @return string
      */
-    public function readAmf3TypeMarker()
-    {
-    	require_once 'Zend/Amf/Parse/Amf3/Deserializer.php';
+    public function readAmf3TypeMarker() {
+        require_once 'Zend/Amf/Parse/Amf3/Deserializer.php';
         $deserializer = new Zend_Amf_Parse_Amf3_Deserializer($this->_stream);
         $this->_objectEncoding = Zend_Amf_Constants::AMF3_OBJECT_ENCODING;
         return $deserializer->readTypeMarker();
@@ -296,8 +287,8 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      *
      * @return int
      */
-    public function getObjectEncoding()
-    {
+    public function getObjectEncoding() {
         return $this->_objectEncoding;
     }
+
 }

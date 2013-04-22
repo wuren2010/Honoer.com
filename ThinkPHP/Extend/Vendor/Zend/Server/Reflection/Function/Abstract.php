@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,6 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
 /**
  * Zend_Server_Reflection_Node
  */
@@ -50,8 +50,8 @@ require_once 'Zend/Server/Reflection/Prototype.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id: Abstract.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-abstract class Zend_Server_Reflection_Function_Abstract
-{
+abstract class Zend_Server_Reflection_Function_Abstract {
+
     /**
      * @var ReflectionFunction
      */
@@ -95,7 +95,6 @@ abstract class Zend_Server_Reflection_Function_Abstract
      * @var array
      */
     protected $_prototypes = array();
-
     private $_return;
     private $_returnDesc;
     private $_paramDesc;
@@ -107,21 +106,20 @@ abstract class Zend_Server_Reflection_Function_Abstract
      *
      * @param ReflectionFunction $r
      */
-    public function __construct(Reflector $r, $namespace = null, $argv = array())
-    {
+    public function __construct(Reflector $r, $namespace = null, $argv = array()) {
         // In PHP 5.1.x, ReflectionMethod extends ReflectionFunction. In 5.2.x,
         // both extend ReflectionFunctionAbstract. So, we can't do normal type
         // hinting in the prototype, but instead need to do some explicit
         // testing here.
         if ((!$r instanceof ReflectionFunction)
-            && (!$r instanceof ReflectionMethod)) {
+                && (!$r instanceof ReflectionMethod)) {
             require_once 'Zend/Server/Reflection/Exception.php';
             throw new Zend_Server_Reflection_Exception('Invalid reflection class');
         }
         $this->_reflection = $r;
 
         // Determine namespace
-        if (null !== $namespace){
+        if (null !== $namespace) {
             $this->setNamespace($namespace);
         }
 
@@ -150,8 +148,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      * @param int $level
      * @return void
      */
-    protected function _addTree(Zend_Server_Reflection_Node $parent, $level = 0)
-    {
+    protected function _addTree(Zend_Server_Reflection_Node $parent, $level = 0) {
         if ($level >= $this->_sigParamsDepth) {
             return;
         }
@@ -173,8 +170,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      *
      * @return array
      */
-    protected function _buildTree()
-    {
+    protected function _buildTree() {
         $returnTree = array();
         foreach ((array) $this->_return as $value) {
             $node = new Zend_Server_Reflection_Node($value);
@@ -197,15 +193,14 @@ abstract class Zend_Server_Reflection_Function_Abstract
      * @param array $paramDesc Array of parameter descriptions
      * @return array
      */
-    protected function _buildSignatures($return, $returnDesc, $paramTypes, $paramDesc)
-    {
-        $this->_return         = $return;
-        $this->_returnDesc     = $returnDesc;
-        $this->_paramDesc      = $paramDesc;
-        $this->_sigParams      = $paramTypes;
+    protected function _buildSignatures($return, $returnDesc, $paramTypes, $paramDesc) {
+        $this->_return = $return;
+        $this->_returnDesc = $returnDesc;
+        $this->_paramDesc = $paramDesc;
+        $this->_sigParams = $paramTypes;
         $this->_sigParamsDepth = count($paramTypes);
-        $signatureTrees        = $this->_buildTree();
-        $signatures            = array();
+        $signatureTrees = $this->_buildTree();
+        $signatures = array();
 
         $endPoints = array();
         foreach ($signatureTrees as $root) {
@@ -235,7 +230,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
         $params = $this->_reflection->getParameters();
         foreach ($signatures as $signature) {
             $return = new Zend_Server_Reflection_ReturnValue(array_shift($signature), $this->_returnDesc);
-            $tmp    = array();
+            $tmp = array();
             foreach ($signature as $key => $type) {
                 $param = new Zend_Server_Reflection_Parameter($params[$key], $type, $this->_paramDesc[$key]);
                 $param->setPosition($key);
@@ -256,21 +251,19 @@ abstract class Zend_Server_Reflection_Function_Abstract
      * @param ReflectionFunction $function
      * @return array
      */
-    protected function _reflect()
-    {
-        $function           = $this->_reflection;
-        $helpText           = '';
-        $signatures         = array();
-        $returnDesc         = '';
-        $paramCount         = $function->getNumberOfParameters();
+    protected function _reflect() {
+        $function = $this->_reflection;
+        $helpText = '';
+        $signatures = array();
+        $returnDesc = '';
+        $paramCount = $function->getNumberOfParameters();
         $paramCountRequired = $function->getNumberOfRequiredParameters();
-        $parameters         = $function->getParameters();
-        $docBlock           = $function->getDocComment();
+        $parameters = $function->getParameters();
+        $docBlock = $function->getDocComment();
 
         if (!empty($docBlock)) {
             // Get help text
-            if (preg_match(':/\*\*\s*\r?\n\s*\*\s(.*?)\r?\n\s*\*(\s@|/):s', $docBlock, $matches))
-            {
+            if (preg_match(':/\*\*\s*\r?\n\s*\*\s(.*?)\r?\n\s*\*(\s@|/):s', $docBlock, $matches)) {
                 $helpText = $matches[1];
                 $helpText = preg_replace('/(^\s*\*\s)/m', '', $helpText);
                 $helpText = preg_replace('/\r?\n\s*\*\s*(\r?\n)*/s', "\n", $helpText);
@@ -278,11 +271,10 @@ abstract class Zend_Server_Reflection_Function_Abstract
             }
 
             // Get return type(s) and description
-            $return     = 'void';
+            $return = 'void';
             if (preg_match('/@return\s+(\S+)/', $docBlock, $matches)) {
                 $return = explode('|', $matches[1]);
-                if (preg_match('/@return\s+\S+\s+(.*?)(@|\*\/)/s', $docBlock, $matches))
-                {
+                if (preg_match('/@return\s+\S+\s+(.*?)(@|\*\/)/s', $docBlock, $matches)) {
                     $value = $matches[1];
                     $value = preg_replace('/\s?\*\s/m', '', $value);
                     $value = preg_replace('/\s{2,}/', ' ', $value);
@@ -293,8 +285,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
             // Get param types and description
             if (preg_match_all('/@param\s+([^\s]+)/m', $docBlock, $matches)) {
                 $paramTypesTmp = $matches[1];
-                if (preg_match_all('/@param\s+\S+\s+(\$^\S+)\s+(.*?)(@|\*\/)/s', $docBlock, $matches))
-                {
+                if (preg_match_all('/@param\s+\S+\s+(\$^\S+)\s+(.*?)(@|\*\/)/s', $docBlock, $matches)) {
                     $paramDesc = $matches[2];
                     foreach ($paramDesc as $key => $value) {
                         $value = preg_replace('/\s?\*\s/m', '', $value);
@@ -305,7 +296,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
             }
         } else {
             $helpText = $function->getName();
-            $return   = 'void';
+            $return = 'void';
         }
 
         // Set method description
@@ -338,8 +329,8 @@ abstract class Zend_Server_Reflection_Function_Abstract
         if (count($paramTypesTmp) != $paramCount) {
             require_once 'Zend/Server/Reflection/Exception.php';
             throw new Zend_Server_Reflection_Exception(
-               'Variable number of arguments is not supported for services (except optional parameters). '
-             . 'Number of function arguments must correspond to actual number of arguments described in a docblock.');
+                    'Variable number of arguments is not supported for services (except optional parameters). '
+                    . 'Number of function arguments must correspond to actual number of arguments described in a docblock.');
         }
 
         $paramTypes = array();
@@ -354,7 +345,6 @@ abstract class Zend_Server_Reflection_Function_Abstract
         $this->_buildSignatures($return, $returnDesc, $paramTypes, $paramDesc);
     }
 
-
     /**
      * Proxy reflection calls
      *
@@ -362,14 +352,13 @@ abstract class Zend_Server_Reflection_Function_Abstract
      * @param array $args
      * @return mixed
      */
-    public function __call($method, $args)
-    {
+    public function __call($method, $args) {
         if (method_exists($this->_reflection, $method)) {
             return call_user_func_array(array($this->_reflection, $method), $args);
         }
 
         require_once 'Zend/Server/Reflection/Exception.php';
-        throw new Zend_Server_Reflection_Exception('Invalid reflection method ("' .$method. '")');
+        throw new Zend_Server_Reflection_Exception('Invalid reflection method ("' . $method . '")');
     }
 
     /**
@@ -381,8 +370,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      * @param string $key
      * @return mixed
      */
-    public function __get($key)
-    {
+    public function __get($key) {
         if (isset($this->_config[$key])) {
             return $this->_config[$key];
         }
@@ -399,8 +387,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      * @param mixed $value
      * @return void
      */
-    public function __set($key, $value)
-    {
+    public function __set($key, $value) {
         $this->_config[$key] = $value;
     }
 
@@ -410,8 +397,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      * @param string $namespace
      * @return void
      */
-    public function setNamespace($namespace)
-    {
+    public function setNamespace($namespace) {
         if (empty($namespace)) {
             $this->_namespace = '';
             return;
@@ -430,8 +416,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      *
      * @return string
      */
-    public function getNamespace()
-    {
+    public function getNamespace() {
         return $this->_namespace;
     }
 
@@ -441,8 +426,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      * @param string $string
      * @return void
      */
-    public function setDescription($string)
-    {
+    public function setDescription($string) {
         if (!is_string($string)) {
             require_once 'Zend/Server/Reflection/Exception.php';
             throw new Zend_Server_Reflection_Exception('Invalid description');
@@ -456,8 +440,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      *
      * @return void
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->_description;
     }
 
@@ -467,8 +450,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      *
      * @return array
      */
-    public function getPrototypes()
-    {
+    public function getPrototypes() {
         return $this->_prototypes;
     }
 
@@ -477,8 +459,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      *
      * @return array
      */
-    public function getInvokeArguments()
-    {
+    public function getInvokeArguments() {
         return $this->_argv;
     }
 
@@ -490,8 +471,7 @@ abstract class Zend_Server_Reflection_Function_Abstract
      *
      * @return void
      */
-    public function __wakeup()
-    {
+    public function __wakeup() {
         if ($this->_reflection instanceof ReflectionMethod) {
             $class = new ReflectionClass($this->_class);
             $this->_reflection = new ReflectionMethod($class->newInstance(), $this->getName());
@@ -499,4 +479,5 @@ abstract class Zend_Server_Reflection_Function_Abstract
             $this->_reflection = new ReflectionFunction($this->getName());
         }
     }
+
 }

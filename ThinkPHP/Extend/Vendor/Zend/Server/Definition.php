@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -28,8 +29,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Server_Definition implements Countable, Iterator
-{
+class Zend_Server_Definition implements Countable, Iterator {
+
     /**
      * @var array Array of Zend_Server_Method_Definition objects
      */
@@ -46,8 +47,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * @param  null|array $methods 
      * @return void
      */
-    public function __construct($methods = null)
-    {
+    public function __construct($methods = null) {
         if (is_array($methods)) {
             $this->setMethods($methods);
         }
@@ -59,8 +59,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * @param mixed $flag 
      * @return void
      */
-    public function setOverwriteExistingMethods($flag)
-    {
+    public function setOverwriteExistingMethods($flag) {
         $this->_overwriteExistingMethods = (bool) $flag;
         return $this;
     }
@@ -73,8 +72,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * @return Zend_Server_Definition
      * @throws Zend_Server_Exception if duplicate or invalid method provided
      */
-    public function addMethod($method, $name = null)
-    {
+    public function addMethod($method, $name = null) {
         if (is_array($method)) {
             require_once 'Zend/Server/Method/Definition.php';
             $method = new Zend_Server_Method_Definition($method);
@@ -110,8 +108,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * @param  array $methods Array of Zend_Server_Method_Definition objects or arrays
      * @return Zend_Server_Definition
      */
-    public function addMethods(array $methods)
-    {
+    public function addMethods(array $methods) {
         foreach ($methods as $key => $method) {
             $this->addMethod($method, $key);
         }
@@ -124,8 +121,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * @param  array $methods Array of Zend_Server_Method_Definition objects or arrays
      * @return Zend_Server_Definition
      */
-    public function setMethods(array $methods)
-    {
+    public function setMethods(array $methods) {
         $this->clearMethods();
         $this->addMethods($methods);
         return $this;
@@ -137,8 +133,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * @param  string $method 
      * @return bool
      */
-    public function hasMethod($method)
-    {
+    public function hasMethod($method) {
         return array_key_exists($method, $this->_methods);
     }
 
@@ -148,8 +143,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * @param  string $method 
      * @return null|Zend_Server_Method_Definition
      */
-    public function getMethod($method)
-    {
+    public function getMethod($method) {
         if ($this->hasMethod($method)) {
             return $this->_methods[$method];
         }
@@ -161,8 +155,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * 
      * @return array Array of Zend_Server_Method_Definition objects
      */
-    public function getMethods()
-    {
+    public function getMethods() {
         return $this->_methods;
     }
 
@@ -172,8 +165,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * @param  string $method 
      * @return Zend_Server_Definition
      */
-    public function removeMethod($method)
-    {
+    public function removeMethod($method) {
         if ($this->hasMethod($method)) {
             unset($this->_methods[$method]);
         }
@@ -185,8 +177,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * 
      * @return Zend_Server_Definition
      */
-    public function clearMethods()
-    {
+    public function clearMethods() {
         $this->_methods = array();
         return $this;
     }
@@ -196,8 +187,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * 
      * @return array
      */
-    public function toArray()
-    {
+    public function toArray() {
         $methods = array();
         foreach ($this->getMethods() as $key => $method) {
             $methods[$key] = $method->toArray();
@@ -210,8 +200,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * 
      * @return int
      */
-    public function count()
-    {
+    public function count() {
         return count($this->_methods);
     }
 
@@ -220,8 +209,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * 
      * @return mixed
      */
-    public function current()
-    {
+    public function current() {
         return current($this->_methods);
     }
 
@@ -230,8 +218,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * 
      * @return int|string
      */
-    public function key()
-    {
+    public function key() {
         return key($this->_methods);
     }
 
@@ -240,8 +227,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * 
      * @return void
      */
-    public function next()
-    {
+    public function next() {
         return next($this->_methods);
     }
 
@@ -250,8 +236,7 @@ class Zend_Server_Definition implements Countable, Iterator
      * 
      * @return void
      */
-    public function rewind()
-    {
+    public function rewind() {
         return reset($this->_methods);
     }
 
@@ -260,8 +245,8 @@ class Zend_Server_Definition implements Countable, Iterator
      * 
      * @return bool
      */
-    public function valid()
-    {
+    public function valid() {
         return (bool) $this->current();
     }
+
 }

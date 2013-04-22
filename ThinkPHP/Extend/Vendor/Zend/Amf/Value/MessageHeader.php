@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -31,8 +32,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Value_MessageHeader 
-{
+class Zend_Amf_Value_MessageHeader {
+
     /**
      * Name of the header
      *
@@ -69,13 +70,13 @@ class Zend_Amf_Value_MessageHeader
      * @param misc $content
      * @param integer $length
      */
-    public function __construct($name, $mustRead, $data, $length=null)
-    {
-        $this->name     = $name;
+    public function __construct($name, $mustRead, $data, $length = null) {
+        $this->name = $name;
         $this->mustRead = (bool) $mustRead;
-        $this->data     = $data;
+        $this->data = $data;
         if (null !== $length) {
             $this->length = (int) $length;
         }
     }
+
 }

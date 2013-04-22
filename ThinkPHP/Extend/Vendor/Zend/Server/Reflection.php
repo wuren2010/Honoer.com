@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,6 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
 /**
  * Zend_Server_Reflection_Function
  */
@@ -38,8 +38,8 @@ require_once 'Zend/Server/Reflection/Class.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id: Reflection.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-class Zend_Server_Reflection
-{
+class Zend_Server_Reflection {
+
     /**
      * Perform class reflection to create dispatch signatures
      *
@@ -57,8 +57,7 @@ class Zend_Server_Reflection
      * @return Zend_Server_Reflection_Class
      * @throws Zend_Server_Reflection_Exception
      */
-    public static function reflectClass($class, $argv = false, $namespace = '')
-    {
+    public static function reflectClass($class, $argv = false, $namespace = '') {
         if (is_object($class)) {
             $reflection = new ReflectionObject($class);
         } elseif (class_exists($class)) {
@@ -93,8 +92,7 @@ class Zend_Server_Reflection
      * @return Zend_Server_Reflection_Function
      * @throws Zend_Server_Reflection_Exception
      */
-    public static function reflectFunction($function, $argv = false, $namespace = '')
-    {
+    public static function reflectFunction($function, $argv = false, $namespace = '') {
         if (!is_string($function) || !function_exists($function)) {
             require_once 'Zend/Server/Reflection/Exception.php';
             throw new Zend_Server_Reflection_Exception('Invalid function "' . $function . '" passed to reflectFunction');
@@ -108,4 +106,5 @@ class Zend_Server_Reflection
 
         return new Zend_Server_Reflection_Function(new ReflectionFunction($function), $namespace, $argv);
     }
+
 }

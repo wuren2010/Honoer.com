@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -33,8 +34,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class Zend_Amf_Parse_Deserializer
-{
+abstract class Zend_Amf_Parse_Deserializer {
+
     /**
      * The raw string that represents the AMF request.
      *
@@ -48,8 +49,7 @@ abstract class Zend_Amf_Parse_Deserializer
      * @param  Zend_Amf_Parse_InputStream $stream
      * @return void
      */
-    public function __construct(Zend_Amf_Parse_InputStream $stream)
-    {
+    public function __construct(Zend_Amf_Parse_InputStream $stream) {
         $this->_stream = $stream;
     }
 

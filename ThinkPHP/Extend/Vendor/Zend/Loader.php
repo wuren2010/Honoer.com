@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -27,8 +28,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Loader
-{
+class Zend_Loader {
+
     /**
      * Loads a class from a PHP file.  The filename must be formatted
      * as "$class.php".
@@ -49,8 +50,7 @@ class Zend_Loader
      * @return void
      * @throws Zend_Exception
      */
-    public static function loadClass($class, $dirs = null)
-    {
+    public static function loadClass($class, $dirs = null) {
         if (class_exists($class, false) || interface_exists($class, false)) {
             return;
         }
@@ -112,8 +112,7 @@ class Zend_Loader
      * @return boolean
      * @throws Zend_Exception
      */
-    public static function loadFile($filename, $dirs = null, $once = false)
-    {
+    public static function loadFile($filename, $dirs = null, $once = false) {
         self::_securityCheck($filename);
 
         /**
@@ -160,8 +159,7 @@ class Zend_Loader
      * @param string   $filename
      * @return boolean
      */
-    public static function isReadable($filename)
-    {
+    public static function isReadable($filename) {
         if (!$fh = @fopen($filename, 'r', true)) {
             return false;
         }
@@ -181,8 +179,7 @@ class Zend_Loader
      * @param  string $class
      * @return string|false Class name on success; false on failure
      */
-    public static function autoload($class)
-    {
+    public static function autoload($class) {
         trigger_error(__CLASS__ . '::' . __METHOD__ . ' is deprecated as of 1.8.0 and will be removed with 2.0.0; use Zend_Loader_Autoloader instead', E_USER_NOTICE);
         try {
             @self::loadClass($class);
@@ -202,8 +199,7 @@ class Zend_Loader
      * @throws Zend_Exception if spl_autoload() is not found
      * or if the specified class does not have an autoload() method.
      */
-    public static function registerAutoload($class = 'Zend_Loader', $enabled = true)
-    {
+    public static function registerAutoload($class = 'Zend_Loader', $enabled = true) {
         trigger_error(__CLASS__ . '::' . __METHOD__ . ' is deprecated as of 1.8.0 and will be removed with 2.0.0; use Zend_Loader_Autoloader instead', E_USER_NOTICE);
         require_once 'Zend/Loader/Autoloader.php';
         $autoloader = Zend_Loader_Autoloader::getInstance();
@@ -234,8 +230,7 @@ class Zend_Loader
      * @return void
      * @throws Zend_Exception
      */
-    protected static function _securityCheck($filename)
-    {
+    protected static function _securityCheck($filename) {
         /**
          * Security check
          */
@@ -259,12 +254,12 @@ class Zend_Loader
      * @return boolean
      * @deprecated Since 1.5.0; use loadFile() instead
      */
-    protected static function _includeFile($filespec, $once = false)
-    {
+    protected static function _includeFile($filespec, $once = false) {
         if ($once) {
             return include_once $filespec;
         } else {
-            return include $filespec ;
+            return include $filespec;
         }
     }
+
 }

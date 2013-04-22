@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -18,13 +19,10 @@
  * @version    $Id: Exception.php 2504 2011-12-28 07:35:29Z liu21st $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
-
 /**
  * Zend_Exception
  */
 require_once 'Zend/Exception.php';
-
 
 /**
  * @category   Zend
@@ -32,18 +30,17 @@ require_once 'Zend/Exception.php';
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Date_Exception extends Zend_Exception
-{
+class Zend_Date_Exception extends Zend_Exception {
+
     protected $operand = null;
 
-    public function __construct($message, $op = null)
-    {
+    public function __construct($message, $op = null) {
         $this->operand = $op;
         parent::__construct($message);
     }
 
-    public function getOperand()
-    {
+    public function getOperand() {
         return $this->operand;
     }
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty plugin
  *
@@ -17,9 +18,8 @@
  * @param array $params parameters
  * @return string with compiled code
  */
-function smarty_modifiercompiler_to_charset($params, $compiler)
-{
-    if (!SMARTY_MBSTRING /* ^phpunit */&&empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
+function smarty_modifiercompiler_to_charset($params, $compiler) {
+    if (!SMARTY_MBSTRING /* ^phpunit */ && empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
         // FIXME: (rodneyrehm) shouldn't this throw an error?
         return $params[0];
     }

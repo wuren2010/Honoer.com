@@ -9,6 +9,13 @@ class ClassModel extends RelationModel {
             'class_name' => 'Article',
             'foreign_key' => 'class_id',
         ),
+        'Picture' => array(
+            'mapping_type' => BELONGS_TO,
+            'mapping_name' => 'Picture',
+            'class_name' => 'Picture',
+            'foreign_key' => 'picture_id',
+            'as_fields' => 'picture_path,picture_thumb',
+        ),
     );
 
     public function getList($where, $order = null, $limit = null) {

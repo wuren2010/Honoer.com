@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty plugin
  * 
@@ -34,10 +35,9 @@
  * @return string 
  * @uses smarty_function_escape_special_chars()
  */
-function smarty_function_html_image($params, $template)
-{
+function smarty_function_html_image($params, $template) {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
- 
+
     $alt = '';
     $file = '';
     $height = '';
@@ -48,7 +48,7 @@ function smarty_function_html_image($params, $template)
     $path_prefix = '';
     $server_vars = $_SERVER;
     $basedir = isset($server_vars['DOCUMENT_ROOT']) ? $server_vars['DOCUMENT_ROOT'] : '';
-    foreach($params as $_key => $_val) {
+    foreach ($params as $_key => $_val) {
         switch ($_key) {
             case 'file':
             case 'height':
@@ -63,8 +63,8 @@ function smarty_function_html_image($params, $template)
                 if (!is_array($_val)) {
                     $$_key = smarty_function_escape_special_chars($_val);
                 } else {
-                    throw new SmartyException ("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
-                } 
+                    throw new SmartyException("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
+                }
                 break;
 
             case 'link':
@@ -77,22 +77,22 @@ function smarty_function_html_image($params, $template)
                 if (!is_array($_val)) {
                     $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
                 } else {
-                    throw new SmartyException ("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
-                } 
+                    throw new SmartyException("html_image: extra attribute '$_key' cannot be an array", E_USER_NOTICE);
+                }
                 break;
-        } 
-    } 
+        }
+    }
 
     if (empty($file)) {
         trigger_error("html_image: missing 'file' parameter", E_USER_NOTICE);
         return;
-    } 
+    }
 
     if (substr($file, 0, 1) == '/') {
         $_image_path = $basedir . $file;
     } else {
         $_image_path = $file;
-    } 
+    }
 
     if (!isset($params['width']) || !isset($params['height'])) {
         if (!$_image_data = @getimagesize($_image_path)) {
@@ -105,34 +105,34 @@ function smarty_function_html_image($params, $template)
             } else {
                 trigger_error("html_image: '$_image_path' is not a valid image file", E_USER_NOTICE);
                 return;
-            } 
-        } 
+            }
+        }
         if (isset($template->smarty->security_policy)) {
             if (!$template->smarty->security_policy->isTrustedResourceDir($_image_path)) {
                 return;
-            } 
-        } 
+            }
+        }
 
         if (!isset($params['width'])) {
             $width = $_image_data[0];
-        } 
+        }
         if (!isset($params['height'])) {
             $height = $_image_data[1];
-        } 
-    } 
+        }
+    }
 
     if (isset($params['dpi'])) {
         if (strstr($server_vars['HTTP_USER_AGENT'], 'Mac')) {
             $dpi_default = 72;
         } else {
             $dpi_default = 96;
-        } 
+        }
         $_resize = $dpi_default / $params['dpi'];
         $width = round($width * $_resize);
         $height = round($height * $_resize);
-    } 
+    }
 
     return $prefix . '<img src="' . $path_prefix . $file . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '"' . $extra . ' />' . $suffix;
-} 
+}
 
 ?>

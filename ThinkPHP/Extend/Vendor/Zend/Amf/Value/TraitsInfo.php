@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -28,8 +29,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Value_TraitsInfo
-{
+class Zend_Amf_Value_TraitsInfo {
+
     /**
      * @var string Class name
      */
@@ -59,12 +60,11 @@ class Zend_Amf_Value_TraitsInfo
      * @param  boolean $properties
      * @return void
      */
-    public function __construct($className, $dynamic=false, $externalizable=false, $properties=null)
-    {
-        $this->_className      = $className;
-        $this->_dynamic        = $dynamic;
+    public function __construct($className, $dynamic = false, $externalizable = false, $properties = null) {
+        $this->_className = $className;
+        $this->_dynamic = $dynamic;
         $this->_externalizable = $externalizable;
-        $this->_properties     = $properties;
+        $this->_properties = $properties;
     }
 
     /**
@@ -72,8 +72,7 @@ class Zend_Amf_Value_TraitsInfo
      *
      * @return boolean
      */
-    public function isDynamic()
-    {
+    public function isDynamic() {
         return $this->_dynamic;
     }
 
@@ -82,8 +81,7 @@ class Zend_Amf_Value_TraitsInfo
      *
      * @return boolean
      */
-    public function isExternalizable()
-    {
+    public function isExternalizable() {
         return $this->_externalizable;
     }
 
@@ -92,8 +90,7 @@ class Zend_Amf_Value_TraitsInfo
      *
      * @return int
      */
-    public function length()
-    {
+    public function length() {
         return count($this->_properties);
     }
 
@@ -102,8 +99,7 @@ class Zend_Amf_Value_TraitsInfo
      *
      * @return string
      */
-    public function getClassName()
-    {
+    public function getClassName() {
         return $this->_className;
     }
 
@@ -113,8 +109,7 @@ class Zend_Amf_Value_TraitsInfo
      * @param  string $name
      * @return Zend_Amf_Value_TraitsInfo
      */
-    public function addProperty($name)
-    {
+    public function addProperty($name) {
         $this->_properties[] = $name;
         return $this;
     }
@@ -125,8 +120,7 @@ class Zend_Amf_Value_TraitsInfo
      * @param  array $props
      * @return Zend_Amf_Value_TraitsInfo
      */
-    public function addAllProperties(array $props)
-    {
+    public function addAllProperties(array $props) {
         $this->_properties = $props;
         return $this;
     }
@@ -137,8 +131,7 @@ class Zend_Amf_Value_TraitsInfo
      * @param  int $index
      * @return string
      */
-    public function getProperty($index)
-    {
+    public function getProperty($index) {
         return $this->_properties[(int) $index];
     }
 
@@ -147,8 +140,8 @@ class Zend_Amf_Value_TraitsInfo
      *
      * @return array
      */
-    public function getAllProperties()
-    {
+    public function getAllProperties() {
         return $this->_properties;
     }
+
 }

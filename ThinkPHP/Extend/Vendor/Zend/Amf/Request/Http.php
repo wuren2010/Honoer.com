@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -19,7 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: Http.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-
 /** Zend_Amf_Request */
 require_once 'Zend/Amf/Request.php';
 
@@ -35,8 +35,8 @@ require_once 'Zend/Amf/Request.php';
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Request_Http extends Zend_Amf_Request
-{
+class Zend_Amf_Request_Http extends Zend_Amf_Request {
+
     /**
      * Raw AMF request
      * @var string
@@ -52,8 +52,7 @@ class Zend_Amf_Request_Http extends Zend_Amf_Request
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         // php://input allows you to read raw POST data. It is a less memory 
         // intensive alternative to $HTTP_RAW_POST_DATA and does not need any 
         // special php.ini directives
@@ -64,7 +63,7 @@ class Zend_Amf_Request_Http extends Zend_Amf_Request
             $this->_rawRequest = $amfRequest;
             $this->initialize($amfRequest);
         } else {
-            echo '<p>Zend Amf Endpoint</p>' ;
+            echo '<p>Zend Amf Endpoint</p>';
         }
     }
 
@@ -73,8 +72,8 @@ class Zend_Amf_Request_Http extends Zend_Amf_Request
      * 
      * @return string
      */
-    public function getRawRequest()
-    {
+    public function getRawRequest() {
         return $this->_rawRequest;
     }
+
 }

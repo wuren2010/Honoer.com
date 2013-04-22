@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,6 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
 /**
  * Zend_Server_Reflection_ReturnValue
  */
@@ -40,8 +40,8 @@ require_once 'Zend/Server/Reflection/Parameter.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id: Prototype.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-class Zend_Server_Reflection_Prototype
-{
+class Zend_Server_Reflection_Prototype {
+
     /**
      * Constructor
      *
@@ -49,8 +49,7 @@ class Zend_Server_Reflection_Prototype
      * @param array $params
      * @return void
      */
-    public function __construct(Zend_Server_Reflection_ReturnValue $return, $params = null)
-    {
+    public function __construct(Zend_Server_Reflection_ReturnValue $return, $params = null) {
         $this->_return = $return;
 
         if (!is_array($params) && (null !== $params)) {
@@ -75,8 +74,7 @@ class Zend_Server_Reflection_Prototype
      *
      * @return string
      */
-    public function getReturnType()
-    {
+    public function getReturnType() {
         return $this->_return->getType();
     }
 
@@ -86,8 +84,7 @@ class Zend_Server_Reflection_Prototype
      * @access public
      * @return Zend_Server_Reflection_ReturnValue
      */
-    public function getReturnValue()
-    {
+    public function getReturnValue() {
         return $this->_return;
     }
 
@@ -96,8 +93,8 @@ class Zend_Server_Reflection_Prototype
      *
      * @return array Array of {@link Zend_Server_Reflection_Parameter}s
      */
-    public function getParameters()
-    {
+    public function getParameters() {
         return $this->_params;
     }
+
 }

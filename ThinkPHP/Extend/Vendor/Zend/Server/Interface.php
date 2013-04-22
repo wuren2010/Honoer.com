@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -27,8 +28,8 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id: Interface.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-interface Zend_Server_Interface
-{
+interface Zend_Server_Interface {
+
     /**
      * Attach a function as a server method
      *

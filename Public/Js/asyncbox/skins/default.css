@@ -2,7 +2,7 @@
 /*!----------------------------------------------------------------------------- 
    AsyncBox default v1.5 - http://asyncui.com/skin - Copyright 2012, Wuxinxi007
    -----------------------------------------------------------------------------!*/
-   
+
 body{margin:0;height:100%} asyncui{display:block} .asyncbox{position:absolute;font:12px Tahoma,sans-serif}
 
 ab_skins{background:url(default/default_bg.gif)}
@@ -34,7 +34,7 @@ table.ab_outer{width:auto;height:auto;border-collapse:collaps}
 /*asyncbox alert...*/
 .asyncbox_alert,.asyncbox_confirm,.asyncbox_success,.asyncbox_warning,.asyncbox_error{color:#033;margin:12px;line-height:18px;padding-left:46px;text-align:left;}
 .asyncbox_alert span,.asyncbox_confirm span,.asyncbox_success span,.asyncbox_warning span,.asyncbox_error span{
-	width:37px;height:37px;position:absolute;top:36px;left:18px;background:url(default/default_bg.gif) no-repeat -32px 0
+    width:37px;height:37px;position:absolute;top:36px;left:18px;background:url(default/default_bg.gif) no-repeat -32px 0
 }
 .asyncbox_confirm span{background-position:-69px 0}
 .asyncbox_success span{background-position:-106px 0}

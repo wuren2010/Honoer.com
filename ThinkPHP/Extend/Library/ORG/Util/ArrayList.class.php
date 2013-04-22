@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -57,7 +58,7 @@ class ArrayList implements IteratorAggregate {
 
     //
     public function unshift($element) {
-        return (array_unshift($this->_elements,$element))?true : false;
+        return (array_unshift($this->_elements, $element)) ? true : false;
     }
 
     //
@@ -73,7 +74,7 @@ class ArrayList implements IteratorAggregate {
      */
     public function addAll($list) {
         $before = $this->size();
-        foreach( $list as $element) {
+        foreach ($list as $element) {
             $this->add($element);
         }
         $after = $this->size();
@@ -136,7 +137,9 @@ class ArrayList implements IteratorAggregate {
      */
     public function lastIndexOf($element) {
         for ($i = (count($this->_elements) - 1); $i > 0; $i--) {
-            if ($element == $this->get($i)) { return $i; }
+            if ($element == $this->get($i)) {
+                return $i;
+            }
         }
     }
 
@@ -153,7 +156,9 @@ class ArrayList implements IteratorAggregate {
      */
     public function remove($index) {
         $element = $this->get($index);
-        if (!is_null($element)) { array_splice($this->_elements, $index, 1); }
+        if (!is_null($element)) {
+            array_splice($this->_elements, $index, 1);
+        }
         return $element;
     }
 
@@ -163,8 +168,8 @@ class ArrayList implements IteratorAggregate {
      * @param integer $offset  开始移除位置
      * @param integer $length  移除长度
      */
-    public function removeRange($offset , $length) {
-        array_splice($this->_elements, $offset , $length);
+    public function removeRange($offset, $length) {
+        array_splice($this->_elements, $offset, $length);
     }
 
     /**
@@ -181,8 +186,8 @@ class ArrayList implements IteratorAggregate {
      * @param integer $offset  开始位置
      * @param integer $length  长度
      */
-    public function range($offset,$length=null) {
-        return array_slice($this->_elements,$offset,$length);
+    public function range($offset, $length = null) {
+        return array_slice($this->_elements, $offset, $length);
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -21,12 +22,14 @@ abstract class Action {
      * @param array $parms 参数
      * @return mixed
      */
-    public function __call($method,$parms) {
+    public function __call($method, $parms) {
         // 如果定义了_empty操作 则调用
-        if(method_exists($this,'_empty')) {
-            $this->_empty($method,$parms);
+        if (method_exists($this, '_empty')) {
+            $this->_empty($method, $parms);
         }
     }
 
-}//类定义结束
+}
+
+//类定义结束
 ?>

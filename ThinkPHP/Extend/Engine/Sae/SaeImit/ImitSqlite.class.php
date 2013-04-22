@@ -1,29 +1,31 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | 模拟器数据库采用sqlite3
 // +----------------------------------------------------------------------
 // | Author: luofei614<www.3g4k.com>
 // +----------------------------------------------------------------------
 // $Id: ImitSqlite.class.php 2766 2012-02-20 15:58:21Z luofei614@gmail.com $
-class ImitSqlite extends SQLite3{
-    function __construct()
-    {
-        $this->open(dirname(__FILE__).'/sae.db');
+class ImitSqlite extends SQLite3 {
+
+    function __construct() {
+        $this->open(dirname(__FILE__) . '/sae.db');
     }
+
     //获得数据，返回数组
-    public function getData($sql){
+    public function getData($sql) {
         $this->last_sql = $sql;
-        $result=$this->query($sql);
-        if(!$result){
+        $result = $this->query($sql);
+        if (!$result) {
             return false;
         }
-        $data=array();
-        while($arr=$result->fetchArray(SQLITE3_ASSOC)){
-            $data[]=$arr;
+        $data = array();
+        while ($arr = $result->fetchArray(SQLITE3_ASSOC)) {
+            $data[] = $arr;
         }
         return $data;
-        
     }
+
     //返回第一条数据
     public function getLine($sql) {
         $data = $this->getData($sql);
@@ -43,6 +45,7 @@ class ImitSqlite extends SQLite3{
             return false;
         }
     }
+
     //运行sql语句
     public function runSql($sql) {
         return $this->exec($sql);

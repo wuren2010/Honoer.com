@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -28,8 +29,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Parse_Resource_Stream
-{
+class Zend_Amf_Parse_Resource_Stream {
+
     /**
      * Parse resource into string
      * 
@@ -39,4 +40,5 @@ class Zend_Amf_Parse_Resource_Stream
     public function parse($resource) {
         return stream_get_contents($resource);
     }
+
 }

@@ -1,15 +1,13 @@
 
-<div class="container">
-    <div class="row-fluid">
-        <include file="Public:left" />
-        <div class="span9">
-            <div class="bs-docs-box">
-                <include file="Public:crumbs" />
-                <div class="tab-content">
-                    <volist name="data" id="vo" key="k">
-                        {$vo.article_content}
-                    </volist>
-                </div>
+<div class="row-fluid">
+    <include file="Public:left" />
+    <div class="span9">
+        <div class="bs-docs-box">
+            <include file="Public:crumbs" />
+            <div class="tab-content">
+                <volist name="data" id="vo" key="k">
+                    {$vo.article_content}
+                </volist>
             </div>
         </div>
     </div>

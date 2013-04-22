@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -15,19 +16,18 @@
  * @package  Common
  * @author   liu21st <liu21st@gmail.com>
  */
-
 // 错误输出
 function halt($error) {
     exit($error);
 }
 
 // 自定义异常处理
-function throw_exception($msg, $type='ThinkException', $code=0) {
+function throw_exception($msg, $type = 'ThinkException', $code = 0) {
     halt($msg);
 }
 
 // 浏览器友好的变量输出
-function dump($var, $echo=true, $label=null, $strict=true) {
+function dump($var, $echo = true, $label = null, $strict = true) {
     $label = ($label === null) ? '' : rtrim($label) . ' ';
     if (!$strict) {
         if (ini_get('html_errors')) {
@@ -52,15 +52,15 @@ function dump($var, $echo=true, $label=null, $strict=true) {
         return $output;
 }
 
- // 区间调试开始
-function debug_start($label='') {
+// 区间调试开始
+function debug_start($label = '') {
     $GLOBALS[$label]['_beginTime'] = microtime(TRUE);
     if (MEMORY_LIMIT_ON)
         $GLOBALS[$label]['_beginMem'] = memory_get_usage();
 }
 
 // 区间调试结束，显示指定标记到当前位置的调试
-function debug_end($label='') {
+function debug_end($label = '') {
     $GLOBALS[$label]['_endTime'] = microtime(TRUE);
     echo '<div style="text-align:center;width:100%">Process ' . $label . ': Times ' . number_format($GLOBALS[$label]['_endTime'] - $GLOBALS[$label]['_beginTime'], 6) . 's ';
     if (MEMORY_LIMIT_ON) {
@@ -71,11 +71,11 @@ function debug_end($label='') {
 }
 
 // 全局缓存设置和读取
-function S($name, $value='', $expire='', $type='',$options=null) {
+function S($name, $value = '', $expire = '', $type = '', $options = null) {
     static $_cache = array();
     alias_import('Cache');
     //取得缓存对象实例
-    $cache = Cache::getInstance($type,$options);
+    $cache = Cache::getInstance($type, $options);
     if ('' !== $value) {
         if (is_null($value)) {
             // 删除缓存
@@ -99,7 +99,7 @@ function S($name, $value='', $expire='', $type='',$options=null) {
 }
 
 // 快速文件数据读取和保存 针对简单类型数据 字符串、数组
-function F($name, $value='', $path=DATA_PATH) {
+function F($name, $value = '', $path = DATA_PATH) {
     static $_cache = array();
     $filename = $path . $name . '.php';
     if ('' !== $value) {
@@ -128,7 +128,7 @@ function F($name, $value='', $path=DATA_PATH) {
 }
 
 // 取得对象实例 支持调用类的静态方法
-function get_instance_of($name, $method='', $args=array()) {
+function get_instance_of($name, $method = '', $args = array()) {
     static $_instance = array();
     $identify = empty($args) ? $name . $method : $name . $method . to_guid_string($args);
     if (!isset($_instance[$identify])) {
@@ -165,21 +165,23 @@ function to_guid_string($mix) {
 // 加载扩展配置文件
 function load_ext_file() {
     // 加载自定义外部文件
-    if(C('LOAD_EXT_FILE')) {
-        $files =  explode(',',C('LOAD_EXT_FILE'));
-        foreach ($files as $file){
-            $file   = COMMON_PATH.$file.'.php';
-            if(is_file($file)) include $file;
+    if (C('LOAD_EXT_FILE')) {
+        $files = explode(',', C('LOAD_EXT_FILE'));
+        foreach ($files as $file) {
+            $file = COMMON_PATH . $file . '.php';
+            if (is_file($file))
+                include $file;
         }
     }
     // 加载自定义的动态配置文件
-    if(C('LOAD_EXT_CONFIG')) {
-        $configs =  C('LOAD_EXT_CONFIG');
-        if(is_string($configs)) $configs =  explode(',',$configs);
-        foreach ($configs as $key=>$config){
-            $file   = CONF_PATH.$config.'.php';
-            if(is_file($file)) {
-                is_numeric($key)?C(include $file):C($key,include $file);
+    if (C('LOAD_EXT_CONFIG')) {
+        $configs = C('LOAD_EXT_CONFIG');
+        if (is_string($configs))
+            $configs = explode(',', $configs);
+        foreach ($configs as $key => $config) {
+            $file = CONF_PATH . $config . '.php';
+            if (is_file($file)) {
+                is_numeric($key) ? C(include $file) : C($key, include $file);
             }
         }
     }

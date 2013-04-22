@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty plugin
  *
@@ -18,13 +19,12 @@
  * @param array $params parameters
  * @return string with compiled code
  */
-function smarty_modifiercompiler_upper($params, $compiler)
-{
-    if (SMARTY_MBSTRING /* ^phpunit */&&empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
-        return 'mb_strtoupper(' . $params[0] . ',SMARTY_RESOURCE_CHAR_SET)' ;
+function smarty_modifiercompiler_upper($params, $compiler) {
+    if (SMARTY_MBSTRING /* ^phpunit */ && empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
+        return 'mb_strtoupper(' . $params[0] . ',SMARTY_RESOURCE_CHAR_SET)';
     }
     // no MBString fallback
     return 'strtoupper(' . $params[0] . ')';
-} 
+}
 
 ?>

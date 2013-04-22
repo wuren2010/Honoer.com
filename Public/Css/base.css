@@ -1,19 +1,21 @@
-/*header{height:80px;background: white #5bccfe;}*/
-header{height:80px;background: url("../Images/headerbg.png") repeat;}
-footer{height:80px;background: #F2F2F2;}
-.masthead {height:80px;line-height: 80px;float: left;}
+.header{height:80px;background:#F8F8F8;margin-bottom: 20px;border-bottom: 1px solid #CCC;box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);}
+.footer{height:60px;background:#F8F8F8;margin-top: 20px;padding-top: 20px;border-top: 1px solid #CCC;box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);}
 
-header .masthead img{
-    max-height:100px;
+
+.banner-pic {
+    height: 200px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.logo img{
+    margin-top: 20px;
+    max-height:80px;
 } 
-
-hr{height:1px;border-bottom: 1px solid #B3B3B3;box-shadow: 0 0 5px #C3C3C3;margin: 20px 0;z-index: 15;}
-
-header ul.nav {
-    margin-top:45px;
+.nav {
+    margin-top:40px;
     margin-bottom: 0;
 }
-header .nav li {
+.header .nav li {
     margin: 0 5px;
 }
 
@@ -116,8 +118,6 @@ a.banner {
     overflow: hidden;
     display: block;
 }
-
-
 
 .nav-pills > li > a {
     width: 80px;

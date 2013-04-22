@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty Internal Plugin Compile Assign
  *
@@ -25,8 +26,7 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase {
      * @param array  $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
-    {
+    public function compile($args, $compiler, $parameter) {
         // the following must be assigned at runtime because it will be overwritten in Smarty_Internal_Compile_Append
         $this->required_attributes = array('var', 'value');
         $this->shorttag_order = array('var', 'value');
@@ -65,7 +65,7 @@ class Smarty_Internal_Compile_Assign extends Smarty_Internal_CompileBase {
         } elseif ($_scope == Smarty::SCOPE_ROOT || $_scope == Smarty::SCOPE_GLOBAL) {
             $output .= "\n\$_ptr = \$_smarty_tpl->parent; while (\$_ptr != null) {\$_ptr->tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]]; \$_ptr = \$_ptr->parent; }";
         }
-        if ( $_scope == Smarty::SCOPE_GLOBAL) {
+        if ($_scope == Smarty::SCOPE_GLOBAL) {
             $output .= "\nSmarty::\$global_tpl_vars[$_attr[var]] = clone \$_smarty_tpl->tpl_vars[$_attr[var]];";
         }
         $output .= '?>';

@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -11,9 +12,9 @@
 // $Id$
 
 /**
- +------------------------------------------------------------------------------
+  +------------------------------------------------------------------------------
  * 将Trace信息输出到火狐的firebug，从而不影响ajax效果和页面的布局。
- +------------------------------------------------------------------------------
+  +------------------------------------------------------------------------------
  * 使用前，你需要先在火狐浏览器上安装firebug和firePHP两个插件。
  * 定义项目的tags.php文件， 
  * <code>
@@ -29,123 +30,122 @@
  * headers输出，你可以在入口文件第一行加入代码 ob_start(); 或者配置output_buffering
  *
  */
-
 defined('THINK_PATH') or exit();
+
 /**
- +------------------------------------------------------------------------------
+  +------------------------------------------------------------------------------
  * 系统行为扩展 页面Trace显示输出
- +------------------------------------------------------------------------------
+  +------------------------------------------------------------------------------
  */
 class FireShowPageTraceBehavior extends Behavior {
+
     // 行为参数定义
-    protected $options   =  array(
-        'FIRE_SHOW_PAGE_TRACE'=> true,   // 显示页面Trace信息
-        'TRACE_PAGE_TABS'=> array('BASE'=>'基本','FILE'=>'文件','INFO'=>'流程','ERR|NOTIC'=>'错误','SQL'=>'SQL','DEBUG'=>'调试')
+    protected $options = array(
+        'FIRE_SHOW_PAGE_TRACE' => true, // 显示页面Trace信息
+        'TRACE_PAGE_TABS' => array('BASE' => '基本', 'FILE' => '文件', 'INFO' => '流程', 'ERR|NOTIC' => '错误', 'SQL' => 'SQL', 'DEBUG' => '调试')
     );
 
     // 行为扩展的执行入口必须是run
-    public function run(&$params){
-            if(C('FIRE_SHOW_PAGE_TRACE')) $this->showTrace();
+    public function run(&$params) {
+        if (C('FIRE_SHOW_PAGE_TRACE'))
+            $this->showTrace();
     }
 
     /**
-     +----------------------------------------------------------
+      +----------------------------------------------------------
      * 显示页面Trace信息
-     +----------------------------------------------------------
+      +----------------------------------------------------------
      * @access private
-     +----------------------------------------------------------
+      +----------------------------------------------------------
      */
     private function showTrace() {
-         // 系统默认显示信息
-        $files =  get_included_files();
-        $info   =   array();
-        foreach ($files as $key=>$file){
-            $info[] = $file.' ( '.number_format(filesize($file)/1024,2).' KB )';
+        // 系统默认显示信息
+        $files = get_included_files();
+        $info = array();
+        foreach ($files as $key => $file) {
+            $info[] = $file . ' ( ' . number_format(filesize($file) / 1024, 2) . ' KB )';
         }
-        $trace  =   array();
-        $base   =   array(
-            '请求信息'=>  date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME']).' '.$_SERVER['SERVER_PROTOCOL'].' '.$_SERVER['REQUEST_METHOD'].' : '.__SELF__,
-            '运行时间'=> $this->showTime(),
-            '内存开销'=> MEMORY_LIMIT_ON?number_format((memory_get_usage() - $GLOBALS['_startUseMems'])/1024,2).' kb':'不支持',
-            '查询信息'=> N('db_query').' queries '.N('db_write').' writes ',
-            '文件加载'=> count(get_included_files()),
-            '缓存信息'=> N('cache_read').' gets '.N('cache_write').' writes ',
-            '配置加载'=> count(c()),
-            '会话信息'=> 'SESSION_ID='.session_id(),
-            );
+        $trace = array();
+        $base = array(
+            '请求信息' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']) . ' ' . $_SERVER['SERVER_PROTOCOL'] . ' ' . $_SERVER['REQUEST_METHOD'] . ' : ' . __SELF__,
+            '运行时间' => $this->showTime(),
+            '内存开销' => MEMORY_LIMIT_ON ? number_format((memory_get_usage() - $GLOBALS['_startUseMems']) / 1024, 2) . ' kb' : '不支持',
+            '查询信息' => N('db_query') . ' queries ' . N('db_write') . ' writes ',
+            '文件加载' => count(get_included_files()),
+            '缓存信息' => N('cache_read') . ' gets ' . N('cache_write') . ' writes ',
+            '配置加载' => count(c()),
+            '会话信息' => 'SESSION_ID=' . session_id(),
+        );
         // 读取项目定义的Trace文件
-        $traceFile  =   CONF_PATH.'trace.php';
-        if(is_file($traceFile)) {
-            $base    =   array_merge($base,include $traceFile);
+        $traceFile = CONF_PATH . 'trace.php';
+        if (is_file($traceFile)) {
+            $base = array_merge($base, include $traceFile);
         }
-        $debug  =   trace();
-        $tabs   =   C('TRACE_PAGE_TABS');
-        foreach ($tabs as $name=>$title){
-            switch(strtoupper($name)) {
+        $debug = trace();
+        $tabs = C('TRACE_PAGE_TABS');
+        foreach ($tabs as $name => $title) {
+            switch (strtoupper($name)) {
                 case 'BASE':// 基本信息
-                    $trace[$title]  =   $base;
+                    $trace[$title] = $base;
                     break;
                 case 'FILE': // 文件信息
-                    $trace[$title]  =   $info;
+                    $trace[$title] = $info;
                     break;
                 default:// 调试信息
-                    if(strpos($name,'|')) {// 多组信息
-                        $array  =   explode('|',$name);
-                        $result =   array();
-                        foreach($array as $name){
-                            $result   +=   isset($debug[$name])?$debug[$name]:array();
+                    if (strpos($name, '|')) {// 多组信息
+                        $array = explode('|', $name);
+                        $result = array();
+                        foreach ($array as $name) {
+                            $result += isset($debug[$name]) ? $debug[$name] : array();
                         }
-                        $trace[$title]  =   $result;
-                    }else{
-                        $trace[$title]  =   isset($debug[$name])?$debug[$name]:'';
+                        $trace[$title] = $result;
+                    } else {
+                        $trace[$title] = isset($debug[$name]) ? $debug[$name] : '';
                     }
             }
         }
-    foreach ($trace as $key=>$val){
-            if(!is_array($val) && empty($val))
-                $val=array();
-            if(is_array($val)){
-            $fire=array(
-            array('','')
-            );
-            foreach($val as $k=>$v){
-                $fire[]=array($k,$v);
+        foreach ($trace as $key => $val) {
+            if (!is_array($val) && empty($val))
+                $val = array();
+            if (is_array($val)) {
+                $fire = array(
+                    array('', '')
+                );
+                foreach ($val as $k => $v) {
+                    $fire[] = array($k, $v);
+                }
+                fb(array($key, $fire), FirePHP::TABLE);
+            } else {
+                fb($val, $key);
             }
-            fb(array($key,$fire),FirePHP::TABLE);
-        }else{
-            fb($val,$key);
         }
-     }
-    unset($files,$info,$log,$base);
+        unset($files, $info, $log, $base);
     }
 
     /**
-     +----------------------------------------------------------
+      +----------------------------------------------------------
      * 获取运行时间
-     +----------------------------------------------------------
+      +----------------------------------------------------------
      */
     private function showTime() {
         // 显示运行时间
-        G('beginTime',$GLOBALS['_beginTime']);
+        G('beginTime', $GLOBALS['_beginTime']);
         G('viewEndTime');
         // 显示详细运行时间
-        return G('beginTime','viewEndTime').'s ( Load:'.G('beginTime','loadTime').'s Init:'.G('loadTime','initTime').'s Exec:'.G('initTime','viewStartTime').'s Template:'.G('viewStartTime','viewEndTime').'s )';
+        return G('beginTime', 'viewEndTime') . 's ( Load:' . G('beginTime', 'loadTime') . 's Init:' . G('loadTime', 'initTime') . 's Exec:' . G('initTime', 'viewStartTime') . 's Template:' . G('viewStartTime', 'viewEndTime') . 's )';
     }
 
 }
 
-
-function fb()
-{
+function fb() {
     $instance = FirePHP::getInstance(true);
-  
+
     $args = func_get_args();
-    return call_user_func_array(array($instance,'fb'),$args);
+    return call_user_func_array(array($instance, 'fb'), $args);
 }
 
+class FB {
 
-class FB
-{
     /**
      * Enable and disable logging to Firebug
      * 
@@ -153,24 +153,22 @@ class FB
      * @param boolean $Enabled TRUE to enable, FALSE to disable
      * @return void
      */
-    public static function setEnabled($Enabled)
-    {
+    public static function setEnabled($Enabled) {
         $instance = FirePHP::getInstance(true);
         $instance->setEnabled($Enabled);
     }
-  
+
     /**
      * Check if logging is enabled
      * 
      * @see FirePHP->getEnabled()
      * @return boolean TRUE if enabled
      */
-    public static function getEnabled()
-    {
+    public static function getEnabled() {
         $instance = FirePHP::getInstance(true);
         return $instance->getEnabled();
-    }  
-  
+    }
+
     /**
      * Specify a filter to be used when encoding an object
      * 
@@ -181,12 +179,11 @@ class FB
      * @param array $Filter An array or members to exclude
      * @return void
      */
-    public static function setObjectFilter($Class, $Filter)
-    {
-      $instance = FirePHP::getInstance(true);
-      $instance->setObjectFilter($Class, $Filter);
+    public static function setObjectFilter($Class, $Filter) {
+        $instance = FirePHP::getInstance(true);
+        $instance->setObjectFilter($Class, $Filter);
     }
-  
+
     /**
      * Set some options for the library
      * 
@@ -194,8 +191,7 @@ class FB
      * @param array $Options The options to be set
      * @return void
      */
-    public static function setOptions($Options)
-    {
+    public static function setOptions($Options) {
         $instance = FirePHP::getInstance(true);
         $instance->setOptions($Options);
     }
@@ -206,8 +202,7 @@ class FB
      * @see FirePHP->getOptions()
      * @return array The options
      */
-    public static function getOptions()
-    {
+    public static function getOptions() {
         $instance = FirePHP::getInstance(true);
         return $instance->getOptions();
     }
@@ -220,11 +215,10 @@ class FB
      * @return true
      * @throws Exception
      */
-    public static function send()
-    {
+    public static function send() {
         $instance = FirePHP::getInstance(true);
         $args = func_get_args();
-        return call_user_func_array(array($instance,'fb'),$args);
+        return call_user_func_array(array($instance, 'fb'), $args);
     }
 
     /**
@@ -238,8 +232,7 @@ class FB
      * @param array $Options OPTIONAL Instructions on how to log the group
      * @return true
      */
-    public static function group($Name, $Options=null)
-    {
+    public static function group($Name, $Options = null) {
         $instance = FirePHP::getInstance(true);
         return $instance->group($Name, $Options);
     }
@@ -250,8 +243,7 @@ class FB
      * @return true
      * @throws Exception
      */
-    public static function groupEnd()
-    {
+    public static function groupEnd() {
         return self::send(null, null, FirePHP::GROUP_END);
     }
 
@@ -264,10 +256,9 @@ class FB
      * @return true
      * @throws Exception
      */
-    public static function log($Object, $Label=null)
-    {
+    public static function log($Object, $Label = null) {
         return self::send($Object, $Label, FirePHP::LOG);
-    } 
+    }
 
     /**
      * Log object with label to firebug console
@@ -278,10 +269,9 @@ class FB
      * @return true
      * @throws Exception
      */
-    public static function info($Object, $Label=null)
-    {
+    public static function info($Object, $Label = null) {
         return self::send($Object, $Label, FirePHP::INFO);
-    } 
+    }
 
     /**
      * Log object with label to firebug console
@@ -292,10 +282,9 @@ class FB
      * @return true
      * @throws Exception
      */
-    public static function warn($Object, $Label=null)
-    {
+    public static function warn($Object, $Label = null) {
         return self::send($Object, $Label, FirePHP::WARN);
-    } 
+    }
 
     /**
      * Log object with label to firebug console
@@ -306,10 +295,9 @@ class FB
      * @return true
      * @throws Exception
      */
-    public static function error($Object, $Label=null)
-    {
+    public static function error($Object, $Label = null) {
         return self::send($Object, $Label, FirePHP::ERROR);
-    } 
+    }
 
     /**
      * Dumps key and variable to firebug server panel
@@ -320,10 +308,9 @@ class FB
      * @return true
      * @throws Exception
      */
-    public static function dump($Key, $Variable)
-    {
+    public static function dump($Key, $Variable) {
         return self::send($Variable, $Key, FirePHP::DUMP);
-    } 
+    }
 
     /**
      * Log a trace in the firebug console
@@ -333,10 +320,9 @@ class FB
      * @return true
      * @throws Exception
      */
-    public static function trace($Label)
-    {
+    public static function trace($Label) {
         return self::send($Label, FirePHP::TRACE);
-    } 
+    }
 
     /**
      * Log a table in the firebug console
@@ -347,10 +333,9 @@ class FB
      * @return true
      * @throws Exception
      */
-    public static function table($Label, $Table)
-    {
+    public static function table($Label, $Table) {
         return self::send($Table, $Label, FirePHP::TABLE);
-    } 
+    }
 
 }
 
@@ -365,8 +350,8 @@ if (!defined('E_DEPRECATED')) {
 }
 if (!defined('E_USER_DEPRECATED')) {
     define('E_USER_DEPRECATED', 16384);
-} 
- 
+}
+
 /**
  * Sends the given data to the FirePHP Firefox Extension.
  * The data can be displayed in the Firebug Console or in the
@@ -380,12 +365,12 @@ if (!defined('E_USER_DEPRECATED')) {
  * @package         FirePHPCore
  */
 class FirePHP {
-
     /**
      * FirePHP version
      *
      * @var string
      */
+
     const VERSION = '0.3';    // @pinf replace '0.3' with '%%package.version%%'
 
     /**
@@ -396,7 +381,7 @@ class FirePHP {
      * @var string
      */
     const LOG = 'LOG';
-  
+
     /**
      * Firebug INFO level
      *
@@ -405,7 +390,7 @@ class FirePHP {
      * @var string
      */
     const INFO = 'INFO';
-    
+
     /**
      * Firebug WARN level
      *
@@ -414,7 +399,7 @@ class FirePHP {
      * @var string
      */
     const WARN = 'WARN';
-    
+
     /**
      * Firebug ERROR level
      *
@@ -423,21 +408,21 @@ class FirePHP {
      * @var string
      */
     const ERROR = 'ERROR';
-    
+
     /**
      * Dumps a variable to firebug's server panel
      *
      * @var string
      */
     const DUMP = 'DUMP';
-    
+
     /**
      * Displays a stack trace in firebug console
      *
      * @var string
      */
     const TRACE = 'TRACE';
-    
+
     /**
      * Displays an exception in firebug console
      * 
@@ -446,56 +431,56 @@ class FirePHP {
      * @var string
      */
     const EXCEPTION = 'EXCEPTION';
-    
+
     /**
      * Displays an table in firebug console
      *
      * @var string
      */
     const TABLE = 'TABLE';
-    
+
     /**
      * Starts a group in firebug console
      * 
      * @var string
      */
     const GROUP_START = 'GROUP_START';
-    
+
     /**
      * Ends a group in firebug console
      * 
      * @var string
      */
     const GROUP_END = 'GROUP_END';
-    
+
     /**
      * Singleton instance of FirePHP
      *
      * @var FirePHP
      */
     protected static $instance = null;
-    
+
     /**
      * Flag whether we are logging from within the exception handler
      * 
      * @var boolean
      */
     protected $inExceptionHandler = false;
-    
+
     /**
      * Flag whether to throw PHP errors that have been converted to ErrorExceptions
      * 
      * @var boolean
      */
     protected $throwErrorExceptions = true;
-    
+
     /**
      * Flag whether to convert PHP assertion errors to Exceptions
      * 
      * @var boolean
      */
     protected $convertAssertionErrorsToExceptions = true;
-    
+
     /**
      * Flag whether to throw PHP assertion errors that have been converted to Exceptions
      * 
@@ -509,17 +494,17 @@ class FirePHP {
      * @var int
      */
     protected $messageIndex = 1;
-    
+
     /**
      * Options for the library
      * 
      * @var array
      */
     protected $options = array('maxDepth' => 10,
-                               'maxObjectDepth' => 5,
-                               'maxArrayDepth' => 5,
-                               'useNativeJsonEncode' => true,
-                               'includeLineNumbers' => true);
+        'maxObjectDepth' => 5,
+        'maxArrayDepth' => 5,
+        'useNativeJsonEncode' => true,
+        'includeLineNumbers' => true);
 
     /**
      * Filters used to exclude object members when encoding
@@ -556,33 +541,30 @@ class FirePHP {
      * When the object gets serialized only include specific object members.
      * 
      * @return array
-     */  
-    public function __sleep()
-    {
-        return array('options','objectFilters','enabled');
+     */
+    public function __sleep() {
+        return array('options', 'objectFilters', 'enabled');
     }
-    
+
     /**
      * Gets singleton instance of FirePHP
      *
      * @param boolean $AutoCreate
      * @return FirePHP
      */
-    public static function getInstance($AutoCreate = false)
-    {
-        if ($AutoCreate===true && !self::$instance) {
+    public static function getInstance($AutoCreate = false) {
+        if ($AutoCreate === true && !self::$instance) {
             self::init();
         }
         return self::$instance;
     }
-    
+
     /**
      * Creates FirePHP object and stores it for singleton access
      *
      * @return FirePHP
      */
-    public static function init()
-    {
+    public static function init() {
         return self::setInstance(new self());
     }
 
@@ -592,8 +574,7 @@ class FirePHP {
      * @param FirePHP $instance The FirePHP object instance
      * @return FirePHP
      */
-    public static function setInstance($instance)
-    {
+    public static function setInstance($instance) {
         return self::$instance = $instance;
     }
 
@@ -603,10 +584,9 @@ class FirePHP {
      * @param object $console The console object to log to
      * @return void
      */
-    public function setLogToInsightConsole($console)
-    {
-        if(is_string($console)) {
-            if(get_class($this)!='FirePHP_Insight' && !is_subclass_of($this, 'FirePHP_Insight')) {
+    public function setLogToInsightConsole($console) {
+        if (is_string($console)) {
+            if (get_class($this) != 'FirePHP_Insight' && !is_subclass_of($this, 'FirePHP_Insight')) {
                 throw new Exception('FirePHP instance not an instance or subclass of FirePHP_Insight!');
             }
             $this->logToInsightConsole = $this->to('request')->console($console);
@@ -621,21 +601,19 @@ class FirePHP {
      * @param boolean $Enabled TRUE to enable, FALSE to disable
      * @return void
      */
-    public function setEnabled($Enabled)
-    {
-       $this->enabled = $Enabled;
+    public function setEnabled($Enabled) {
+        $this->enabled = $Enabled;
     }
-    
+
     /**
      * Check if logging is enabled
      * 
      * @return boolean TRUE if enabled
      */
-    public function getEnabled()
-    {
+    public function getEnabled() {
         return $this->enabled;
     }
-    
+
     /**
      * Specify a filter to be used when encoding an object
      * 
@@ -645,11 +623,10 @@ class FirePHP {
      * @param array $Filter An array of members to exclude
      * @return void
      */
-    public function setObjectFilter($Class, $Filter)
-    {
+    public function setObjectFilter($Class, $Filter) {
         $this->objectFilters[strtolower($Class)] = $Filter;
     }
-  
+
     /**
      * Set some options for the library
      * 
@@ -663,9 +640,8 @@ class FirePHP {
      * @param array $Options The options to be set
      * @return void
      */
-    public function setOptions($Options)
-    {
-        $this->options = array_merge($this->options,$Options);
+    public function setOptions($Options) {
+        $this->options = array_merge($this->options, $Options);
     }
 
     /**
@@ -673,8 +649,7 @@ class FirePHP {
      *
      * @return array The currently set options
      */
-    public function getOptions()
-    {
+    public function getOptions() {
         return $this->options;
     }
 
@@ -685,9 +660,8 @@ class FirePHP {
      * @param mixed $Value
      * @throws Exception
      * @return void
-     */  
-    public function setOption($Name, $Value)
-    {
+     */
+    public function setOption($Name, $Value) {
         if (!isset($this->options[$Name])) {
             throw $this->newException('Unknown option: ' . $Name);
         }
@@ -701,8 +675,7 @@ class FirePHP {
      * @throws Exception
      * @return mixed
      */
-    public function getOption($Name)
-    {
+    public function getOption($Name) {
         if (!isset($this->options[$Name])) {
             throw $this->newException('Unknown option: ' . $Name);
         }
@@ -716,16 +689,15 @@ class FirePHP {
      * 
      * @return mixed Returns a string containing the previously defined error handler (if any)
      */
-    public function registerErrorHandler($throwErrorExceptions = false)
-    {
+    public function registerErrorHandler($throwErrorExceptions = false) {
         //NOTE: The following errors will not be caught by this error handler:
         //      E_ERROR, E_PARSE, E_CORE_ERROR,
         //      E_CORE_WARNING, E_COMPILE_ERROR,
         //      E_COMPILE_WARNING, E_STRICT
-    
+
         $this->throwErrorExceptions = $throwErrorExceptions;
-    
-        return set_error_handler(array($this,'errorHandler'));     
+
+        return set_error_handler(array($this, 'errorHandler'));
     }
 
     /**
@@ -739,8 +711,7 @@ class FirePHP {
      * @param int $errline
      * @param array $errcontext
      */
-    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
-    {
+    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
         // Don't throw exception if error reporting is switched off
         if (error_reporting() == 0) {
             return;
@@ -756,7 +727,7 @@ class FirePHP {
             }
         }
     }
-  
+
     /**
      * Register FirePHP as your exception handler
      * 
@@ -764,11 +735,10 @@ class FirePHP {
      *               or NULL on error.
      *               If no previous handler was defined, NULL is also returned.
      */
-    public function registerExceptionHandler()
-    {
-        return set_exception_handler(array($this,'exceptionHandler'));     
+    public function registerExceptionHandler() {
+        return set_exception_handler(array($this, 'exceptionHandler'));
     }
-  
+
     /**
      * FirePHP's exception handler
      * 
@@ -777,13 +747,12 @@ class FirePHP {
      * @param Exception $Exception
      * @throws Exception
      */
-    function exceptionHandler($Exception)
-    {
-    
+    function exceptionHandler($Exception) {
+
         $this->inExceptionHandler = true;
-    
+
         header('HTTP/1.1 500 Internal Server Error');
-    
+
         try {
             $this->fb($Exception);
         } catch (Exception $e) {
@@ -791,7 +760,7 @@ class FirePHP {
         }
         $this->inExceptionHandler = false;
     }
-  
+
     /**
      * Register FirePHP driver as your assert callback
      * 
@@ -799,18 +768,17 @@ class FirePHP {
      * @param boolean $throwAssertionExceptions
      * @return mixed Returns the original setting or FALSE on errors
      */
-    public function registerAssertionHandler($convertAssertionErrorsToExceptions = true, $throwAssertionExceptions = false)
-    {
+    public function registerAssertionHandler($convertAssertionErrorsToExceptions = true, $throwAssertionExceptions = false) {
         $this->convertAssertionErrorsToExceptions = $convertAssertionErrorsToExceptions;
         $this->throwAssertionExceptions = $throwAssertionExceptions;
-        
+
         if ($throwAssertionExceptions && !$convertAssertionErrorsToExceptions) {
             throw $this->newException('Cannot throw assertion exceptions as assertion errors are not being converted to exceptions!');
         }
-        
+
         return assert_options(ASSERT_CALLBACK, array($this, 'assertionHandler'));
     }
-  
+
     /**
      * FirePHP's assertion handler
      *
@@ -820,23 +788,21 @@ class FirePHP {
      * @param int    $line Line source of assertion
      * @param mixed  $code Assertion code
      */
-    public function assertionHandler($file, $line, $code)
-    {
+    public function assertionHandler($file, $line, $code) {
         if ($this->convertAssertionErrorsToExceptions) {
-          
-          $exception = new ErrorException('Assertion Failed - Code[ '.$code.' ]', 0, null, $file, $line);
-    
-          if ($this->throwAssertionExceptions) {
-              throw $exception;
-          } else {
-              $this->fb($exception);
-          }
-        
+
+            $exception = new ErrorException('Assertion Failed - Code[ ' . $code . ' ]', 0, null, $file, $line);
+
+            if ($this->throwAssertionExceptions) {
+                throw $exception;
+            } else {
+                $this->fb($exception);
+            }
         } else {
-            $this->fb($code, 'Assertion Failed', FirePHP::ERROR, array('File'=>$file,'Line'=>$line));
+            $this->fb($code, 'Assertion Failed', FirePHP::ERROR, array('File' => $file, 'Line' => $line));
         }
     }
-  
+
     /**
      * Start a group for following messages.
      * 
@@ -849,33 +815,31 @@ class FirePHP {
      * @return true
      * @throws Exception
      */
-    public function group($Name, $Options = null)
-    {
-    
+    public function group($Name, $Options = null) {
+
         if (!$Name) {
             throw $this->newException('You must specify a label for the group!');
         }
-        
+
         if ($Options) {
             if (!is_array($Options)) {
                 throw $this->newException('Options must be defined as an array!');
             }
             if (array_key_exists('Collapsed', $Options)) {
-                $Options['Collapsed'] = ($Options['Collapsed'])?'true':'false';
+                $Options['Collapsed'] = ($Options['Collapsed']) ? 'true' : 'false';
             }
         }
-        
+
         return $this->fb(null, $Name, FirePHP::GROUP_START, $Options);
     }
-  
+
     /**
      * Ends a group you have started before
      *
      * @return true
      * @throws Exception
      */
-    public function groupEnd()
-    {
+    public function groupEnd() {
         return $this->fb(null, null, FirePHP::GROUP_END);
     }
 
@@ -888,10 +852,9 @@ class FirePHP {
      * @return true
      * @throws Exception
      */
-    public function log($Object, $Label = null, $Options = array())
-    {
+    public function log($Object, $Label = null, $Options = array()) {
         return $this->fb($Object, $Label, FirePHP::LOG, $Options);
-    } 
+    }
 
     /**
      * Log object with label to firebug console
@@ -902,10 +865,9 @@ class FirePHP {
      * @return true
      * @throws Exception
      */
-    public function info($Object, $Label = null, $Options = array())
-    {
+    public function info($Object, $Label = null, $Options = array()) {
         return $this->fb($Object, $Label, FirePHP::INFO, $Options);
-    } 
+    }
 
     /**
      * Log object with label to firebug console
@@ -916,10 +878,9 @@ class FirePHP {
      * @return true
      * @throws Exception
      */
-    public function warn($Object, $Label = null, $Options = array())
-    {
+    public function warn($Object, $Label = null, $Options = array()) {
         return $this->fb($Object, $Label, FirePHP::WARN, $Options);
-    } 
+    }
 
     /**
      * Log object with label to firebug console
@@ -930,10 +891,9 @@ class FirePHP {
      * @return true
      * @throws Exception
      */
-    public function error($Object, $Label = null, $Options = array())
-    {
+    public function error($Object, $Label = null, $Options = array()) {
         return $this->fb($Object, $Label, FirePHP::ERROR, $Options);
-    } 
+    }
 
     /**
      * Dumps key and variable to firebug server panel
@@ -944,12 +904,11 @@ class FirePHP {
      * @return true
      * @throws Exception
      */
-    public function dump($Key, $Variable, $Options = array())
-    {
+    public function dump($Key, $Variable, $Options = array()) {
         if (!is_string($Key)) {
             throw $this->newException('Key passed to dump() is not a string');
         }
-        if (strlen($Key)>100) {
+        if (strlen($Key) > 100) {
             throw $this->newException('Key passed to dump() is longer than 100 characters');
         }
         if (!preg_match_all('/^[a-zA-Z0-9-_\.:]*$/', $Key, $m)) {
@@ -957,7 +916,7 @@ class FirePHP {
         }
         return $this->fb($Variable, $Key, FirePHP::DUMP, $Options);
     }
-  
+
     /**
      * Log a trace in the firebug console
      *
@@ -966,10 +925,9 @@ class FirePHP {
      * @return true
      * @throws Exception
      */
-    public function trace($Label)
-    {
+    public function trace($Label) {
         return $this->fb($Label, FirePHP::TRACE);
-    } 
+    }
 
     /**
      * Log a table in the firebug console
@@ -980,8 +938,7 @@ class FirePHP {
      * @return true
      * @throws Exception
      */
-    public function table($Label, $Table, $Options = array())
-    {
+    public function table($Label, $Table, $Options = array()) {
         return $this->fb($Table, $Label, FirePHP::TABLE, $Options);
     }
 
@@ -990,8 +947,7 @@ class FirePHP {
      * 
      * @see Insight_Helper::to()
      */
-    public static function to()
-    {
+    public static function to() {
         $instance = self::getInstance();
         if (!method_exists($instance, "_to")) {
             throw new Exception("FirePHP::to() implementation not loaded");
@@ -1005,8 +961,7 @@ class FirePHP {
      * 
      * @see Insight_Helper::plugin()
      */
-    public static function plugin()
-    {
+    public static function plugin() {
         $instance = self::getInstance();
         if (!method_exists($instance, "_plugin")) {
             throw new Exception("FirePHP::plugin() implementation not loaded");
@@ -1020,21 +975,20 @@ class FirePHP {
      *
      * @return boolean
      */
-    public function detectClientExtension()
-    {
+    public function detectClientExtension() {
         // Check if FirePHP is installed on client via User-Agent header
-        if (@preg_match_all('/\sFirePHP\/([\.\d]*)\s?/si',$this->getUserAgent(),$m) &&
-           version_compare($m[1][0],'0.0.6','>=')) {
+        if (@preg_match_all('/\sFirePHP\/([\.\d]*)\s?/si', $this->getUserAgent(), $m) &&
+                version_compare($m[1][0], '0.0.6', '>=')) {
             return true;
         } else
         // Check if FirePHP is installed on client via X-FirePHP-Version header
-        if (@preg_match_all('/^([\.\d]*)$/si',$this->getRequestHeader("X-FirePHP-Version"),$m) &&
-           version_compare($m[1][0],'0.0.6','>=')) {
+        if (@preg_match_all('/^([\.\d]*)$/si', $this->getRequestHeader("X-FirePHP-Version"), $m) &&
+                version_compare($m[1][0], '0.0.6', '>=')) {
             return true;
         }
         return false;
     }
- 
+
     /**
      * Log varible to Firebug
      * 
@@ -1043,10 +997,9 @@ class FirePHP {
      * @return true Return TRUE if message was added to headers, FALSE otherwise
      * @throws Exception
      */
-    public function fb($Object)
-    {
-        if($this instanceof FirePHP_Insight && method_exists($this, '_logUpgradeClientMessage')) {
-            if(!FirePHP_Insight::$upgradeClientMessageLogged) {    // avoid infinite recursion as _logUpgradeClientMessage() logs a message
+    public function fb($Object) {
+        if ($this instanceof FirePHP_Insight && method_exists($this, '_logUpgradeClientMessage')) {
+            if (!FirePHP_Insight::$upgradeClientMessageLogged) {    // avoid infinite recursion as _logUpgradeClientMessage() logs a message
                 $this->_logUpgradeClientMessage();
             }
         }
@@ -1061,20 +1014,21 @@ class FirePHP {
             // If we are logging from within the exception handler we cannot throw another exception
             if ($this->inExceptionHandler) {
                 // Simply echo the error out to the page
-                echo '<div style="border: 2px solid red; font-family: Arial; font-size: 12px; background-color: lightgray; padding: 5px;"><span style="color: red; font-weight: bold;">FirePHP ERROR:</span> Headers already sent in <b>'.$filename.'</b> on line <b>'.$linenum.'</b>. Cannot send log data to FirePHP. You must have Output Buffering enabled via ob_start() or output_buffering ini directive.</div>';
+                echo '<div style="border: 2px solid red; font-family: Arial; font-size: 12px; background-color: lightgray; padding: 5px;"><span style="color: red; font-weight: bold;">FirePHP ERROR:</span> Headers already sent in <b>' . $filename . '</b> on line <b>' . $linenum . '</b>. Cannot send log data to FirePHP. You must have Output Buffering enabled via ob_start() or output_buffering ini directive.</div>';
             } else {
-                throw $this->newException('Headers already sent in '.$filename.' on line '.$linenum.'. Cannot send log data to FirePHP. You must have Output Buffering enabled via ob_start() or output_buffering ini directive.');
+                throw $this->newException('Headers already sent in ' . $filename . ' on line ' . $linenum . '. Cannot send log data to FirePHP. You must have Output Buffering enabled via ob_start() or output_buffering ini directive.');
             }
         }
-      
+
         $Type = null;
         $Label = null;
         $Options = array();
-      
-        if (func_num_args()==1) {
+
+        if (func_num_args() == 1) {
+            
         } else
-        if (func_num_args()==2) {
-            switch(func_get_arg(1)) {
+        if (func_num_args() == 2) {
+            switch (func_get_arg(1)) {
                 case self::LOG:
                 case self::INFO:
                 case self::WARN:
@@ -1092,11 +1046,11 @@ class FirePHP {
                     break;
             }
         } else
-        if (func_num_args()==3) {
+        if (func_num_args() == 3) {
             $Type = func_get_arg(2);
             $Label = func_get_arg(1);
         } else
-        if (func_num_args()==4) {
+        if (func_num_args() == 4) {
             $Type = func_get_arg(2);
             $Label = func_get_arg(1);
             $Options = func_get_arg(3);
@@ -1104,15 +1058,15 @@ class FirePHP {
             throw $this->newException('Wrong number of arguments to fb() function!');
         }
 
-        if($this->logToInsightConsole!==null && (get_class($this)=='FirePHP_Insight' || is_subclass_of($this, 'FirePHP_Insight'))) {
+        if ($this->logToInsightConsole !== null && (get_class($this) == 'FirePHP_Insight' || is_subclass_of($this, 'FirePHP_Insight'))) {
             $msg = $this->logToInsightConsole;
             if ($Object instanceof Exception) {
                 $Type = self::EXCEPTION;
             }
-            if($Label && $Type!=self::TABLE && $Type!=self::GROUP_START) {
+            if ($Label && $Type != self::TABLE && $Type != self::GROUP_START) {
                 $msg = $msg->label($Label);
             }
-            switch($Type) {
+            switch ($Type) {
                 case self::DUMP:
                 case self::LOG:
                     return $msg->log($Object);
@@ -1130,12 +1084,12 @@ class FirePHP {
                     if (isset($Object[0]) && !is_string($Object[0]) && $Label) {
                         $Object = array($Label, $Object);
                     }
-                    return $msg->table($Object[0], array_slice($Object[1],1), $Object[1][0]);
+                    return $msg->table($Object[0], array_slice($Object[1], 1), $Object[1][0]);
                 case self::GROUP_START:
                     $insightGroupStack[] = $msg->group(md5($Label))->open();
                     return $msg->log($Label);
                 case self::GROUP_END:
-                    if(count($insightGroupStack)==0) {
+                    if (count($insightGroupStack) == 0) {
                         throw new Error('Too many groupEnd() as opposed to group() calls!');
                     }
                     $group = array_pop($insightGroupStack);
@@ -1148,170 +1102,176 @@ class FirePHP {
         if (!$this->detectClientExtension()) {
             return false;
         }
-      
+
         $meta = array();
         $skipFinalObjectEncode = false;
-      
+
         if ($Object instanceof Exception) {
-    
+
             $meta['file'] = $this->_escapeTraceFile($Object->getFile());
             $meta['line'] = $Object->getLine();
-          
+
             $trace = $Object->getTrace();
             if ($Object instanceof ErrorException
-               && isset($trace[0]['function'])
-               && $trace[0]['function']=='errorHandler'
-               && isset($trace[0]['class'])
-               && $trace[0]['class']=='FirePHP') {
-               
+                    && isset($trace[0]['function'])
+                    && $trace[0]['function'] == 'errorHandler'
+                    && isset($trace[0]['class'])
+                    && $trace[0]['class'] == 'FirePHP') {
+
                 $severity = false;
-                switch($Object->getSeverity()) {
-                    case E_WARNING: $severity = 'E_WARNING'; break;
-                    case E_NOTICE: $severity = 'E_NOTICE'; break;
-                    case E_USER_ERROR: $severity = 'E_USER_ERROR'; break;
-                    case E_USER_WARNING: $severity = 'E_USER_WARNING'; break;
-                    case E_USER_NOTICE: $severity = 'E_USER_NOTICE'; break;
-                    case E_STRICT: $severity = 'E_STRICT'; break;
-                    case E_RECOVERABLE_ERROR: $severity = 'E_RECOVERABLE_ERROR'; break;
-                    case E_DEPRECATED: $severity = 'E_DEPRECATED'; break;
-                    case E_USER_DEPRECATED: $severity = 'E_USER_DEPRECATED'; break;
+                switch ($Object->getSeverity()) {
+                    case E_WARNING: $severity = 'E_WARNING';
+                        break;
+                    case E_NOTICE: $severity = 'E_NOTICE';
+                        break;
+                    case E_USER_ERROR: $severity = 'E_USER_ERROR';
+                        break;
+                    case E_USER_WARNING: $severity = 'E_USER_WARNING';
+                        break;
+                    case E_USER_NOTICE: $severity = 'E_USER_NOTICE';
+                        break;
+                    case E_STRICT: $severity = 'E_STRICT';
+                        break;
+                    case E_RECOVERABLE_ERROR: $severity = 'E_RECOVERABLE_ERROR';
+                        break;
+                    case E_DEPRECATED: $severity = 'E_DEPRECATED';
+                        break;
+                    case E_USER_DEPRECATED: $severity = 'E_USER_DEPRECATED';
+                        break;
                 }
-                   
-                $Object = array('Class'=>get_class($Object),
-                                'Message'=>$severity.': '.$Object->getMessage(),
-                                'File'=>$this->_escapeTraceFile($Object->getFile()),
-                                'Line'=>$Object->getLine(),
-                                'Type'=>'trigger',
-                                'Trace'=>$this->_escapeTrace(array_splice($trace,2)));
+
+                $Object = array('Class' => get_class($Object),
+                    'Message' => $severity . ': ' . $Object->getMessage(),
+                    'File' => $this->_escapeTraceFile($Object->getFile()),
+                    'Line' => $Object->getLine(),
+                    'Type' => 'trigger',
+                    'Trace' => $this->_escapeTrace(array_splice($trace, 2)));
                 $skipFinalObjectEncode = true;
             } else {
-                $Object = array('Class'=>get_class($Object),
-                                'Message'=>$Object->getMessage(),
-                                'File'=>$this->_escapeTraceFile($Object->getFile()),
-                                'Line'=>$Object->getLine(),
-                                'Type'=>'throw',
-                                'Trace'=>$this->_escapeTrace($trace));
+                $Object = array('Class' => get_class($Object),
+                    'Message' => $Object->getMessage(),
+                    'File' => $this->_escapeTraceFile($Object->getFile()),
+                    'Line' => $Object->getLine(),
+                    'Type' => 'throw',
+                    'Trace' => $this->_escapeTrace($trace));
                 $skipFinalObjectEncode = true;
             }
             $Type = self::EXCEPTION;
-          
         } else
-        if ($Type==self::TRACE) {
-          
+        if ($Type == self::TRACE) {
+
             $trace = debug_backtrace();
-            if (!$trace) return false;
-            for( $i=0 ; $i<sizeof($trace) ; $i++ ) {
-    
+            if (!$trace)
+                return false;
+            for ($i = 0; $i < sizeof($trace); $i++) {
+
                 if (isset($trace[$i]['class'])
-                   && isset($trace[$i]['file'])
-                   && ($trace[$i]['class']=='FirePHP'
-                       || $trace[$i]['class']=='FB')
-                   && (substr($this->_standardizePath($trace[$i]['file']),-18,18)=='FirePHPCore/fb.php'
-                       || substr($this->_standardizePath($trace[$i]['file']),-29,29)=='FirePHPCore/FirePHP.class.php')) {
+                        && isset($trace[$i]['file'])
+                        && ($trace[$i]['class'] == 'FirePHP'
+                        || $trace[$i]['class'] == 'FB')
+                        && (substr($this->_standardizePath($trace[$i]['file']), -18, 18) == 'FirePHPCore/fb.php'
+                        || substr($this->_standardizePath($trace[$i]['file']), -29, 29) == 'FirePHPCore/FirePHP.class.php')) {
                     /* Skip - FB::trace(), FB::send(), $firephp->trace(), $firephp->fb() */
                 } else
                 if (isset($trace[$i]['class'])
-                   && isset($trace[$i+1]['file'])
-                   && $trace[$i]['class']=='FirePHP'
-                   && substr($this->_standardizePath($trace[$i+1]['file']),-18,18)=='FirePHPCore/fb.php') {
+                        && isset($trace[$i + 1]['file'])
+                        && $trace[$i]['class'] == 'FirePHP'
+                        && substr($this->_standardizePath($trace[$i + 1]['file']), -18, 18) == 'FirePHPCore/fb.php') {
                     /* Skip fb() */
                 } else
-                if ($trace[$i]['function']=='fb'
-                   || $trace[$i]['function']=='trace'
-                   || $trace[$i]['function']=='send') {
+                if ($trace[$i]['function'] == 'fb'
+                        || $trace[$i]['function'] == 'trace'
+                        || $trace[$i]['function'] == 'send') {
 
-                    $Object = array('Class'=>isset($trace[$i]['class'])?$trace[$i]['class']:'',
-                                    'Type'=>isset($trace[$i]['type'])?$trace[$i]['type']:'',
-                                    'Function'=>isset($trace[$i]['function'])?$trace[$i]['function']:'',
-                                    'Message'=>$trace[$i]['args'][0],
-                                    'File'=>isset($trace[$i]['file'])?$this->_escapeTraceFile($trace[$i]['file']):'',
-                                    'Line'=>isset($trace[$i]['line'])?$trace[$i]['line']:'',
-                                    'Args'=>isset($trace[$i]['args'])?$this->encodeObject($trace[$i]['args']):'',
-                                    'Trace'=>$this->_escapeTrace(array_splice($trace,$i+1)));
-        
+                    $Object = array('Class' => isset($trace[$i]['class']) ? $trace[$i]['class'] : '',
+                        'Type' => isset($trace[$i]['type']) ? $trace[$i]['type'] : '',
+                        'Function' => isset($trace[$i]['function']) ? $trace[$i]['function'] : '',
+                        'Message' => $trace[$i]['args'][0],
+                        'File' => isset($trace[$i]['file']) ? $this->_escapeTraceFile($trace[$i]['file']) : '',
+                        'Line' => isset($trace[$i]['line']) ? $trace[$i]['line'] : '',
+                        'Args' => isset($trace[$i]['args']) ? $this->encodeObject($trace[$i]['args']) : '',
+                        'Trace' => $this->_escapeTrace(array_splice($trace, $i + 1)));
+
                     $skipFinalObjectEncode = true;
-                    $meta['file'] = isset($trace[$i]['file'])?$this->_escapeTraceFile($trace[$i]['file']):'';
-                    $meta['line'] = isset($trace[$i]['line'])?$trace[$i]['line']:'';
+                    $meta['file'] = isset($trace[$i]['file']) ? $this->_escapeTraceFile($trace[$i]['file']) : '';
+                    $meta['line'] = isset($trace[$i]['line']) ? $trace[$i]['line'] : '';
                     break;
                 }
             }
-    
         } else
-        if ($Type==self::TABLE) {
-          
+        if ($Type == self::TABLE) {
+
             if (isset($Object[0]) && is_string($Object[0])) {
                 $Object[1] = $this->encodeTable($Object[1]);
             } else {
                 $Object = $this->encodeTable($Object);
             }
-    
+
             $skipFinalObjectEncode = true;
-          
         } else
-        if ($Type==self::GROUP_START) {
-          
+        if ($Type == self::GROUP_START) {
+
             if (!$Label) {
                 throw $this->newException('You must specify a label for the group!');
             }
-          
         } else {
-            if ($Type===null) {
+            if ($Type === null) {
                 $Type = self::LOG;
             }
         }
-        
+
         if ($this->options['includeLineNumbers']) {
             if (!isset($meta['file']) || !isset($meta['line'])) {
-    
+
                 $trace = debug_backtrace();
-                for( $i=0 ; $trace && $i<sizeof($trace) ; $i++ ) {
-          
+                for ($i = 0; $trace && $i < sizeof($trace); $i++) {
+
                     if (isset($trace[$i]['class'])
-                       && isset($trace[$i]['file'])
-                       && ($trace[$i]['class']=='FirePHP'
-                           || $trace[$i]['class']=='FB')
-                       && (substr($this->_standardizePath($trace[$i]['file']),-18,18)=='FirePHPCore/fb.php'
-                           || substr($this->_standardizePath($trace[$i]['file']),-29,29)=='FirePHPCore/FirePHP.class.php')) {
+                            && isset($trace[$i]['file'])
+                            && ($trace[$i]['class'] == 'FirePHP'
+                            || $trace[$i]['class'] == 'FB')
+                            && (substr($this->_standardizePath($trace[$i]['file']), -18, 18) == 'FirePHPCore/fb.php'
+                            || substr($this->_standardizePath($trace[$i]['file']), -29, 29) == 'FirePHPCore/FirePHP.class.php')) {
                         /* Skip - FB::trace(), FB::send(), $firephp->trace(), $firephp->fb() */
                     } else
                     if (isset($trace[$i]['class'])
-                       && isset($trace[$i+1]['file'])
-                       && $trace[$i]['class']=='FirePHP'
-                       && substr($this->_standardizePath($trace[$i+1]['file']),-18,18)=='FirePHPCore/fb.php') {
+                            && isset($trace[$i + 1]['file'])
+                            && $trace[$i]['class'] == 'FirePHP'
+                            && substr($this->_standardizePath($trace[$i + 1]['file']), -18, 18) == 'FirePHPCore/fb.php') {
                         /* Skip fb() */
                     } else
                     if (isset($trace[$i]['file'])
-                       && substr($this->_standardizePath($trace[$i]['file']),-18,18)=='FirePHPCore/fb.php') {
+                            && substr($this->_standardizePath($trace[$i]['file']), -18, 18) == 'FirePHPCore/fb.php') {
                         /* Skip FB::fb() */
                     } else {
-                        $meta['file'] = isset($trace[$i]['file'])?$this->_escapeTraceFile($trace[$i]['file']):'';
-                        $meta['line'] = isset($trace[$i]['line'])?$trace[$i]['line']:'';
+                        $meta['file'] = isset($trace[$i]['file']) ? $this->_escapeTraceFile($trace[$i]['file']) : '';
+                        $meta['line'] = isset($trace[$i]['line']) ? $trace[$i]['line'] : '';
                         break;
                     }
-                }      
+                }
             }
         } else {
             unset($meta['file']);
             unset($meta['line']);
         }
 
-        $this->setHeader('X-Wf-Protocol-1','http://meta.wildfirehq.org/Protocol/JsonStream/0.2');
-        $this->setHeader('X-Wf-1-Plugin-1','http://meta.firephp.org/Wildfire/Plugin/FirePHP/Library-FirePHPCore/'.self::VERSION);
-     
+        $this->setHeader('X-Wf-Protocol-1', 'http://meta.wildfirehq.org/Protocol/JsonStream/0.2');
+        $this->setHeader('X-Wf-1-Plugin-1', 'http://meta.firephp.org/Wildfire/Plugin/FirePHP/Library-FirePHPCore/' . self::VERSION);
+
         $structure_index = 1;
-        if ($Type==self::DUMP) {
+        if ($Type == self::DUMP) {
             $structure_index = 2;
-            $this->setHeader('X-Wf-1-Structure-2','http://meta.firephp.org/Wildfire/Structure/FirePHP/Dump/0.1');
+            $this->setHeader('X-Wf-1-Structure-2', 'http://meta.firephp.org/Wildfire/Structure/FirePHP/Dump/0.1');
         } else {
-            $this->setHeader('X-Wf-1-Structure-1','http://meta.firephp.org/Wildfire/Structure/FirePHP/FirebugConsole/0.1');
+            $this->setHeader('X-Wf-1-Structure-1', 'http://meta.firephp.org/Wildfire/Structure/FirePHP/FirebugConsole/0.1');
         }
-      
-        if ($Type==self::DUMP) {
-            $msg = '{"'.$Label.'":'.$this->jsonEncode($Object, $skipFinalObjectEncode).'}';
+
+        if ($Type == self::DUMP) {
+            $msg = '{"' . $Label . '":' . $this->jsonEncode($Object, $skipFinalObjectEncode) . '}';
         } else {
             $msg_meta = $Options;
             $msg_meta['Type'] = $Type;
-            if ($Label!==null) {
+            if ($Label !== null) {
                 $msg_meta['Label'] = $Label;
             }
             if (isset($meta['file']) && !isset($msg_meta['File'])) {
@@ -1320,61 +1280,58 @@ class FirePHP {
             if (isset($meta['line']) && !isset($msg_meta['Line'])) {
                 $msg_meta['Line'] = $meta['line'];
             }
-            $msg = '['.$this->jsonEncode($msg_meta).','.$this->jsonEncode($Object, $skipFinalObjectEncode).']';
+            $msg = '[' . $this->jsonEncode($msg_meta) . ',' . $this->jsonEncode($Object, $skipFinalObjectEncode) . ']';
         }
-        
-        $parts = explode("\n",chunk_split($msg, 5000, "\n"));
-    
-        for( $i=0 ; $i<count($parts) ; $i++) {
-            
+
+        $parts = explode("\n", chunk_split($msg, 5000, "\n"));
+
+        for ($i = 0; $i < count($parts); $i++) {
+
             $part = $parts[$i];
             if ($part) {
-                
-                if (count($parts)>2) {
+
+                if (count($parts) > 2) {
                     // Message needs to be split into multiple parts
-                    $this->setHeader('X-Wf-1-'.$structure_index.'-'.'1-'.$this->messageIndex,
-                                     (($i==0)?strlen($msg):'')
-                                     . '|' . $part . '|'
-                                     . (($i<count($parts)-2)?'\\':''));
+                    $this->setHeader('X-Wf-1-' . $structure_index . '-' . '1-' . $this->messageIndex, (($i == 0) ? strlen($msg) : '')
+                            . '|' . $part . '|'
+                            . (($i < count($parts) - 2) ? '\\' : ''));
                 } else {
-                    $this->setHeader('X-Wf-1-'.$structure_index.'-'.'1-'.$this->messageIndex,
-                                     strlen($part) . '|' . $part . '|');
+                    $this->setHeader('X-Wf-1-' . $structure_index . '-' . '1-' . $this->messageIndex, strlen($part) . '|' . $part . '|');
                 }
-                
+
                 $this->messageIndex++;
-                
+
                 if ($this->messageIndex > 99999) {
-                    throw $this->newException('Maximum number (99,999) of messages reached!');             
+                    throw $this->newException('Maximum number (99,999) of messages reached!');
                 }
             }
         }
-    
-        $this->setHeader('X-Wf-1-Index',$this->messageIndex-1);
-    
+
+        $this->setHeader('X-Wf-1-Index', $this->messageIndex - 1);
+
         return true;
     }
-  
+
     /**
      * Standardizes path for windows systems.
      *
      * @param string $Path
      * @return string
      */
-    protected function _standardizePath($Path)
-    {
-        return preg_replace('/\\\\+/','/',$Path);    
+    protected function _standardizePath($Path) {
+        return preg_replace('/\\\\+/', '/', $Path);
     }
-  
+
     /**
      * Escape trace path for windows systems
      *
      * @param array $Trace
      * @return array
      */
-    protected function _escapeTrace($Trace)
-    {
-        if (!$Trace) return $Trace;
-        for( $i=0 ; $i<sizeof($Trace) ; $i++ ) {
+    protected function _escapeTrace($Trace) {
+        if (!$Trace)
+            return $Trace;
+        for ($i = 0; $i < sizeof($Trace); $i++) {
             if (isset($Trace[$i]['file'])) {
                 $Trace[$i]['file'] = $this->_escapeTraceFile($Trace[$i]['file']);
             }
@@ -1382,23 +1339,22 @@ class FirePHP {
                 $Trace[$i]['args'] = $this->encodeObject($Trace[$i]['args']);
             }
         }
-        return $Trace;    
+        return $Trace;
     }
-  
+
     /**
      * Escape file information of trace for windows systems
      *
      * @param string $File
      * @return string
      */
-    protected function _escapeTraceFile($File)
-    {
+    protected function _escapeTraceFile($File) {
         /* Check if we have a windows filepath */
-        if (strpos($File,'\\')) {
+        if (strpos($File, '\\')) {
             /* First strip down to single \ */
-          
-            $file = preg_replace('/\\\\+/','\\',$File);
-          
+
+            $file = preg_replace('/\\\\+/', '\\', $File);
+
             return $file;
         }
         return $File;
@@ -1410,8 +1366,7 @@ class FirePHP {
      * @param string $Filename
      * @param integer $Linenum
      */
-    protected function headersSent(&$Filename, &$Linenum)
-    {
+    protected function headersSent(&$Filename, &$Linenum) {
         return headers_sent($Filename, $Linenum);
     }
 
@@ -1421,9 +1376,8 @@ class FirePHP {
      * @param string $Name
      * @param string $Value
      */
-    protected function setHeader($Name, $Value)
-    {
-        return header($Name.': '.$Value);
+    protected function setHeader($Name, $Value) {
+        return header($Name . ': ' . $Value);
     }
 
     /**
@@ -1431,9 +1385,9 @@ class FirePHP {
      *
      * @return string|false
      */
-    protected function getUserAgent()
-    {
-        if (!isset($_SERVER['HTTP_USER_AGENT'])) return false;
+    protected function getUserAgent() {
+        if (!isset($_SERVER['HTTP_USER_AGENT']))
+            return false;
         return $_SERVER['HTTP_USER_AGENT'];
     }
 
@@ -1444,17 +1398,17 @@ class FirePHP {
      */
     public static function getAllRequestHeaders() {
         static $_cached_headers = false;
-        if($_cached_headers!==false) {
+        if ($_cached_headers !== false) {
             return $_cached_headers;
         }
         $headers = array();
-        if(function_exists('getallheaders')) {
-            foreach( getallheaders() as $name => $value ) {
+        if (function_exists('getallheaders')) {
+            foreach (getallheaders() as $name => $value) {
                 $headers[strtolower($name)] = $value;
             }
         } else {
-            foreach($_SERVER as $name => $value) {
-                if(substr($name, 0, 5) == 'HTTP_') {
+            foreach ($_SERVER as $name => $value) {
+                if (substr($name, 0, 5) == 'HTTP_') {
                     $headers[strtolower(str_replace(' ', '-', str_replace('_', ' ', substr($name, 5))))] = $value;
                 }
             }
@@ -1467,8 +1421,7 @@ class FirePHP {
      *
      * @return string|false
      */
-    protected function getRequestHeader($Name)
-    {
+    protected function getRequestHeader($Name) {
         $headers = self::getAllRequestHeaders();
         if (isset($headers[strtolower($Name)])) {
             return $headers[strtolower($Name)];
@@ -1482,11 +1435,10 @@ class FirePHP {
      * @param string $Message
      * @return Exception
      */
-    protected function newException($Message)
-    {
+    protected function newException($Message) {
         return new Exception($Message);
     }
-  
+
     /**
      * Encode an object into a JSON string
      * 
@@ -1495,15 +1447,14 @@ class FirePHP {
      * @param object $Object The object to be encoded
      * @return string The JSON string
      */
-    public function jsonEncode($Object, $skipObjectEncode = false)
-    {
+    public function jsonEncode($Object, $skipObjectEncode = false) {
         if (!$skipObjectEncode) {
             $Object = $this->encodeObject($Object);
         }
-        
+
         if (function_exists('json_encode')
-           && $this->options['useNativeJsonEncode']!=false) {
-    
+                && $this->options['useNativeJsonEncode'] != false) {
+
             return json_encode($Object);
         } else {
             return $this->json_encode($Object);
@@ -1515,26 +1466,26 @@ class FirePHP {
      * 
      * @param array $Table The table to be encoded
      * @return array
-     */  
-    protected function encodeTable($Table)
-    {
-    
-        if (!$Table) return $Table;
-        
+     */
+    protected function encodeTable($Table) {
+
+        if (!$Table)
+            return $Table;
+
         $new_table = array();
-        foreach($Table as $row) {
-      
+        foreach ($Table as $row) {
+
             if (is_array($row)) {
                 $new_row = array();
-            
-                foreach($row as $item) {
+
+                foreach ($row as $item) {
                     $new_row[] = $this->encodeObject($item);
                 }
-            
+
                 $new_table[] = $new_row;
             }
         }
-        
+
         return $new_table;
     }
 
@@ -1546,72 +1497,69 @@ class FirePHP {
      * @param int $Depth The current traversal depth
      * @return array All members of the object
      */
-    protected function encodeObject($Object, $ObjectDepth = 1, $ArrayDepth = 1, $MaxDepth = 1)
-    {
+    protected function encodeObject($Object, $ObjectDepth = 1, $ArrayDepth = 1, $MaxDepth = 1) {
         if ($MaxDepth > $this->options['maxDepth']) {
-            return '** Max Depth ('.$this->options['maxDepth'].') **';
+            return '** Max Depth (' . $this->options['maxDepth'] . ') **';
         }
 
         $return = array();
-    
+
         if (is_resource($Object)) {
-    
-            return '** '.(string)$Object.' **';
-    
-        } else    
+
+            return '** ' . (string) $Object . ' **';
+        } else
         if (is_object($Object)) {
-    
+
             if ($ObjectDepth > $this->options['maxObjectDepth']) {
-                return '** Max Object Depth ('.$this->options['maxObjectDepth'].') **';
+                return '** Max Object Depth (' . $this->options['maxObjectDepth'] . ') **';
             }
-            
+
             foreach ($this->objectStack as $refVal) {
                 if ($refVal === $Object) {
-                    return '** Recursion ('.get_class($Object).') **';
+                    return '** Recursion (' . get_class($Object) . ') **';
                 }
             }
             array_push($this->objectStack, $Object);
-                    
+
             $return['__className'] = $class = get_class($Object);
             $class_lower = strtolower($class);
-    
-            $reflectionClass = new ReflectionClass($class);  
+
+            $reflectionClass = new ReflectionClass($class);
             $properties = array();
-            foreach( $reflectionClass->getProperties() as $property) {
+            foreach ($reflectionClass->getProperties() as $property) {
                 $properties[$property->getName()] = $property;
             }
-                
-            $members = (array)$Object;
-    
-            foreach( $properties as $plain_name => $property ) {
-    
+
+            $members = (array) $Object;
+
+            foreach ($properties as $plain_name => $property) {
+
                 $name = $raw_name = $plain_name;
                 if ($property->isStatic()) {
-                    $name = 'static:'.$name;
+                    $name = 'static:' . $name;
                 }
                 if ($property->isPublic()) {
-                    $name = 'public:'.$name;
+                    $name = 'public:' . $name;
                 } else
                 if ($property->isPrivate()) {
-                    $name = 'private:'.$name;
-                    $raw_name = "\0".$class."\0".$raw_name;
+                    $name = 'private:' . $name;
+                    $raw_name = "\0" . $class . "\0" . $raw_name;
                 } else
                 if ($property->isProtected()) {
-                    $name = 'protected:'.$name;
-                    $raw_name = "\0".'*'."\0".$raw_name;
+                    $name = 'protected:' . $name;
+                    $raw_name = "\0" . '*' . "\0" . $raw_name;
                 }
-    
+
                 if (!(isset($this->objectFilters[$class_lower])
-                     && is_array($this->objectFilters[$class_lower])
-                     && in_array($plain_name,$this->objectFilters[$class_lower]))) {
-    
-                    if (array_key_exists($raw_name,$members)
-                       && !$property->isStatic()) {
-                  
-                        $return[$name] = $this->encodeObject($members[$raw_name], $ObjectDepth + 1, 1, $MaxDepth + 1);      
-                
+                        && is_array($this->objectFilters[$class_lower])
+                        && in_array($plain_name, $this->objectFilters[$class_lower]))) {
+
+                    if (array_key_exists($raw_name, $members)
+                            && !$property->isStatic()) {
+
+                        $return[$name] = $this->encodeObject($members[$raw_name], $ObjectDepth + 1, 1, $MaxDepth + 1);
                     } else {
-                        if (method_exists($property,'setAccessible')) {
+                        if (method_exists($property, 'setAccessible')) {
                             $property->setAccessible(true);
                             $return[$name] = $this->encodeObject($property->getValue($Object), $ObjectDepth + 1, 1, $MaxDepth + 1);
                         } else
@@ -1625,54 +1573,53 @@ class FirePHP {
                     $return[$name] = '** Excluded by Filter **';
                 }
             }
-            
+
             // Include all members that are not defined in the class
             // but exist in the object
-            foreach( $members as $raw_name => $value ) {
-    
+            foreach ($members as $raw_name => $value) {
+
                 $name = $raw_name;
-              
+
                 if ($name{0} == "\0") {
                     $parts = explode("\0", $name);
                     $name = $parts[2];
                 }
-              
+
                 $plain_name = $name;
-    
+
                 if (!isset($properties[$name])) {
-                    $name = 'undeclared:'.$name;
-    
+                    $name = 'undeclared:' . $name;
+
                     if (!(isset($this->objectFilters[$class_lower])
-                         && is_array($this->objectFilters[$class_lower])
-                         && in_array($plain_name,$this->objectFilters[$class_lower]))) {
-    
+                            && is_array($this->objectFilters[$class_lower])
+                            && in_array($plain_name, $this->objectFilters[$class_lower]))) {
+
                         $return[$name] = $this->encodeObject($value, $ObjectDepth + 1, 1, $MaxDepth + 1);
                     } else {
                         $return[$name] = '** Excluded by Filter **';
                     }
                 }
             }
-            
+
             array_pop($this->objectStack);
-            
         } elseif (is_array($Object)) {
-    
+
             if ($ArrayDepth > $this->options['maxArrayDepth']) {
-                return '** Max Array Depth ('.$this->options['maxArrayDepth'].') **';
+                return '** Max Array Depth (' . $this->options['maxArrayDepth'] . ') **';
             }
-          
+
             foreach ($Object as $key => $val) {
-              
+
                 // Encoding the $GLOBALS PHP array causes an infinite loop
                 // if the recursion is not reset here as it contains
                 // a reference to itself. This is the only way I have come up
                 // with to stop infinite recursion in this case.
-                if ($key=='GLOBALS'
-                   && is_array($val)
-                   && array_key_exists('GLOBALS',$val)) {
+                if ($key == 'GLOBALS'
+                        && is_array($val)
+                        && array_key_exists('GLOBALS', $val)) {
                     $val['GLOBALS'] = '** Recursion (GLOBALS) **';
                 }
-              
+
                 $return[$key] = $this->encodeObject($val, 1, $ArrayDepth + 1, $MaxDepth + 1);
             }
         } else {
@@ -1691,35 +1638,44 @@ class FirePHP {
      * @param mixed $str String to be tested
      * @return boolean
      */
-    protected static function is_utf8($str)
-    {
-        if(function_exists('mb_detect_encoding')) {
+    protected static function is_utf8($str) {
+        if (function_exists('mb_detect_encoding')) {
             return (mb_detect_encoding($str) == 'UTF-8');
         }
-        $c=0; $b=0;
-        $bits=0;
-        $len=strlen($str);
-        for($i=0; $i<$len; $i++){
-            $c=ord($str[$i]);
-            if ($c > 128){
-                if (($c >= 254)) return false;
-                elseif ($c >= 252) $bits=6;
-                elseif ($c >= 248) $bits=5;
-                elseif ($c >= 240) $bits=4;
-                elseif ($c >= 224) $bits=3;
-                elseif ($c >= 192) $bits=2;
-                else return false;
-                if (($i+$bits) > $len) return false;
-                while($bits > 1){
+        $c = 0;
+        $b = 0;
+        $bits = 0;
+        $len = strlen($str);
+        for ($i = 0; $i < $len; $i++) {
+            $c = ord($str[$i]);
+            if ($c > 128) {
+                if (($c >= 254))
+                    return false;
+                elseif ($c >= 252)
+                    $bits = 6;
+                elseif ($c >= 248)
+                    $bits = 5;
+                elseif ($c >= 240)
+                    $bits = 4;
+                elseif ($c >= 224)
+                    $bits = 3;
+                elseif ($c >= 192)
+                    $bits = 2;
+                else
+                    return false;
+                if (($i + $bits) > $len)
+                    return false;
+                while ($bits > 1) {
                     $i++;
-                    $b=ord($str[$i]);
-                    if ($b < 128 || $b > 191) return false;
+                    $b = ord($str[$i]);
+                    if ($b < 128 || $b > 191)
+                        return false;
                     $bits--;
                 }
             }
         }
         return true;
-    } 
+    }
 
     /**
      * Converts to and from JSON format.
@@ -1776,33 +1732,30 @@ class FirePHP {
      * @license     http://www.opensource.org/licenses/bsd-license.php
      * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
      */
-   
-     
+
     /**
      * Keep a list of objects as we descend into the array so we can detect recursion.
      */
     private $json_objectStack = array();
 
-
-   /**
-    * convert a string from one UTF-8 char to one UTF-16 char
-    *
-    * Normally should be handled by mb_convert_encoding, but
-    * provides a slower PHP-only method for installations
-    * that lack the multibye string extension.
-    *
-    * @param    string  $utf8   UTF-8 character
-    * @return   string  UTF-16 character
-    * @access   private
-    */
-    private function json_utf82utf16($utf8)
-    {
+    /**
+     * convert a string from one UTF-8 char to one UTF-16 char
+     *
+     * Normally should be handled by mb_convert_encoding, but
+     * provides a slower PHP-only method for installations
+     * that lack the multibye string extension.
+     *
+     * @param    string  $utf8   UTF-8 character
+     * @return   string  UTF-16 character
+     * @access   private
+     */
+    private function json_utf82utf16($utf8) {
         // oh please oh please oh please oh please oh please
         if (function_exists('mb_convert_encoding')) {
             return mb_convert_encoding($utf8, 'UTF-16', 'UTF-8');
         }
 
-        switch(strlen($utf8)) {
+        switch (strlen($utf8)) {
             case 1:
                 // this case should never be reached, because we are in ASCII range
                 // see: http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
@@ -1812,42 +1765,41 @@ class FirePHP {
                 // return a UTF-16 character from a 2-byte UTF-8 char
                 // see: http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                 return chr(0x07 & (ord($utf8{0}) >> 2))
-                       . chr((0xC0 & (ord($utf8{0}) << 6))
-                       | (0x3F & ord($utf8{1})));
+                        . chr((0xC0 & (ord($utf8{0}) << 6))
+                                | (0x3F & ord($utf8{1})));
 
             case 3:
                 // return a UTF-16 character from a 3-byte UTF-8 char
                 // see: http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
                 return chr((0xF0 & (ord($utf8{0}) << 4))
-                       | (0x0F & (ord($utf8{1}) >> 2)))
-                       . chr((0xC0 & (ord($utf8{1}) << 6))
-                       | (0x7F & ord($utf8{2})));
+                                | (0x0F & (ord($utf8{1}) >> 2)))
+                        . chr((0xC0 & (ord($utf8{1}) << 6))
+                                | (0x7F & ord($utf8{2})));
         }
 
         // ignoring UTF-32 for now, sorry
         return '';
     }
 
-   /**
-    * encodes an arbitrary variable into JSON format
-    *
-    * @param    mixed   $var    any number, boolean, string, array, or object to be encoded.
-    *                           see argument 1 to Services_JSON() above for array-parsing behavior.
-    *                           if var is a strng, note that encode() always expects it
-    *                           to be in ASCII or UTF-8 format!
-    *
-    * @return   mixed   JSON string representation of input var or an error if a problem occurs
-    * @access   public
-    */
-    private function json_encode($var)
-    {
-    
+    /**
+     * encodes an arbitrary variable into JSON format
+     *
+     * @param    mixed   $var    any number, boolean, string, array, or object to be encoded.
+     *                           see argument 1 to Services_JSON() above for array-parsing behavior.
+     *                           if var is a strng, note that encode() always expects it
+     *                           to be in ASCII or UTF-8 format!
+     *
+     * @return   mixed   JSON string representation of input var or an error if a problem occurs
+     * @access   public
+     */
+    private function json_encode($var) {
+
         if (is_object($var)) {
-            if (in_array($var,$this->json_objectStack)) {
+            if (in_array($var, $this->json_objectStack)) {
                 return '"** Recursion **"';
             }
         }
-          
+
         switch (gettype($var)) {
             case 'boolean':
                 return $var ? 'true' : 'false';
@@ -1867,10 +1819,10 @@ class FirePHP {
                 $ascii = '';
                 $strlen_var = strlen($var);
 
-               /*
-                * Iterate over every character in the string,
-                * escaping with a slash or encoding to UTF-8 where necessary
-                */
+                /*
+                 * Iterate over every character in the string,
+                 * escaping with a slash or encoding to UTF-8 where necessary
+                 */
                 for ($c = 0; $c < $strlen_var; ++$c) {
 
                     $ord_var_c = ord($var{$c});
@@ -1896,7 +1848,7 @@ class FirePHP {
                         case $ord_var_c == 0x2F:
                         case $ord_var_c == 0x5C:
                             // double quote, slash, slosh
-                            $ascii .= '\\'.$var{$c};
+                            $ascii .= '\\' . $var{$c};
                             break;
 
                         case (($ord_var_c >= 0x20) && ($ord_var_c <= 0x7F)):
@@ -1916,9 +1868,7 @@ class FirePHP {
                         case (($ord_var_c & 0xF0) == 0xE0):
                             // characters U-00000800 - U-0000FFFF, mask 1110XXXX
                             // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                            $char = pack('C*', $ord_var_c,
-                                         ord($var{$c + 1}),
-                                         ord($var{$c + 2}));
+                            $char = pack('C*', $ord_var_c, ord($var{$c + 1}), ord($var{$c + 2}));
                             $c += 2;
                             $utf16 = $this->json_utf82utf16($char);
                             $ascii .= sprintf('\u%04s', bin2hex($utf16));
@@ -1927,10 +1877,7 @@ class FirePHP {
                         case (($ord_var_c & 0xF8) == 0xF0):
                             // characters U-00010000 - U-001FFFFF, mask 11110XXX
                             // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                            $char = pack('C*', $ord_var_c,
-                                         ord($var{$c + 1}),
-                                         ord($var{$c + 2}),
-                                         ord($var{$c + 3}));
+                            $char = pack('C*', $ord_var_c, ord($var{$c + 1}), ord($var{$c + 2}), ord($var{$c + 3}));
                             $c += 3;
                             $utf16 = $this->json_utf82utf16($char);
                             $ascii .= sprintf('\u%04s', bin2hex($utf16));
@@ -1939,11 +1886,7 @@ class FirePHP {
                         case (($ord_var_c & 0xFC) == 0xF8):
                             // characters U-00200000 - U-03FFFFFF, mask 111110XX
                             // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                            $char = pack('C*', $ord_var_c,
-                                         ord($var{$c + 1}),
-                                         ord($var{$c + 2}),
-                                         ord($var{$c + 3}),
-                                         ord($var{$c + 4}));
+                            $char = pack('C*', $ord_var_c, ord($var{$c + 1}), ord($var{$c + 2}), ord($var{$c + 3}), ord($var{$c + 4}));
                             $c += 4;
                             $utf16 = $this->json_utf82utf16($char);
                             $ascii .= sprintf('\u%04s', bin2hex($utf16));
@@ -1952,12 +1895,7 @@ class FirePHP {
                         case (($ord_var_c & 0xFE) == 0xFC):
                             // characters U-04000000 - U-7FFFFFFF, mask 1111110X
                             // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                            $char = pack('C*', $ord_var_c,
-                                         ord($var{$c + 1}),
-                                         ord($var{$c + 2}),
-                                         ord($var{$c + 3}),
-                                         ord($var{$c + 4}),
-                                         ord($var{$c + 5}));
+                            $char = pack('C*', $ord_var_c, ord($var{$c + 1}), ord($var{$c + 2}), ord($var{$c + 3}), ord($var{$c + 4}), ord($var{$c + 5}));
                             $c += 5;
                             $utf16 = $this->json_utf82utf16($char);
                             $ascii .= sprintf('\u%04s', bin2hex($utf16));
@@ -1965,7 +1903,7 @@ class FirePHP {
                     }
                 }
 
-                return '"'.$ascii.'"';
+                return '"' . $ascii . '"';
 
             case 'array':
                 /*
@@ -1988,16 +1926,14 @@ class FirePHP {
 
                 // treat as a JSON object
                 if (is_array($var) && count($var) && (array_keys($var) !== range(0, sizeof($var) - 1))) {
-                  
+
                     $this->json_objectStack[] = $var;
 
-                    $properties = array_map(array($this, 'json_name_value'),
-                                            array_keys($var),
-                                            array_values($var));
+                    $properties = array_map(array($this, 'json_name_value'), array_keys($var), array_values($var));
 
                     array_pop($this->json_objectStack);
 
-                    foreach($properties as $property) {
+                    foreach ($properties as $property) {
                         if ($property instanceof Exception) {
                             return $property;
                         }
@@ -2013,7 +1949,7 @@ class FirePHP {
 
                 array_pop($this->json_objectStack);
 
-                foreach($elements as $element) {
+                foreach ($elements as $element) {
                     if ($element instanceof Exception) {
                         return $element;
                     }
@@ -2026,18 +1962,16 @@ class FirePHP {
 
                 $this->json_objectStack[] = $var;
 
-                $properties = array_map(array($this, 'json_name_value'),
-                                        array_keys($vars),
-                                        array_values($vars));
+                $properties = array_map(array($this, 'json_name_value'), array_keys($vars), array_values($vars));
 
                 array_pop($this->json_objectStack);
-              
-                foreach($properties as $property) {
+
+                foreach ($properties as $property) {
                     if ($property instanceof Exception) {
                         return $property;
                     }
                 }
-                     
+
                 return '{' . join(',', $properties) . '}';
 
             default:
@@ -2045,27 +1979,26 @@ class FirePHP {
         }
     }
 
-   /**
-    * array-walking function for use in generating JSON-formatted name-value pairs
-    *
-    * @param    string  $name   name of key to use
-    * @param    mixed   $value  reference to an array element to be encoded
-    *
-    * @return   string  JSON-formatted name-value pair, like '"name":value'
-    * @access   private
-    */
-    private function json_name_value($name, $value)
-    {
+    /**
+     * array-walking function for use in generating JSON-formatted name-value pairs
+     *
+     * @param    string  $name   name of key to use
+     * @param    mixed   $value  reference to an array element to be encoded
+     *
+     * @return   string  JSON-formatted name-value pair, like '"name":value'
+     * @access   private
+     */
+    private function json_name_value($name, $value) {
         // Encoding the $GLOBALS PHP array causes an infinite loop
         // if the recursion is not reset here as it contains
         // a reference to itself. This is the only way I have come up
         // with to stop infinite recursion in this case.
-        if ($name=='GLOBALS'
-           && is_array($value)
-           && array_key_exists('GLOBALS',$value)) {
+        if ($name == 'GLOBALS'
+                && is_array($value)
+                && array_key_exists('GLOBALS', $value)) {
             $value['GLOBALS'] = '** Recursion **';
         }
-    
+
         $encoded_value = $this->json_encode($value);
 
         if ($encoded_value instanceof Exception) {
@@ -2077,17 +2010,16 @@ class FirePHP {
 
     /**
      * @deprecated
-     */    
-    public function setProcessorUrl($URL)
-    {
+     */
+    public function setProcessorUrl($URL) {
         trigger_error("The FirePHP::setProcessorUrl() method is no longer supported", E_USER_DEPRECATED);
     }
 
     /**
      * @deprecated
      */
-    public function setRendererUrl($URL)
-    {
+    public function setRendererUrl($URL) {
         trigger_error("The FirePHP::setRendererUrl() method is no longer supported", E_USER_DEPRECATED);
-    }  
+    }
+
 }

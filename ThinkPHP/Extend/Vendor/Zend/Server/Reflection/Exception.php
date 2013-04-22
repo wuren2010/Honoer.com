@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,6 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
 /**
  * @see Zend_Server_Exception
  */
@@ -33,6 +33,6 @@ require_once 'Zend/Server/Exception.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id: Exception.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-class Zend_Server_Reflection_Exception extends Zend_Server_Exception
-{
+class Zend_Server_Reflection_Exception extends Zend_Server_Exception {
+    
 }

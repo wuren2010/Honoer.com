@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -27,11 +28,11 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-final class Zend_Version
-{
+final class Zend_Version {
     /**
      * Zend Framework version identification - see compareVersion()
      */
+
     const VERSION = '1.9.5';
 
     /**
@@ -44,10 +45,10 @@ final class Zend_Version
      *                           and +1 if $version is newer.
      *
      */
-    public static function compareVersion($version)
-    {
+    public static function compareVersion($version) {
         $version = strtolower($version);
         $version = preg_replace('/(\d)pr(\d?)/', '$1a$2', $version);
         return version_compare($version, strtolower(self::VERSION));
     }
+
 }

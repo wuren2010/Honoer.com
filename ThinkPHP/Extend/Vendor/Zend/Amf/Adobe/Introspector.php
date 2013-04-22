@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -18,7 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: Introspector.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-
 /** Zend_Amf_Parse_TypeLoader */
 require_once 'Zend/Amf/Parse/TypeLoader.php';
 
@@ -36,8 +36,8 @@ require_once 'Zend/Server/Reflection.php';
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Adobe_Introspector 
-{
+class Zend_Amf_Adobe_Introspector {
+
     /**
      * Options used:
      * - server: instance of Zend_Amf_Server to use
@@ -61,17 +61,16 @@ class Zend_Amf_Adobe_Introspector
      * @var DOMDocument XML document to store data
      */
     protected $_xml;
-   
+
     /**
      * Constructor
      * 
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->_xml = new DOMDocument('1.0', 'utf-8');
     }
-    
+
     /**
      * Create XML definition on an AMF service class
      * 
@@ -79,47 +78,45 @@ class Zend_Amf_Adobe_Introspector
      * @param  array $options invocation options
      * @return string XML with service class introspection
      */
-    public function introspect($serviceClass, $options = array()) 
-    {
+    public function introspect($serviceClass, $options = array()) {
         $this->_options = $options;
-        
+
         if (strpbrk($serviceClass, '\\/<>')) {
             return $this->_returnError('Invalid service name');
         }
 
         // Transform com.foo.Bar into com_foo_Bar
-        $serviceClass = str_replace('.' , '_', $serviceClass);
+        $serviceClass = str_replace('.', '_', $serviceClass);
 
         // Introspect!
         if (!class_exists($serviceClass)) {
             require_once 'Zend/Loader.php';
             Zend_Loader::loadClass($serviceClass, $this->_getServicePath());
         }
-        
+
         $serv = $this->_xml->createElement('service-description');
         $serv->setAttribute('xmlns', 'http://ns.adobe.com/flex/service-description/2008');
 
         $this->_types = $this->_xml->createElement('types');
-        $this->_ops   = $this->_xml->createElement('operations');
+        $this->_ops = $this->_xml->createElement('operations');
 
         $r = Zend_Server_Reflection::reflectClass($serviceClass);
         $this->_addService($r, $this->_ops);
-    
+
         $serv->appendChild($this->_types);
         $serv->appendChild($this->_ops);
         $this->_xml->appendChild($serv);
 
         return $this->_xml->saveXML();
     }
-    
+
     /**
      * Authentication handler
      * 
      * @param  Zend_Acl $acl
      * @return unknown_type
      */
-    public function initAcl(Zend_Acl $acl)
-    {
+    public function initAcl(Zend_Acl $acl) {
         return false; // we do not need auth for this class
     }
 
@@ -130,8 +127,7 @@ class Zend_Amf_Adobe_Introspector
      * @param  DOMElement $typexml target XML element 
      * @return void
      */
-    protected function _addClassAttributes($typename, DOMElement $typexml)
-    {
+    protected function _addClassAttributes($typename, DOMElement $typexml) {
         // Do not try to autoload here because _phpTypeToAS should 
         // have already attempted to load this class
         if (!class_exists($typename, false)) {
@@ -161,12 +157,11 @@ class Zend_Amf_Adobe_Introspector
      * @param  DOMElement $target target XML element
      * @return void
      */
-    protected function _addService(Zend_Server_Reflection_Class $refclass, DOMElement $target)
-    {
+    protected function _addService(Zend_Server_Reflection_Class $refclass, DOMElement $target) {
         foreach ($refclass->getMethods() as $method) {
-            if (!$method->isPublic() 
-                || $method->isConstructor()
-                || ('__' == substr($method->name, 0, 2))
+            if (!$method->isPublic()
+                    || $method->isConstructor()
+                    || ('__' == substr($method->name, 0, 2))
             ) {
                 continue;
             }
@@ -197,15 +192,14 @@ class Zend_Amf_Adobe_Introspector
             }
         }
     }
-    
+
     /**
      * Extract type of the property from DocBlock
      * 
      * @param  Zend_Reflection_Property $prop reflection property object
      * @return string Property type
      */
-    protected function _getPropertyType(Zend_Reflection_Property $prop)
-    {
+    protected function _getPropertyType(Zend_Reflection_Property $prop) {
         $docBlock = $prop->getDocComment();
 
         if (!$docBlock) {
@@ -219,14 +213,13 @@ class Zend_Amf_Adobe_Introspector
         $tag = $docBlock->getTag('var');
         return trim($tag->getDescription());
     }
-    
+
     /**
      * Get the array of service directories
      * 
      * @return array Service class directories
      */
-    protected function _getServicePath() 
-    {
+    protected function _getServicePath() {
         if (isset($this->_options['server'])) {
             return $this->_options['server']->getDirectory();
         }
@@ -244,8 +237,7 @@ class Zend_Amf_Adobe_Introspector
      * @param  string $typename PHP type name
      * @return string AS type name
      */
-    protected function _phpTypeToAS($typename)
-    {
+    protected function _phpTypeToAS($typename) {
         if (class_exists($typename)) {
             $vars = get_class_vars($typename);
 
@@ -267,8 +259,7 @@ class Zend_Amf_Adobe_Introspector
      * @param  string $typename type name
      * @return string New type name
      */
-    protected function _registerType($typename) 
-    {
+    protected function _registerType($typename) {
         // Known type - return its AS name
         if (isset($this->_typesMap[$typename])) {
             return $this->_typesMap[$typename];
@@ -291,19 +282,19 @@ class Zend_Amf_Adobe_Introspector
         $typeEl = $this->_xml->createElement('type');
         $typeEl->setAttribute('name', $asTypeName);
         $this->_addClassAttributes($typename, $typeEl);
-        $this->_types->appendChild($typeEl);    
+        $this->_types->appendChild($typeEl);
 
         return $asTypeName;
     }
-    
-   /**
+
+    /**
      * Return error with error message
      * 
      * @param  string $msg Error message
      * @return string 
      */
-    protected function _returnError($msg) 
-    {
-        return 'ERROR: $msg';    
+    protected function _returnError($msg) {
+        return 'ERROR: $msg';
     }
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -29,8 +30,8 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Server_Method_Parameter
-{
+class Zend_Server_Method_Parameter {
+
     /**
      * @var mixed Default parameter value
      */
@@ -62,8 +63,7 @@ class Zend_Server_Method_Parameter
      * @param  null|array $options 
      * @return void
      */
-    public function __construct($options = null)
-    {
+    public function __construct($options = null) {
         if (is_array($options)) {
             $this->setOptions($options);
         }
@@ -75,8 +75,7 @@ class Zend_Server_Method_Parameter
      * @param  array $options 
      * @return Zend_Server_Method_Parameter
      */
-    public function setOptions(array $options)
-    {
+    public function setOptions(array $options) {
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
             if (method_exists($this, $method)) {
@@ -92,8 +91,7 @@ class Zend_Server_Method_Parameter
      * @param  mixed $defaultValue
      * @return Zend_Server_Method_Parameter
      */
-    public function setDefaultValue($defaultValue)
-    {
+    public function setDefaultValue($defaultValue) {
         $this->_defaultValue = $defaultValue;
         return $this;
     }
@@ -103,8 +101,7 @@ class Zend_Server_Method_Parameter
      *
      * @return mixed
      */
-    public function getDefaultValue()
-    {
+    public function getDefaultValue() {
         return $this->_defaultValue;
     }
 
@@ -114,8 +111,7 @@ class Zend_Server_Method_Parameter
      * @param  string $description
      * @return Zend_Server_Method_Parameter
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->_description = (string) $description;
         return $this;
     }
@@ -125,8 +121,7 @@ class Zend_Server_Method_Parameter
      *
      * @return string
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->_description;
     }
 
@@ -136,8 +131,7 @@ class Zend_Server_Method_Parameter
      * @param  string $name
      * @return Zend_Server_Method_Parameter
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->_name = (string) $name;
         return $this;
     }
@@ -147,8 +141,7 @@ class Zend_Server_Method_Parameter
      *
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->_name;
     }
 
@@ -158,8 +151,7 @@ class Zend_Server_Method_Parameter
      * @param  bool $flag 
      * @return Zend_Server_Method_Parameter
      */
-    public function setOptional($flag)
-    {
+    public function setOptional($flag) {
         $this->_optional = (bool) $flag;
         return $this;
     }
@@ -169,8 +161,7 @@ class Zend_Server_Method_Parameter
      * 
      * @return bool
      */
-    public function isOptional()
-    {
+    public function isOptional() {
         return $this->_optional;
     }
 
@@ -180,8 +171,7 @@ class Zend_Server_Method_Parameter
      * @param  string $type 
      * @return Zend_Server_Method_Parameter
      */
-    public function setType($type)
-    {
+    public function setType($type) {
         $this->_type = (string) $type;
         return $this;
     }
@@ -191,8 +181,7 @@ class Zend_Server_Method_Parameter
      * 
      * @return string
      */
-    public function getType()
-    {
+    public function getType() {
         return $this->_type;
     }
 
@@ -201,14 +190,14 @@ class Zend_Server_Method_Parameter
      * 
      * @return array
      */
-    public function toArray()
-    {
+    public function toArray() {
         return array(
-            'type'         => $this->getType(),
-            'name'         => $this->getName(),
-            'optional'     => $this->isOptional(),
+            'type' => $this->getType(),
+            'name' => $this->getName(),
+            'optional' => $this->isOptional(),
             'defaultValue' => $this->getDefaultValue(),
-            'description'  => $this->getDescription(),
+            'description' => $this->getDescription(),
         );
     }
+
 }

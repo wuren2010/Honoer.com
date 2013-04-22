@@ -25,58 +25,59 @@
 class UploadFile {//类定义开始
     // 上传文件的最大值
 
-    private $config =   array(
-        'maxSize'           =>  -1,    // 上传文件的最大值
-        'supportMulti'      =>  true,    // 是否支持多文件上传
-        'allowExts'         =>  array(),    // 允许上传的文件后缀 留空不作后缀检查
-        'allowTypes'        =>  array(),    // 允许上传的文件类型 留空不做检查
-        'thumb'             =>  false,    // 使用对上传图片进行缩略图处理
-        'imageClassPath'    =>  'ORG.Util.Image',    // 图库类包路径
-        'thumbMaxWidth'     =>  '',// 缩略图最大宽度
-        'thumbMaxHeight'    =>  '',// 缩略图最大高度
-        'thumbPrefix'       =>  'thumb_',// 缩略图前缀
-        'thumbSuffix'       =>  '',
-        'thumbPath'         =>  '',// 缩略图保存路径
-        'thumbFile'         =>  '',// 缩略图文件名
-        'thumbExt'          =>  '',// 缩略图扩展名        
-        'thumbRemoveOrigin' =>  false,// 是否移除原图
-        'zipImages'         =>  false,// 压缩图片文件上传
-        'autoSub'           =>  false,// 启用子目录保存文件
-        'subType'           =>  'hash',// 子目录创建方式 可以使用hash date
-        'dateFormat'        =>  'Ymd',
-        'hashLevel'         =>  1, // hash的目录层次
-        'savePath'          =>  '',// 上传文件保存路径
-        'autoCheck'         =>  true, // 是否自动检查附件
-        'uploadReplace'     =>  false,// 存在同名是否覆盖
-        'saveRule'          =>  'uniqid',// 上传文件命名规则
-        'hashType'          =>  'md5_file',// 上传文件Hash规则函数名
+    private $config = array(
+        'maxSize' => -1, // 上传文件的最大值
+        'supportMulti' => true, // 是否支持多文件上传
+        'allowExts' => array(), // 允许上传的文件后缀 留空不作后缀检查
+        'allowTypes' => array(), // 允许上传的文件类型 留空不做检查
+        'thumb' => false, // 使用对上传图片进行缩略图处理
+        'imageClassPath' => 'ORG.Util.Image', // 图库类包路径
+        'thumbMaxWidth' => '', // 缩略图最大宽度
+        'thumbMaxHeight' => '', // 缩略图最大高度
+        'thumbPrefix' => 'thumb_', // 缩略图前缀
+        'thumbSuffix' => '',
+        'thumbPath' => '', // 缩略图保存路径
+        'thumbFile' => '', // 缩略图文件名
+        'thumbExt' => '', // 缩略图扩展名        
+        'thumbRemoveOrigin' => false, // 是否移除原图
+        'zipImages' => false, // 压缩图片文件上传
+        'autoSub' => false, // 启用子目录保存文件
+        'subType' => 'hash', // 子目录创建方式 可以使用hash date
+        'dateFormat' => 'Ymd',
+        'hashLevel' => 1, // hash的目录层次
+        'savePath' => '', // 上传文件保存路径
+        'autoCheck' => true, // 是否自动检查附件
+        'uploadReplace' => false, // 存在同名是否覆盖
+        'saveRule' => 'uniqid', // 上传文件命名规则
+        'hashType' => 'md5_file', // 上传文件Hash规则函数名
         //sae平台下特有属性
-        'expires'=>'',
-        'encoding'=>'',
-        'type'=>'',
-        'private'=>'',
-        'compress'=>false
-        );
+        'expires' => '',
+        'encoding' => '',
+        'type' => '',
+        'private' => '',
+        'compress' => false
+    );
+    // 错误信息
+    private $error = '';
+    // 上传成功的文件信息
+    private $uploadFileInfo;
+    //[sae] storage的domain
+    private $domain;
 
-  // 错误信息
-  private $error = '';
-  // 上传成功的文件信息
-  private $uploadFileInfo ;
-  //[sae] storage的domain
-  private $domain;
-  public function __get($name){
-        if(isset($this->config[$name])) {
+    public function __get($name) {
+        if (isset($this->config[$name])) {
             return $this->config[$name];
         }
         return null;
     }
 
-    public function __set($name,$value){
-        if(isset($this->config[$name])) {
-            $this->config[$name]    =   $value;
+    public function __set($name, $value) {
+        if (isset($this->config[$name])) {
+            $this->config[$name] = $value;
         }
     }
-    public function __isset($name){
+
+    public function __isset($name) {
         return isset($this->config[$name]);
     }
 
@@ -87,9 +88,9 @@ class UploadFile {//类定义开始
      * @access public
       +----------------------------------------------------------
      */
-    public function __construct($config=array()) {
-        if(is_array($config)) {
-            $this->config   =   array_merge($this->config,$config);
+    public function __construct($config = array()) {
+        if (is_array($config)) {
+            $this->config = array_merge($this->config, $config);
         }
     }
 
@@ -120,15 +121,17 @@ class UploadFile {//类定义开始
             $this->error = '非法图像文件';
             return false;
         }
-        $attr=array();
-        $attrs=array('expires','encoding','type','private');
+        $attr = array();
+        $attrs = array('expires', 'encoding', 'type', 'private');
         foreach ($attrs as $key => $value)
-            if(!empty($this->config[$key])) $attr[$key]=$value;
-          if($this->compress) $attr['encoding']='gzip';
+            if (!empty($this->config[$key]))
+                $attr[$key] = $value;
+        if ($this->compress)
+            $attr['encoding'] = 'gzip';
         //[sae] 上传文件
-        if (!$this->thumbRemoveOrigin && !$s->upload($this->domain, $filename, $file['tmp_name'],$attr,$compress) ) {
-                 $this->error = '文件上传失败'.$s->errmsg();
-                return false;
+        if (!$this->thumbRemoveOrigin && !$s->upload($this->domain, $filename, $file['tmp_name'], $attr, $compress)) {
+            $this->error = '文件上传失败' . $s->errmsg();
+            return false;
         }
         if ($this->thumb && in_array(strtolower($file['extension']), array('gif', 'jpg', 'jpeg', 'bmp', 'png'))) {
             $image = getimagesize($file['tmp_name']);
@@ -139,12 +142,12 @@ class UploadFile {//类定义开始
                 $thumbPrefix = explode(',', $this->thumbPrefix);
                 $thumbSuffix = explode(',', $this->thumbSuffix);
                 $thumbFile = explode(',', $this->thumbFile);
-                $thumbPath    =  $this->thumbPath?$this->thumbPath:dirname($filename).'/';
-                $thumbExt       =   $this->thumbExt ? $this->thumbExt : $file['extension']; //自定义缩略图扩展名
+                $thumbPath = $this->thumbPath ? $this->thumbPath : dirname($filename) . '/';
+                $thumbExt = $this->thumbExt ? $this->thumbExt : $file['extension']; //自定义缩略图扩展名
                 //[sae] 定义缩略图目录时，判断doamin
                 $domain = $this->thumbPath ? $this->thumbDomain : $this->domain;
                 //[sae] 用自带image类生成缩略图
-               // $realFilename = $this->autoSub ? basename($file['savename']) : $file['savename'];
+                // $realFilename = $this->autoSub ? basename($file['savename']) : $file['savename'];
                 $srcWidth = $image[0];
                 $srcHeight = $image[1];
                 $img = Think::instance('SaeImage');
@@ -160,19 +163,19 @@ class UploadFile {//类定义开始
                         $height = (int) ($srcHeight * $scale);
                     }
 
-                    if(!empty($thumbFile[$i])) {
-                        $thumbname  =   $thumbFile[$i];
-                    }else{
-                        $prefix =   isset($thumbPrefix[$i])?$thumbPrefix[$i]:$thumbPrefix[0];
-                        $suffix =   isset($thumbSuffix[$i])?$thumbSuffix[$i]:$thumbSuffix[0];
-                        $thumbname  =   $prefix.basename($filename,'.'.$thumbExt).$suffix;
+                    if (!empty($thumbFile[$i])) {
+                        $thumbname = $thumbFile[$i];
+                    } else {
+                        $prefix = isset($thumbPrefix[$i]) ? $thumbPrefix[$i] : $thumbPrefix[0];
+                        $suffix = isset($thumbSuffix[$i]) ? $thumbSuffix[$i] : $thumbSuffix[0];
+                        $thumbname = $prefix . basename($filename, '.' . $thumbExt) . $suffix;
                     }
 
                     $img->setData(file_get_contents($file['tmp_name']));
                     $img->resize($width, $height);
                     $new_data = $img->exec();
-                    if (!$s->write($domain, $thumbPath . $thumbname.'.'.$thumbExt, $new_data)) {
-                        $this->error = '生成缩略图失败！'.$this->errmsg();
+                    if (!$s->write($domain, $thumbPath . $thumbname . '.' . $thumbExt, $new_data)) {
+                        $this->error = '生成缩略图失败！' . $this->errmsg();
                         return false;
                     }
                 }
@@ -205,7 +208,7 @@ class UploadFile {//类定义开始
      * @throws ThinkExecption
       +----------------------------------------------------------
      */
-    public function upload($savePath ='') {
+    public function upload($savePath = '') {
         //如果不指定保存文件名，则由系统默认
         if (empty($savePath))
             $savePath = $this->savePath;
@@ -224,7 +227,8 @@ class UploadFile {//类定义开始
             //过滤无效的上传
             if (!empty($file['name'])) {
                 //登记上传文件的扩展信息
-                if(!isset($file['key']))   $file['key']    =   $key;
+                if (!isset($file['key']))
+                    $file['key'] = $key;
                 $file['extension'] = $this->getExt($file['name']);
                 $file['savepath'] = $savePath;
                 $file['savename'] = $this->getSaveName($file);
@@ -270,7 +274,7 @@ class UploadFile {//类定义开始
      * @throws ThinkExecption
       +----------------------------------------------------------
      */
-    public function uploadOne($file, $savePath='') {
+    public function uploadOne($file, $savePath = '') {
         //如果不指定保存文件名，则由系统默认
         if (empty($savePath))
             $savePath = $this->savePath;
@@ -334,24 +338,24 @@ class UploadFile {//类定义开始
       +----------------------------------------------------------
      */
     private function dealFiles($files) {
-        $fileArray  = array();
-        $n          = 0;
-        foreach ($files as $key=>$file){
-            if(is_array($file['name'])) {
-                $keys       =   array_keys($file);
-                $count      =   count($file['name']);
-                for ($i=0; $i<$count; $i++) {
+        $fileArray = array();
+        $n = 0;
+        foreach ($files as $key => $file) {
+            if (is_array($file['name'])) {
+                $keys = array_keys($file);
+                $count = count($file['name']);
+                for ($i = 0; $i < $count; $i++) {
                     $fileArray[$n]['key'] = $key;
-                    foreach ($keys as $_key){
+                    foreach ($keys as $_key) {
                         $fileArray[$n][$_key] = $file[$_key][$i];
                     }
                     $n++;
                 }
-            }else{
-               $fileArray[$key] = $file;
+            } else {
+                $fileArray[$key] = $file;
             }
         }
-       return $fileArray;
+        return $fileArray;
     }
 
     /**
@@ -439,7 +443,7 @@ class UploadFile {//类定义开始
     private function getSubName($file) {
         switch ($this->subType) {
             case 'date':
-                $dir = date($this->dateFormat, time()).'/';
+                $dir = date($this->dateFormat, time()) . '/';
                 break;
             case 'hash':
             default:
@@ -502,7 +506,7 @@ class UploadFile {//类定义开始
     }
 
     // 自动转换字符集 支持数组转换
-    private function autoCharset($fContents, $from='gbk', $to='utf-8') {
+    private function autoCharset($fContents, $from = 'gbk', $to = 'utf-8') {
         $from = strtoupper($from) == 'UTF8' ? 'utf-8' : $from;
         $to = strtoupper($to) == 'UTF8' ? 'utf-8' : $to;
         if (strtoupper($from) === strtoupper($to) || empty($fContents) || (is_scalar($fContents) && !is_string($fContents))) {
@@ -564,7 +568,7 @@ class UploadFile {//类定义开始
       +----------------------------------------------------------
      */
     private function checkSize($size) {
-        return!($size > $this->maxSize) || (-1 == $this->maxSize);
+        return !($size > $this->maxSize) || (-1 == $this->maxSize);
     }
 
     /**

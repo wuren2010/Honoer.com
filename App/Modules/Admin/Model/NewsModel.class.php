@@ -17,7 +17,7 @@ class NewsModel extends Model {
         }
         unset($cidArr);
         foreach ($list as $k => $v) {
-            $list[$k]['aidName'] =$aids[$v['aid']]['nickname'] == '' ? $aids[$v['aid']]['email'] : $aids[$v['aid']]['nickname'];
+            $list[$k]['aidName'] = $aids[$v['aid']]['nickname'] == '' ? $aids[$v['aid']]['email'] : $aids[$v['aid']]['nickname'];
             $list[$k]['status'] = $statusArr[$v['status']];
             $list[$k]['cidName'] = $cids[$v['cid']]['name'];
         }

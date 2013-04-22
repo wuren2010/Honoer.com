@@ -18,4 +18,5 @@ function deleteFile($path, $delDir = FALSE) {
         }
     }
 }
+
 ?>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -19,7 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: OutputStream.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-
 /** Zend_Amf_Util_BinaryStream */
 require_once 'Zend/Amf/Util/BinaryStream.php';
 
@@ -35,15 +35,15 @@ require_once 'Zend/Amf/Util/BinaryStream.php';
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Parse_OutputStream extends Zend_Amf_Util_BinaryStream
-{
+class Zend_Amf_Parse_OutputStream extends Zend_Amf_Util_BinaryStream {
+
     /**
      * Constructor
      * 
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct('');
     }
+
 }

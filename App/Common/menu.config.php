@@ -7,6 +7,7 @@ return array(
         'Class' => '分类列表',
         'News' => '内容管理',
         'Product' => '产品管理',
+        'Picture' => '图片管理',
     ),
     'admin_sub_menu' => array(
         'Common' => array(
@@ -32,6 +33,10 @@ return array(
         'Product' => array(
             'index' => '产品列表',
             'add' => '添加产品',
+        ),
+        'Picture' => array(
+            'index' => '栏目图片',
+            'add' => '添加图片',
         ),
     ),
 );

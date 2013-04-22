@@ -18,7 +18,7 @@
 class SaeCounter extends SaeObject {
 
     //创建统计器
-    public function create($name, $value=0) {
+    public function create($name, $value = 0) {
         //判断是否存在
         if ($this->exists($name))
             return false;
@@ -26,7 +26,7 @@ class SaeCounter extends SaeObject {
     }
 
     //减法
-    public function decr($name, $value=1) {
+    public function decr($name, $value = 1) {
         if (!$this->exists($name))
             return false;
         self::$db->runSql("update sae_counter set val=val-$value where name='$name'");
@@ -55,7 +55,7 @@ class SaeCounter extends SaeObject {
     }
 
     //加法
-    public function incr($name, $value=1) {
+    public function incr($name, $value = 1) {
         if (!$this->exists($name))
             return false;
         self::$db->runSql("update sae_counter set val=val+$value where name='$name'");

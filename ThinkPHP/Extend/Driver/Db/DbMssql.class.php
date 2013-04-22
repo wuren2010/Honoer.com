@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -10,6 +11,7 @@
 // +----------------------------------------------------------------------
 
 defined('THINK_PATH') or exit();
+
 /**
  * MSsql数据库驱动 要求sqlserver2005
  * @category   Extend
@@ -17,21 +19,23 @@ defined('THINK_PATH') or exit();
  * @subpackage  Driver.Db
  * @author    liu21st <liu21st@gmail.com>
  */
-class DbMssql extends Db{
-    protected $selectSql  =     'SELECT T1.* FROM (SELECT thinkphp.*, ROW_NUMBER() OVER (%ORDER%) AS ROW_NUMBER FROM (SELECT %DISTINCT% %FIELD% FROM %TABLE%%JOIN%%WHERE%%GROUP%%HAVING%) AS thinkphp) AS T1 %LIMIT%%COMMENT%';
+class DbMssql extends Db {
+
+    protected $selectSql = 'SELECT T1.* FROM (SELECT thinkphp.*, ROW_NUMBER() OVER (%ORDER%) AS ROW_NUMBER FROM (SELECT %DISTINCT% %FIELD% FROM %TABLE%%JOIN%%WHERE%%GROUP%%HAVING%) AS thinkphp) AS T1 %LIMIT%%COMMENT%';
+
     /**
      * 架构函数 读取数据库配置信息
      * @access public
      * @param array $config 数据库配置数组
      */
-    public function __construct($config=''){
-        if ( !function_exists('mssql_connect') ) {
-            throw_exception(L('_NOT_SUPPERT_').':mssql');
+    public function __construct($config = '') {
+        if (!function_exists('mssql_connect')) {
+            throw_exception(L('_NOT_SUPPERT_') . ':mssql');
         }
-        if(!empty($config)) {
-            $this->config	=	$config;
-            if(empty($this->config['params'])) {
-                $this->config['params'] =   array();
+        if (!empty($config)) {
+            $this->config = $config;
+            if (empty($this->config['params'])) {
+                $this->config['params'] = array();
             }
         }
     }
@@ -40,23 +44,26 @@ class DbMssql extends Db{
      * 连接数据库方法
      * @access public
      */
-    public function connect($config='',$linkNum=0) {
-        if ( !isset($this->linkID[$linkNum]) ) {
-            if(empty($config))	$config  =  $this->config;
-            $pconnect   = !empty($config['params']['persist'])? $config['params']['persist']:$this->pconnect;
-            $conn = $pconnect ? 'mssql_pconnect':'mssql_connect';
+    public function connect($config = '', $linkNum = 0) {
+        if (!isset($this->linkID[$linkNum])) {
+            if (empty($config))
+                $config = $this->config;
+            $pconnect = !empty($config['params']['persist']) ? $config['params']['persist'] : $this->pconnect;
+            $conn = $pconnect ? 'mssql_pconnect' : 'mssql_connect';
             // 处理不带端口号的socket连接情况
             $sepr = IS_WIN ? ',' : ':';
-            $host = $config['hostname'].($config['hostport']?$sepr."{$config['hostport']}":'');
-            $this->linkID[$linkNum] = $conn( $host, $config['username'], $config['password']);
-            if ( !$this->linkID[$linkNum] )  throw_exception("Couldn't connect to SQL Server on $host");
-            if ( !empty($config['database'])  && !mssql_select_db($config['database'], $this->linkID[$linkNum]) ) {
-                throw_exception("Couldn't open database '".$config['database']);
+            $host = $config['hostname'] . ($config['hostport'] ? $sepr . "{$config['hostport']}" : '');
+            $this->linkID[$linkNum] = $conn($host, $config['username'], $config['password']);
+            if (!$this->linkID[$linkNum])
+                throw_exception("Couldn't connect to SQL Server on $host");
+            if (!empty($config['database']) && !mssql_select_db($config['database'], $this->linkID[$linkNum])) {
+                throw_exception("Couldn't open database '" . $config['database']);
             }
             // 标记连接成功
-            $this->connected =  true;
+            $this->connected = true;
             //注销数据库安全信息
-            if(1 != C('DB_DEPLOY_TYPE')) unset($this->config);
+            if (1 != C('DB_DEPLOY_TYPE'))
+                unset($this->config);
         }
         return $this->linkID[$linkNum];
     }
@@ -78,16 +85,18 @@ class DbMssql extends Db{
      */
     public function query($str) {
         $this->initConnect(false);
-        if ( !$this->_linkID ) return false;
+        if (!$this->_linkID)
+            return false;
         $this->queryStr = $str;
         //释放前次的查询结果
-        if ( $this->queryID ) $this->free();
-        N('db_query',1);
+        if ($this->queryID)
+            $this->free();
+        N('db_query', 1);
         // 记录开始执行时间
         G('queryStartTime');
         $this->queryID = mssql_query($str, $this->_linkID);
         $this->debug();
-        if ( false === $this->queryID ) {
+        if (false === $this->queryID) {
             $this->error();
             return false;
         } else {
@@ -104,16 +113,18 @@ class DbMssql extends Db{
      */
     public function execute($str) {
         $this->initConnect(true);
-        if ( !$this->_linkID ) return false;
+        if (!$this->_linkID)
+            return false;
         $this->queryStr = $str;
         //释放前次的查询结果
-        if ( $this->queryID ) $this->free();
-        N('db_write',1);
+        if ($this->queryID)
+            $this->free();
+        N('db_write', 1);
         // 记录开始执行时间
         G('queryStartTime');
-        $result	=	mssql_query($str, $this->_linkID);
+        $result = mssql_query($str, $this->_linkID);
         $this->debug();
-        if ( false === $result ) {
+        if (false === $result) {
             $this->error();
             return false;
         } else {
@@ -129,9 +140,9 @@ class DbMssql extends Db{
      * @return integer
      */
     public function mssql_insert_id() {
-        $query  =   "SELECT @@IDENTITY as last_insert_id";
-        $result =   mssql_query($query, $this->_linkID);
-        list($last_insert_id)   =   mssql_fetch_row($result);
+        $query = "SELECT @@IDENTITY as last_insert_id";
+        $result = mssql_query($query, $this->_linkID);
+        list($last_insert_id) = mssql_fetch_row($result);
         mssql_free_result($result);
         return $last_insert_id;
     }
@@ -143,13 +154,14 @@ class DbMssql extends Db{
      */
     public function startTrans() {
         $this->initConnect(true);
-        if ( !$this->_linkID ) return false;
+        if (!$this->_linkID)
+            return false;
         //数据rollback 支持
         if ($this->transTimes == 0) {
             mssql_query('BEGIN TRAN', $this->_linkID);
         }
         $this->transTimes++;
-        return ;
+        return;
     }
 
     /**
@@ -161,7 +173,7 @@ class DbMssql extends Db{
         if ($this->transTimes > 0) {
             $result = mssql_query('COMMIT TRAN', $this->_linkID);
             $this->transTimes = 0;
-            if(!$result){
+            if (!$result) {
                 $this->error();
                 return false;
             }
@@ -178,7 +190,7 @@ class DbMssql extends Db{
         if ($this->transTimes > 0) {
             $result = mssql_query('ROLLBACK TRAN', $this->_linkID);
             $this->transTimes = 0;
-            if(!$result){
+            if (!$result) {
                 $this->error();
                 return false;
             }
@@ -194,9 +206,9 @@ class DbMssql extends Db{
     private function getAll() {
         //返回数据集
         $result = array();
-        if($this->numRows >0) {
-            while($row = mssql_fetch_assoc($this->queryID))
-                $result[]   =   $row;
+        if ($this->numRows > 0) {
+            while ($row = mssql_fetch_assoc($this->queryID))
+                $result[] = $row;
         }
         return $result;
     }
@@ -207,19 +219,19 @@ class DbMssql extends Db{
      * @return array
      */
     public function getFields($tableName) {
-        $result =   $this->query("SELECT   column_name,   data_type,   column_default,   is_nullable
+        $result = $this->query("SELECT   column_name,   data_type,   column_default,   is_nullable
         FROM    information_schema.tables AS t
         JOIN    information_schema.columns AS c
         ON  t.table_catalog = c.table_catalog
         AND t.table_schema  = c.table_schema
         AND t.table_name    = c.table_name
         WHERE   t.table_name = '$tableName'");
-        $info   =   array();
-        if($result) {
+        $info = array();
+        if ($result) {
             foreach ($result as $key => $val) {
                 $info[$val['column_name']] = array(
-                    'name'    => $val['column_name'],
-                    'type'    => $val['data_type'],
+                    'name' => $val['column_name'],
+                    'type' => $val['data_type'],
                     'notnull' => (bool) ($val['is_nullable'] === ''), // not null is empty, null is yes
                     'default' => $val['column_default'],
                     'primary' => false,
@@ -235,26 +247,26 @@ class DbMssql extends Db{
      * @access public
      * @return array
      */
-    public function getTables($dbName='') {
-        $result   =  $this->query("SELECT TABLE_NAME
+    public function getTables($dbName = '') {
+        $result = $this->query("SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_TYPE = 'BASE TABLE'
             ");
-        $info   =   array();
+        $info = array();
         foreach ($result as $key => $val) {
             $info[$key] = current($val);
         }
         return $info;
     }
 
-	/**
+    /**
      * order分析
      * @access protected
      * @param mixed $order
      * @return string
      */
     protected function parseOrder($order) {
-        return !empty($order)?  ' ORDER BY '.$order:' ORDER BY rand()';
+        return !empty($order) ? ' ORDER BY ' . $order : ' ORDER BY rand()';
     }
 
     /**
@@ -263,30 +275,31 @@ class DbMssql extends Db{
      * @return string
      */
     public function parseLimit($limit) {
-		if(empty($limit)) return '';
-        $limit	=	explode(',',$limit);
-        if(count($limit)>1)
-            $limitStr	=	'(T1.ROW_NUMBER BETWEEN '.$limit[0].' + 1 AND '.$limit[0].' + '.$limit[1].')';
-		else
-            $limitStr = '(T1.ROW_NUMBER BETWEEN 1 AND '.$limit[0].")";
-        return 'WHERE '.$limitStr;
+        if (empty($limit))
+            return '';
+        $limit = explode(',', $limit);
+        if (count($limit) > 1)
+            $limitStr = '(T1.ROW_NUMBER BETWEEN ' . $limit[0] . ' + 1 AND ' . $limit[0] . ' + ' . $limit[1] . ')';
+        else
+            $limitStr = '(T1.ROW_NUMBER BETWEEN 1 AND ' . $limit[0] . ")";
+        return 'WHERE ' . $limitStr;
     }
 
-   /**
+    /**
      * 更新记录
      * @access public
      * @param mixed $data 数据
      * @param array $options 表达式
      * @return false | integer
      */
-    public function update($data,$options) {
-        $this->model  =   $options['model'];
-        $sql   = 'UPDATE '
-            .$this->parseTable($options['table'])
-            .$this->parseSet($data)
-            .$this->parseWhere(!empty($options['where'])?$options['where']:'')
-            .$this->parseLock(isset($options['lock'])?$options['lock']:false)
-            .$this->parseComment(!empty($options['comment'])?$options['comment']:'');
+    public function update($data, $options) {
+        $this->model = $options['model'];
+        $sql = 'UPDATE '
+                . $this->parseTable($options['table'])
+                . $this->parseSet($data)
+                . $this->parseWhere(!empty($options['where']) ? $options['where'] : '')
+                . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
+                . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
         return $this->execute($sql);
     }
 
@@ -296,13 +309,13 @@ class DbMssql extends Db{
      * @param array $options 表达式
      * @return false | integer
      */
-    public function delete($options=array()) {
-        $this->model  =   $options['model'];
-        $sql   = 'DELETE FROM '
-            .$this->parseTable($options['table'])
-            .$this->parseWhere(!empty($options['where'])?$options['where']:'')
-            .$this->parseLock(isset($options['lock'])?$options['lock']:false)
-            .$this->parseComment(!empty($options['comment'])?$options['comment']:'');
+    public function delete($options = array()) {
+        $this->model = $options['model'];
+        $sql = 'DELETE FROM '
+                . $this->parseTable($options['table'])
+                . $this->parseWhere(!empty($options['where']) ? $options['where'] : '')
+                . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
+                . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
         return $this->execute($sql);
     }
 
@@ -311,7 +324,7 @@ class DbMssql extends Db{
      * @access public
      */
     public function close() {
-        if ($this->_linkID){
+        if ($this->_linkID) {
             mssql_close($this->_linkID);
         }
         $this->_linkID = null;
@@ -325,10 +338,11 @@ class DbMssql extends Db{
      */
     public function error() {
         $this->error = mssql_get_last_message();
-        if('' != $this->queryStr){
-            $this->error .= "\n [ SQL语句 ] : ".$this->queryStr;
+        if ('' != $this->queryStr) {
+            $this->error .= "\n [ SQL语句 ] : " . $this->queryStr;
         }
-        trace($this->error,'','ERR');
+        trace($this->error, '', 'ERR');
         return $this->error;
     }
+
 }

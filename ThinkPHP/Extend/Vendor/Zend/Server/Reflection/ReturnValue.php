@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -30,8 +31,8 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id: ReturnValue.php 2504 2011-12-28 07:35:29Z liu21st $
  */
-class Zend_Server_Reflection_ReturnValue
-{
+class Zend_Server_Reflection_ReturnValue {
+
     /**
      * Return value type
      * @var string
@@ -50,8 +51,7 @@ class Zend_Server_Reflection_ReturnValue
      * @param string $type Return value type
      * @param string $description Return value type
      */
-    public function __construct($type = 'mixed', $description = '')
-    {
+    public function __construct($type = 'mixed', $description = '') {
         $this->setType($type);
         $this->setDescription($description);
     }
@@ -61,8 +61,7 @@ class Zend_Server_Reflection_ReturnValue
      *
      * @return string
      */
-    public function getType()
-    {
+    public function getType() {
         return $this->_type;
     }
 
@@ -72,8 +71,7 @@ class Zend_Server_Reflection_ReturnValue
      * @param string|null $type
      * @return void
      */
-    public function setType($type)
-    {
+    public function setType($type) {
         if (!is_string($type) && (null !== $type)) {
             require_once 'Zend/Server/Reflection/Exception.php';
             throw new Zend_Server_Reflection_Exception('Invalid parameter type');
@@ -87,8 +85,7 @@ class Zend_Server_Reflection_ReturnValue
      *
      * @return string
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->_description;
     }
 
@@ -98,8 +95,7 @@ class Zend_Server_Reflection_ReturnValue
      * @param string|null $description
      * @return void
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         if (!is_string($description) && (null !== $description)) {
             require_once 'Zend/Server/Reflection/Exception.php';
             throw new Zend_Server_Reflection_Exception('Invalid parameter description');
@@ -107,4 +103,5 @@ class Zend_Server_Reflection_ReturnValue
 
         $this->_description = $description;
     }
+
 }

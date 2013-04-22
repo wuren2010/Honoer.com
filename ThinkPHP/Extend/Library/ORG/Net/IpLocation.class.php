@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -18,6 +19,7 @@
  * @author    liu21st <liu21st@gmail.com>
  */
 class IpLocation {
+
     /**
      * QQWry.Dat文件指针
      *
@@ -54,7 +56,7 @@ class IpLocation {
      */
     public function __construct($filename = "UTFWry.dat") {
         $this->fp = 0;
-        if (($this->fp = fopen(dirname(__FILE__).'/'.$filename, 'rb')) !== false) {
+        if (($this->fp = fopen(dirname(__FILE__) . '/' . $filename, 'rb')) !== false) {
             $this->firstip = $this->getlong();
             $this->lastip = $this->getlong();
             $this->totalip = ($this->lastip - $this->firstip) / 7;
@@ -81,7 +83,7 @@ class IpLocation {
      */
     private function getlong3() {
         //将读取的little-endian编码的3个字节转化为长整型数
-        $result = unpack('Vlong', fread($this->fp, 3).chr(0));
+        $result = unpack('Vlong', fread($this->fp, 3) . chr(0));
         return $result['long'];
     }
 
@@ -145,12 +147,14 @@ class IpLocation {
      * @param string $ip
      * @return array
      */
-    public function getlocation($ip='') {
-        if (!$this->fp) return null;            // 如果数据文件没有被正确打开，则直接返回空
-		if(empty($ip)) $ip = get_client_ip();
+    public function getlocation($ip = '') {
+        if (!$this->fp)
+            return null;            // 如果数据文件没有被正确打开，则直接返回空
+        if (empty($ip))
+            $ip = get_client_ip();
         $location['ip'] = gethostbyname($ip);   // 将输入的域名转化为IP地址
         $ip = $this->packip($location['ip']);   // 将输入的IP地址转化为可比较的IP地址
-                                                // 不合法的IP地址会被转化为255.255.255.255
+        // 不合法的IP地址会被转化为255.255.255.255
         // 对分搜索
         $l = 0;                         // 搜索的下边界
         $u = $this->totalip;            // 搜索的上边界
@@ -163,14 +167,12 @@ class IpLocation {
             // 以便用于比较，后面相同。
             if ($ip < $beginip) {       // 用户的IP小于中间记录的开始IP地址时
                 $u = $i - 1;            // 将搜索的上边界修改为中间记录减一
-            }
-            else {
+            } else {
                 fseek($this->fp, $this->getlong3());
                 $endip = strrev(fread($this->fp, 4));   // 获取中间记录的结束IP地址
                 if ($ip > $endip) {     // 用户的IP大于中间记录的结束IP地址时
                     $l = $i + 1;        // 将搜索的下边界修改为中间记录加一
-                }
-                else {                  // 用户的IP在中间记录的IP范围内时
+                } else {                  // 用户的IP在中间记录的IP范围内时
                     $findip = $this->firstip + $i * 7;
                     break;              // 则表示找到结果，退出循环
                 }
