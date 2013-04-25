@@ -3,8 +3,8 @@
         <ul class="thumbnails">
             <volist name="service['Article']" id="vo">
                 <li class="span4">
-                    <div class=" bs-docs-box bs-docs-img">
-                        <img src="{$vo.article_pic}" height="200">
+                    <div class="bs-docs-box bs-docs-img">
+                        <img src="{$vo.article_pic}" alt="{$vo.article_name}">
                         <!--<a class="thumbnail" target="_blank" href="{:U('read',array('cid'=>$_GET['cid'],'aid'=>$vo['article_id']))}" title="{$vo.article_title}"><img src="{$vo.article_pic}" height="138"></a>-->
                         <div class="caption">
                             <h4>{$vo.article_title}</h4>
