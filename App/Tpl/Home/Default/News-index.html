@@ -1,5 +1,13 @@
-<div class="bs-docs-box">
-    <div class="banner-words">一起来见证了我们的成长<br>
-我们更期待在成长的路上与您相遇</div>
-    <div class="details-cn">了解更多请进入 weibo.com</div>
+<div class="row-fluid">
+    <include file="Public:left" />
+    <div class="span9">
+        <div class="bs-docs-box">
+            <include file="Public:crumbs" />
+            <ul class="bs-docs-list">
+                <volist name="data" id="vo" key="k" empty="暂无内容~">
+                    <li><span>{$vo.create_time|substr=0,10}</span><a href="{:U('News/read',array('aid'=>$vo['article_id']))}" title="">{$vo.article_title}</a></li>
+                </volist>
+            </ul>
+        </div>
+    </div>
 </div>
