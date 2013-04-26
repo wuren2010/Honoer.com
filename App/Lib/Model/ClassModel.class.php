@@ -18,14 +18,21 @@ class ClassModel extends RelationModel {
         ),
     );
 
+    public function getIndexData($id) {
+        $path = $this->getPath($id);
+        $cid = $path[0]['_child'][0]['class_id'];
+        $data = D('Class')->relation(true)->getDetail(array('class_id' => $cid));
+        return array('path' => $path, 'data' => $data['Article']);
+    }
+
     public function getList($where, $order = null, $limit = null) {
         $where['class_using'] = 1;
+        empty($order) && $order = array('class_id' => 'ASC');
         $result = $this->field(true)
                 ->where($where)
                 ->order($order)
                 ->limit($limit)
                 ->select();
-        //dump($this->getLastSql());
         return $result;
     }
 
@@ -36,13 +43,30 @@ class ClassModel extends RelationModel {
         return $result;
     }
 
-    public function getPath($args) {
-        $path = $this->getDetail($args);
-        $where['class_id|class_pid'] = $path['class_id'];
-        $result = $this->getList($where);
-        //dump($this->getLastSql());
-        return $result;
+    /**
+     * 获取树形结构的列表
+     * @param type $cid
+     * @param type $id
+     * @param type $pid
+     * @return type
+     */
+    public function getPath($cid) {
+        $where['class_pid'] = array('eq', $cid);
+        $where['class_path'] = array('like', '0-' . $cid . '-%');
+        $where['class_id'] = array('eq', $cid);
+        $where['_logic'] = 'or';
+        $map['_complex'] = $where;
+        $data = $this->getList($map);
+        return list_to_tree($data, 'class_id', 'class_pid');
     }
+
+//    public function getPath($args) {
+//        $path = $this->getDetail($args);
+//        $where['class_id|class_pid'] = $path['class_id'];
+//        $result = $this->getList($where);
+//        //dump($this->getLastSql());
+//        return $result;
+//    }
 
     public function getCrumbs($args) {
         $path = $this->getDetail($args);

@@ -3,13 +3,13 @@
 class AboutAction extends PublicAction {
 
     public function index() {
-        $about = D('Class')->getDetail(array('class_module' => MODULE_NAME));
-        $result = D('Class')->relation(true)->getDetail(array('class_pid' => $about['class_id']));
-        $data = $result['Article'];
-        $this->assign('data', $data);
-        $cid = $data[0]['class_id'];
-
-        parent::left();
+        $classModel = D('Class');
+        $cid = $this->_get('cid');
+        $class = $classModel->getDetail(array('class_module' => MODULE_NAME));
+        $data = $classModel->getIndexData($class['class_id']);
+        $this->assign('data', $data['data']);
+        $this->assign('path', $data['path']);
+        $cid = $cid? : $data['path'][0]['_child'][0]['class_id'];
         parent::crumbs($cid);
         $this->display();
     }
