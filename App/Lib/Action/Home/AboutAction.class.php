@@ -6,21 +6,27 @@ class AboutAction extends PublicAction {
         $classModel = D('Class');
         $cid = $this->_get('cid');
         $class = $classModel->getDetail(array('class_module' => MODULE_NAME));
-        $data = $classModel->getIndexData($class['class_id']);
+        $data = $classModel->getIndexData($class['class_id'], $cid);
         $this->assign('data', $data['data']);
         $this->assign('path', $data['path']);
-        $cid = $cid? : $data['path'][0]['_child'][0]['class_id'];
-        parent::crumbs($cid);
+
+        $cpath = $data['data']['class_path'] . '-' . $data['data']['class_id'];
+        parent::crumbs($cpath);
         $this->display();
     }
 
     public function read() {
-        $cid = $this->_get('cid');
-        $data = D('Article')->getDetail(array('class_id' => $cid));
-        $this->assign('data', $data);
+        $aid = $this->_get('aid');
+        $classModel = D('Class');
+        $class = $classModel->getDetail(array('class_module' => MODULE_NAME));
+        $path = $classModel->getPath($class['class_id']);
+        $data = D('Article')->relation(true)->getDetail(array('article_id' => $aid));
+        //上一篇|下一篇
 
-        parent::left();
-        parent::crumbs($cid);
+        $this->assign('path', $path);
+        $this->assign('data', $data);
+        $cpath = $data['class_path'] . '-' . $data['class_id'];
+        parent::crumbs($cpath);
         $this->display();
     }
 

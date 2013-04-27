@@ -31,17 +31,9 @@ class PublicAction extends Action {
         $this->assign('banner', $banner);
     }
 
-    public function crumbs($cid) {
-        $where = array('class_id' => $cid);
-        $crumbs = D('Class')->getCrumbs($where);
+    public function crumbs($path) {
+        $crumbs = D('Class')->getCrumbs($path);
         $this->assign('crumbs', $crumbs);
-    }
-
-    public function left() {
-        $where = array('class_module' => MODULE_NAME);
-        $sliderBar = D('Class')->getPath($where);
-        array_shift($sliderBar);
-        $this->assign('sliderBar', $sliderBar);
     }
 
 }

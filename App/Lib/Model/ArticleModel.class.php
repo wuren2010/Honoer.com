@@ -14,7 +14,7 @@ class ArticleModel extends RelationModel {
             'mapping_name' => 'Class',
             'class_name' => 'Class',
             'foreign_key' => 'class_id',
-            'as_fields' => 'class_name',
+            'as_fields' => 'class_name,class_path',
         ),
     );
 

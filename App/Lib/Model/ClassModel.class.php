@@ -18,11 +18,14 @@ class ClassModel extends RelationModel {
         ),
     );
 
-    public function getIndexData($id) {
-        $path = $this->getPath($id);
-        $cid = $path[0]['_child'][0]['class_id'];
+    /**
+     * 获取页面内容
+     */
+    public function getIndexData($topid, &$cid) {
+        $path = $this->getPath($topid);
+        $cid = $cid? : $path[0]['_child'][0]['class_id'];
         $data = D('Class')->relation(true)->getDetail(array('class_id' => $cid));
-        return array('path' => $path, 'data' => $data['Article']);
+        return array('path' => $path, 'data' => $data);
     }
 
     public function getList($where, $order = null, $limit = null) {
@@ -45,10 +48,6 @@ class ClassModel extends RelationModel {
 
     /**
      * 获取树形结构的列表
-     * @param type $cid
-     * @param type $id
-     * @param type $pid
-     * @return type
      */
     public function getPath($cid) {
         $where['class_pid'] = array('eq', $cid);
@@ -60,20 +59,14 @@ class ClassModel extends RelationModel {
         return list_to_tree($data, 'class_id', 'class_pid');
     }
 
-//    public function getPath($args) {
-//        $path = $this->getDetail($args);
-//        $where['class_id|class_pid'] = $path['class_id'];
-//        $result = $this->getList($where);
-//        //dump($this->getLastSql());
-//        return $result;
-//    }
-
-    public function getCrumbs($args) {
-        $path = $this->getDetail($args);
-        $ids = join(',', explode('-', $path['class_path'])) . ',' . $path['class_id'];
-        $where = array('class_id' => array('in', $ids));
+    /**
+     * 面包屑导航
+     */
+    public function getCrumbs($path) {
+        $path = '1' . strstr($path, '-');
+        $ids = join(',', explode('-', $path));
+        $where['class_id'] = array('in', $ids);
         $result = $this->getList($where);
-        //dump($this->getLastSql());
         return $result;
     }
 
