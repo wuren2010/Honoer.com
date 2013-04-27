@@ -18,11 +18,11 @@
             <include file="Public:header" />
         </div>
         <div class="container">
-            <notempty name="class['picture_path']">
-                <div class="banner-pic">
+            <if condition="!empty($class['picture_path']) && MODULE_NAME neq 'Index'">
+                <div class="bs-docs-banner">
                     <img src="{$class.picture_path}" alt="{$class.class_name}" height="200"/>
                 </div>
-            </notempty>
+            </if>
             {__CONTENT__}
         </div>
         <div class="footer">
