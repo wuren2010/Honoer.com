@@ -9,7 +9,9 @@
                         <div class="caption">
                             <h4>{$vo.article_title}</h4>
                             {$vo.article_content}
-                            <p class="text-right"><a target="_blank" class="btn btn-primary" href="{:U('read',array('cid'=>$_GET['cid'],'aid'=>$vo['article_id']))}">查看更多...</a></p>
+                            <p class="text-right">
+                                <a target="_blank" class="btn btn-primary" href="{:U('read',array('cid'=>$_GET['cid'],'aid'=>$vo['article_id']))}">查看更多...</a>
+                            </p>
                         </div>
                     </div>
                 </li>

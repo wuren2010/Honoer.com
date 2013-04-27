@@ -1,5 +1,11 @@
 <div class="bs-docs-box">
     <include file="Public:crumbs" />
-    <h3>{$data.article_title}</h3>
-    <p>{$data.article_content}</p>
+    <div class="page-header">
+        <h3>{$data.article_title}</h3>
+    </div>
+    <section>
+        {$data.article_content}
+    </section>
+    <div class="page-header">
+    </div>
 </div>

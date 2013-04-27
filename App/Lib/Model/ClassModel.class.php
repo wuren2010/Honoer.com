@@ -60,7 +60,7 @@ class ClassModel extends RelationModel {
     }
 
     /**
-     * 面包屑导航
+     * 面包屑
      */
     public function getCrumbs($path) {
         $path = '1' . strstr($path, '-');

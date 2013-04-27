@@ -9,7 +9,6 @@ class ServiceAction extends PublicAction {
         $data = D('Class')->relation(true)->getList(array('class_pid' => $service['class_id']));
         foreach ($data as $key => $value) {
             foreach ($value['Article'] as $k => $val) {
-                //dump($data[$key]['Article'][$k]['article_content']);
                 $data[$key]['Article'][$k]['article_content'] = $String->msubstr($val['article_content'], 0, 80);
             }
         }
@@ -18,8 +17,8 @@ class ServiceAction extends PublicAction {
     }
 
     public function read($aid) {
-        $data = M('Article')->find($aid);
-        $crumbs = D('Class')->getCrumbs($this->_get('cid'));
+        $data = D('Article')->relation(true)->getDetail(array('article_id' => $aid));
+        $crumbs = D('Class')->getCrumbs($data['class_path']);
         $this->assign('crumbs', $crumbs);
         $this->assign('data', $data);
         $this->display();
