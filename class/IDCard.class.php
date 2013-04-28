@@ -1,8 +1,5 @@
 <?php
-
-
 $IDCard = new IDCard();
-
 var_dump($IDCard::isCard($_GET['card']));
 
 /**
@@ -66,7 +63,6 @@ class IDCard {
 
         return $verify_number;
     }
-
 }
 
 ?>

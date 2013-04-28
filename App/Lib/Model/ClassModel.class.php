@@ -71,11 +71,13 @@ class ClassModel extends RelationModel {
         if (is_array($args)) {
             $class = $this->getList($args);
             if (count($class) > 1) {
-                foreach ($class as $value) {
-                    $data[] = $this->allChild($value['class_id']);
+                foreach ($class as $key => $value) {
+			$data[] = $this->allChild($value['class_id']);
+			$merge[] = '$data["'.$key.'"]';
                 }
+		eval('$list = array_merge('.implode(',',$merge).');');
                 //todo 这里需要修改 将未知个数的数组合并起来
-                $list = array_merge($data[0], $data[1], $data[2], $data[3]);
+                //$list = array_merge($data[0], $data[1], $data[2], $data[3]);
                 return $isTree ? list_to_tree($list, 'class_id', 'class_pid') : $list;
             } else {
                 return $this->parsePath($class[0]['class_id'], $isTree);
