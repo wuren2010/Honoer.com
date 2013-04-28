@@ -30,10 +30,7 @@ class NewsAction extends CommonAction {
     }
 
     public function category() {
-        $list_service = D("Class")->getPath(array('class_module' => 'Service'));
-        $list_about = D("Class")->getPath(array('class_module' => 'About'));
-        $list_news = D("Class")->getPath(array('class_module' => 'News'));
-        $list = array_merge($list_about, $list_news, $list_service);
+        $list = D("Class")->parsePath(array('class_pid' => 0), false);
         $this->assign("list", $list);
     }
 

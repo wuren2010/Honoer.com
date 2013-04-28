@@ -3,11 +3,11 @@
 class ArticleAction extends CommonAction {
 
     public function getIndexList($name, $page) {
-        $class = D("Class")->getPath(array('class_module' => $name));
-        foreach ($class as $value) {
+        $module = D('Class')->getDetail(array('class_module' => $name));
+        $class = D("Class")->getPath($module['class_id']);
+        foreach ($class[0]['_child'] as $value) {
             $classIds[] = $value['class_id'];
         }
-        array_shift($classIds);
         $where = array('class_id' => array('in', $classIds));
         $order = array('article_id' => 'DESC');
         $count = D("Article")->where($where)->count();

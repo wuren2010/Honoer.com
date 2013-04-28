@@ -3,12 +3,13 @@
 class ProductAction extends CommonAction {
 
     public function index() {
+
         $this->assign('currentNav', '产品管理 > 产品列表');
-        $class = D("Class")->getPath(array('class_module' => MODULE_NAME));
-        foreach ($class as $key => $value) {
+        $module = D('Class')->getDetail(array('class_module' => $name));
+        $class = D("Class")->allChild($module['class_id']);
+        foreach ($class as $value) {
             $classIds[] = $value['class_id'];
         }
-        array_shift($classIds);
         $where = array('class_id' => array('in', $classIds));
         $order = array('article_id' => 'DESC');
         $count = D("Article")->where($where)->count();
@@ -24,7 +25,7 @@ class ProductAction extends CommonAction {
     }
 
     public function category() {
-        $list = D("Class")->getPath(array('class_module' => MODULE_NAME));
+        $list = D("Class")->parsePath(array('class_pid' => 0), false);
         $this->assign("list", $list);
     }
 

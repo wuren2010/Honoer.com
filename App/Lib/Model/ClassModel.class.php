@@ -30,7 +30,8 @@ class ClassModel extends RelationModel {
 
     public function getList($where, $order = null, $limit = null) {
         $where['class_using'] = 1;
-        empty($order) && $order = array('class_id' => 'ASC');
+        //empty($order) && $order = array('class_id' => 'ASC');
+        empty($order) && $order = array("CONCAT(`class_path`,'-',`class_id`)" => 'ASC');
         $result = $this->field(true)
                 ->where($where)
                 ->order($order)
@@ -48,15 +49,40 @@ class ClassModel extends RelationModel {
 
     /**
      * 获取树形结构的列表
+     * @param int $cid 顶级栏目的ID
      */
     public function getPath($cid) {
+        $data = $this->allChild($cid);
+        return list_to_tree($data, 'class_id', 'class_pid');
+    }
+
+    public function allChild($cid) {
         $where['class_pid'] = array('eq', $cid);
         $where['class_path'] = array('like', '0-' . $cid . '-%');
         $where['class_id'] = array('eq', $cid);
         $where['_logic'] = 'or';
         $map['_complex'] = $where;
         $data = $this->getList($map);
-        return list_to_tree($data, 'class_id', 'class_pid');
+        return $data;
+    }
+
+    public function parsePath($args, $isTree = true) {
+        $data = array();
+        if (is_array($args)) {
+            $class = $this->getList($args);
+            if (count($class) > 1) {
+                foreach ($class as $value) {
+                    $data[] = $this->allChild($value['class_id']);
+                }
+                //todo 这里需要修改 将未知个数的数组合并起来
+                $list = array_merge($data[0], $data[1], $data[2], $data[3]);
+                return $isTree ? list_to_tree($list, 'class_id', 'class_pid') : $list;
+            } else {
+                return $this->parsePath($class[0]['class_id'], $isTree);
+            }
+        } else {
+            return $isTree ? $this->getPath($args) : $this->allChild($args);
+        }
     }
 
     /**

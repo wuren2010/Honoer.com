@@ -18,19 +18,7 @@
                         <label><input type="radio" name="article_using" value="1" <if condition="$info.article_using !== 0"> checked="checked"</if> /> 文章已发布</label> 
                     </td>
                 </tr>
-                <tr>
-                    <th>所属分类：</th>
-                    <td>
-                        <select name="class_id">
-                            <volist name="list" id="vo">
-                                <option 
-                            <if condition="$vo['class_id'] eq $info['class_id']"> selected="selected"</if> 
-                            <if condition="$i eq 1"> disabled</if> 
-                            value="{$vo.class_id}" ><if condition="$i eq 1"> |--{$vo.class_name}<else />&nbsp;&nbsp;&nbsp;|--{$vo.class_name}</if></option>
-                        </volist>
-                    </select>
-                </td>
-            </tr>
+                <include file="News:category" />
             <tr>
                 <th>文章关键词：</th>
                 <td><input type="text" class="input" size="60" name="article_keywords" value="{$info.article_keywords}"/> 多关键词间用半角逗号（,）分开，可用于做文章关联阅读条件</td>

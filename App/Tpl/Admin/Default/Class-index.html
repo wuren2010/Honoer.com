@@ -19,12 +19,14 @@
             <tbody>
             <volist name="list" id="vo">
                 <tr pid="{$vo.class_pid}" cid="{$vo.class_id}">
-                    <td width="10%" align="center">{$vo.class_id}<input type="hidden" name="cid" value="{$vo.class_id}"/></td>
+                <input type="hidden" name="cid" value="{$vo.class_id}"/>
+                <input type="hidden" name="path" value="{$vo.class_path}"/>
+                <td width="10%" align="center">{$vo.class_id}</td>
                 <php>$mark = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',substr_count($vo['class_path'],'-'))</php>
                 <if condition="$vo['class_pid'] eq 0">
                     <td title="单击分类隐藏/显示该分类下在子类" width="20%" class="tree" style="cursor: pointer;"><span class="blue">{$mark}├{$vo.class_name}</span></td>
                     <else />
-                    <td width="20%" class="tree" style="cursor: pointer;">{$mark}├{$vo.class_name}</td>
+                    <td width="20%" class="tree" style="cursor: pointer;">{$mark}├&nbsp;{$vo.class_name}</td>
                 </if>
                 <td width="20%">
                     <select name="act" class="act">
@@ -32,7 +34,9 @@
                         <if condition="$vo['class_pid'] neq 0">
                             <option value="del">删除该分类</option>
                         </if>
-                        <option value="add">在该分类中添加子类</option>
+                        <if condition="$vo['class_module'] neq 'Index'">
+                            <option value="add">在该分类中添加子类</option>
+                        </if>
                     </select>
                 </td>
                 <td width="20%"><input type="text" value="" name="name" class="input" placeholder="你要修改分类的新名称"/></td>
@@ -47,6 +51,7 @@
     <input id="cid" type="hidden" name="class_id" />
     <input id="act" type="hidden" name="act" />
     <input id="name" type="hidden" name="class_name" />
+    <input id="path" type="hidden" name="class_path" />
 </form>
 
 <script type="text/javascript">
@@ -56,6 +61,7 @@
             $("#cid").val(obj.find("input[name='cid']").val());
             $("#act").val(obj.find("select[name='act']").val());
             $("#name").val(obj.find("input[name='name']").val());
+            $("#path").val(obj.find("input[name='path']").val());
             var url = $("#opForm").attr('action');
             url =url.replace('undefined',$("#act").val());
             if($("#act").val()=="del"){
