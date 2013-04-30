@@ -1,5 +1,5 @@
 <?php
-
+echo 1111111;
 $db_config = require SITE_PATH . '/db.config.php';
 $web_config = require SITE_PATH . '/web.config.php';
 
