@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="bs-docs-logo">
+                <a href="http://{$Think.server.SERVER_NAME}" title="{$Think.config.WEB_NAME}"><img src="{$Think.config.WEB_LOGO}" width="300" height="29"/></a>
+            </div>
+        </div>
+        <div class="span8">
+            <ul class="nav nav-pills pull-right">  
+                <volist name="navigation" id="nav">
+                    <li <if condition="MODULE_NAME eq $nav['class_module']">class="active"</if>><a href="{:U($nav['class_module'].'/index')}">{$nav.class_name}</a></li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+</div>

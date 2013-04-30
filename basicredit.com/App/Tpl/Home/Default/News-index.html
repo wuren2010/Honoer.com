@@ -1,0 +1,13 @@
+<div class="row-fluid">
+    <include file="Public:left" />
+    <div class="span9">
+        <div class="bs-docs-box">
+            <include file="Public:crumbs" />
+            <ul class="bs-docs-list">
+                <volist name="data['Article']" id="vo" key="k" empty="暂无内容~">
+                    <li><small>{$vo.create_time|substr=0,10}</small><a href="{:U('News/read',array('aid'=>$vo['article_id']))}" title="">{$vo.article_title}</a></li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+</div>

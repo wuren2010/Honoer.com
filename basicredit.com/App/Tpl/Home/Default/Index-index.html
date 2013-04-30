@@ -1,0 +1,18 @@
+<div class="container">
+            <div id="myCarousel" class="carousel slide">
+                <ol class="carousel-indicators">
+                    <volist name="banner" id="vo">
+                        <li data-target="#myCarousel" data-slide-to="{$i}" <if condition="$i eq 1">class="active"</if>></li>
+                    </volist>
+                </ol>
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+                    <volist name="banner" id="vo">
+                        <div class="item <if condition="$i eq 1">active</if>"><img src="{$vo.picture_path}" alt="{$vo.picture_name}" height="300" width="980"/></div>
+                    </volist>
+                </div>
+                <!-- Carousel nav -->
+                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+            </div>
+    </div>

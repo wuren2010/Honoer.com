@@ -1,0 +1,49 @@
+<div class="mainBody">
+    <include file="Common:left" />
+    <div id="Right">
+        <div class="Item hr">
+            <span class="add-news"><a class="blue" href="{:U('News/add')}" title="发布内容">发布新内容</a></span>
+            <div class="current">资讯列表</div>
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tab">
+            <thead>
+                <tr>
+                    <td>序号</td>
+                    <td>文章标题</td>
+                    <td>所属分类</td>
+                    <td>状态</td>
+                    <td>发布时间</td>
+                    <td>发布人</td>
+                    <td width="150">操作</td>
+                </tr>
+            </thead>
+            <volist name="list" id="vo">
+                <tr align="center" id="{$vo.article_id}">
+                    <td>{$i}</td>
+                    <td align="left">{$vo.article_title}</td>
+                    <td>{$vo.class_name}</td>
+                    <td><if condition="$vo['article_using']==1"><span class="blue">已发布</span><else />已关闭</if></td>
+                <td>{$vo.create_time|substr=0,10}</td>
+                <td>{$vo.aidName}</td>
+                <td>[ <a href="{:U('edit',array('aid'=>$vo['article_id']))}">编辑 </a> ] [ <a link="{:U('del',array('aid'=>$vo['article_id']))}" href="javascript:void(0)" name="{$vo.article_title}" class="del">删除 </a> ]</td>
+                </tr>
+            </volist>
+        </table>
+        <div class="page">{$page}</div>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $(".del").click(function(){
+            var delLink=$(this).attr("link");
+            popup.confirm('你真的打算删除【<b>'+$(this).attr("name")+'</b>】吗?','温馨提示',function(action){
+                if(action == 'ok'){
+                    top.window.location.href=delLink;
+                }
+            });
+            return false;
+        });
+    });
+</script>

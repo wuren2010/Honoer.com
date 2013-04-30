@@ -1,0 +1,18 @@
+<div class="row-fluid">
+    <include file="Public:left" />
+    <div class="span9">
+        <div class="bs-docs-box">
+            <include file="Public:crumbs" />
+            <div class="page-header bs-docs-header">
+                <h3 class="text-center">{$data.article_title}</h3>
+                <div class="text-right">{$vo.create_time|substr=0,10}</div>
+            </div>
+            <section>
+                {$data.article_content}
+            </section>
+            <div class="page-header">
+
+            </div>
+        </div>
+    </div>
+</div>

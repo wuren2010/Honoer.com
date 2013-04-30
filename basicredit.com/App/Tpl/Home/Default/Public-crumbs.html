@@ -1,0 +1,18 @@
+<noempty name="crumbs">
+    <ul class="breadcrumb bs-docs-crumbs">
+        <volist name="crumbs" id="vo">
+            <if condition="$vo['class_id'] eq $data['class_id']">
+                <li class="active">{$vo.class_name}</li>
+                <else />
+                <li>
+                <if condition="$vo['class_pid'] eq 0">
+                    <a href="{:U($vo['class_module'].'/index')}">{$vo.class_name}</a>
+                    <else />
+                    <a href="{:U($vo['class_module'],array('cid'=>$vo['class_id']))}">{$vo.class_name}</a>
+                </if>
+                <span class="divider">/</span>
+                </li>
+            </if>
+        </volist>
+    </ul>
+</noempty>
