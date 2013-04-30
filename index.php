@@ -1,6 +1,7 @@
 <?php
 
 header('Content-Type:text/html;charset=utf-8');
+
 if (!file_exists("./db.config.php"))
     header("location: ./Install/index.php");
 
@@ -13,3 +14,4 @@ define('RUNTIME_PATH', './Runtime/');
 define('APP_DEBUG', TRUE);
 
 require( THINK_PATH . "ThinkPHP.php");
+?>
