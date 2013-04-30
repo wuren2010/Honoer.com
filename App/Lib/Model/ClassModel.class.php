@@ -37,6 +37,7 @@ class ClassModel extends RelationModel {
                 ->order($order)
                 ->limit($limit)
                 ->select();
+        //dump($this->getLastSql());
         return $result;
     }
 

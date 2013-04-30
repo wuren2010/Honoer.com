@@ -39,6 +39,8 @@ class ArticleModel extends RelationModel {
         if (empty($data['class_id'])) {
             return array('status' => 0, 'info' => '没有所属分类');
         }
+        $picture = $this->uploadFiles();
+        $data['article_pic'] = $picture['savepath'] . $picture['savename'];
         if ($this->create($data)) {
             if ($this->add()) {
                 return array('status' => 1, 'info' => '发布成功!文章ID：' . $this->getLastInsID(), 'url' => U('index'));
@@ -49,6 +51,8 @@ class ArticleModel extends RelationModel {
     }
 
     public function editArticle($data) {
+        $picture = $this->uploadFiles();
+        $data['article_pic'] = $picture['savepath'] . $picture['savename'];
         if ($this->create($data)) {
             if ($this->save()) {
                 return array('status' => 1, 'info' => '修改成功!', 'url' => U('index'));
@@ -72,10 +76,18 @@ class ArticleModel extends RelationModel {
 
     public function delArticle($aid) {
         $where = array('article_id' => (int) $aid);
-        if (M("Article")->where($where)->delete()) {
+        if ($this->where($where)->delete()) {
             return array("status" => 1, "info" => "删除成功！", 'url' => U('index'));
         } else {
             return array("status" => 0, "info" => "删除失败，可能是不存在该ID的记录！", 'url' => U('index'));
+        }
+    }
+
+    public function uploadFiles() {
+        if (!empty($_FILES)) {
+            $upload = new UploadAction();
+            $data = $upload->uploadFiles();
+            return $data;
         }
     }
 

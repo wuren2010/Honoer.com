@@ -30,7 +30,7 @@ class NewsAction extends CommonAction {
     }
 
     public function category() {
-        $list = D("Class")->parsePath(array('class_pid' => 0), false);
+        $list = D("Class")->parsePath(array('class_pid' => 0, 'class_module' => array('neq', 'About')), false);
         $this->assign("list", $list);
     }
 
@@ -61,11 +61,7 @@ class NewsAction extends CommonAction {
     }
 
     public function del() {
-        if (IS_POST) {
-            echo json_encode(D('Article')->delArticle($this->_get('aid')));
-        } else {
-            $this->display('index');
-        }
+        echo json_encode(D('Article')->delArticle($this->_get('aid')));
     }
 
 }

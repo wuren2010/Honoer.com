@@ -5,7 +5,7 @@
         <div class="Item hr">
             <div class="current"><if condition="ACTION_NAME eq 'add'">发布<else />编辑</if>内容</div>
         </div>
-        <form>
+        <form id="form1" name="form1" encType="multipart/form-data" method="post" target="hidden_frame">
             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1">
                 <tr>
                     <th width="100">文章标题：</th>
@@ -32,6 +32,10 @@
                     <td><textarea class="input" style="height: 60px; width: 600px;" name="article_summary">{$info.article_summary}</textarea> 如果不填写则系统自动截取文章前200个字符</td>
                 </tr>
                 <tr>
+                    <th>文章图片：</th>
+                    <td><input type="file" name="picture_name" value=""></td>
+                </tr>
+                <tr>
                     <th>文章内容：</th>
                     <td><textarea id="content" class="input" style="height: 300px; width: 100%;" name="article_content">{$info.article_content}</textarea></td>
                 </tr>
@@ -43,6 +47,8 @@
         </div>
     </div>
 </div>
+<iframe name='hidden_frame' id="hidden_frame"style='display:none'></iframe> 
+
 <js href="__PUBLIC__/Js/kindeditor/kindeditor-min.js,__PUBLIC__/Js/kindeditor/lang/zh_CN.js"/>
 <script type="text/javascript">
     $(function(){
