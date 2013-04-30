@@ -1,7 +1,0 @@
-<div class="span3 bs-docs-sidebar">
-    <ul class="nav nav-list nav-stacked">
-        <volist name="sliderBar" id="vo">
-            <li <if condition="$_GET['cid'] eq $vo['class_id'] || empty($_GET['cid']) && $i eq 1">class="active"</if>><a href="{:U('read',array('cid'=>$vo['class_id']))}"><i class="icon-chevron-right"></i>{$vo.class_name}</a></li>
-        </volist>
-    </ul>
-</div>
