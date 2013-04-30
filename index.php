@@ -4,7 +4,7 @@ header('Content-Type:text/html;charset=utf-8');
 if (!file_exists("./db.config.php"))
     header("location: ./Install/index.php");
 
-//定义项目名称和路径
+//定义项目名称和路�?
 define('SITE_PATH', dirname(__FILE__));
 define('UPLOAD_PATH', './Public/Uploads/');
 define('THINK_PATH', './ThinkPHP/');

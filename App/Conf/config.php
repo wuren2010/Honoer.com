@@ -1,7 +1,7 @@
 <?php
 
-$db_config = require '/db.config.php';
-$web_config = require '/web.config.php';
+$db_config = require SITE_PATH . '/db.config.php';
+$web_config = require SITE_PATH . '/web.config.php';
 //项目配置文件
 $app_config = array(
     'URL_MODEL' => 3, // 如果你的环境不支持PATHINFO 请设置为3
