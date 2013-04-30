@@ -3,7 +3,6 @@
 class PublicAction extends Action {
 
     public function _initialize() {
-
         $class = D('Class')->relation(true)->getDetail(array('class_module' => MODULE_NAME));
         $this->assign('class', $class);
         self::header();
