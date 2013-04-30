@@ -1,1 +1,0 @@
-<?php	return array ( 'WEB_LOGO' => './Public/Images/logo.png', 'WEB_NAME' => '典信科技有限公司', 'LICENSE_NO' => '粤ICP备:11086626号-2', 'WEB_ADDRESS' => '深圳市宝安区2区龙井二路62号6楼', 'WEB_EMAIL' => 'jeffyli@basicredit.com', 'ADMIN_USER' => 'admin', 'ADMIN_PASS' => 'admin', 'PAGE_NUM' => 20, 'WEB_WEIBO' => '', 'WEB_EBS' => '', 'WEB_KEYWORD' => '这是关键词1111', 'WEB_DESCRIPTION' => '这是网站介绍312321', );?>
