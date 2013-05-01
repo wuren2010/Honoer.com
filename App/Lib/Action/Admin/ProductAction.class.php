@@ -14,7 +14,7 @@ class ProductAction extends CommonAction {
         $order = array('article_id' => 'DESC');
         $count = D("Article")->where($where)->count();
 
-        import("ORG.Util.Page");       //载入分页类
+        import("@.ORG.Util.Page");       //载入分页类
         $page = new Page($count, C('PAGE_NUM'));
         $showPage = $page->show();
         $limit = $page->firstRow . ',' . $page->listRows;
@@ -31,7 +31,7 @@ class ProductAction extends CommonAction {
 
     public function add() {
         $this->assign('currentNav', '产品管理 > 添加产品');
-        if (IS_POST) {
+        if (!empty($_POST)) {
             $result = D("Article")->addArticle($this->_post());
             echo json_encode($result);
         } else {
@@ -42,7 +42,7 @@ class ProductAction extends CommonAction {
 
     public function edit() {
         $this->assign('currentNav', '产品管理 > 编辑产品');
-        if (IS_POST) {
+        if (!empty($_POST)) {
             echo json_encode(D("Article")->editArticle($this->_post()));
         } else {
             $info = D("Article")->getDetail(array('article_id' => $this->_get('aid')));

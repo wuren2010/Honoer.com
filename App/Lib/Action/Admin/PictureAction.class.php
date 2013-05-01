@@ -16,7 +16,7 @@ class PictureAction extends CommonAction {
 
     public function add() {
         $this->assign('currentNav', '图片管理 > 添加图片');
-        if (IS_POST) {
+        if (!empty($_POST)) {
             $class_id = $this->_post('class_id');
             import('ORG.Net.UploadFile');
             $upload = new UploadFile(); // 实例化上传类
@@ -51,7 +51,7 @@ class PictureAction extends CommonAction {
 
     public function edit() {
         $this->assign('currentNav', '产品管理 > 编辑产品');
-        if (IS_POST) {
+        if (!empty($_POST)) {
             echo json_encode(D("Article")->editArticle($this->_post()));
         } else {
             $info = D("Article")->getDetail(array('article_id' => $this->_get('aid')));

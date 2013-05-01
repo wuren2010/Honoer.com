@@ -16,6 +16,9 @@
             return false;
         });
 
-        var time=self.setInterval(function(){$("#today").html(date("Y-m-d H:i:s"));},1000);
+        var time=self.setInterval(
+        function(){
+            $("#today").html(date("Y-m-d H:i:s"));
+        },1000);
     });
 </script>

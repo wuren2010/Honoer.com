@@ -67,7 +67,7 @@ class ArticleModel extends RelationModel {
         if (!empty($cid)) {
             $where['article_id'] = array('neq', $cid);
         }
-        if (M("Article")->where($where)->count() > 0) {
+        if ($this->where($where)->count() > 0) {
             return json_encode(array("status" => 0, "info" => "标题已存在"));
         } else {
             return json_encode(array("status" => 1, "info" => "可以使用"));

@@ -23,7 +23,7 @@ class ClassModel extends RelationModel {
      */
     public function getIndexData($topid, &$cid) {
         $path = $this->getPath($topid);
-        $cid = $cid? : $path[0]['_child'][0]['class_id'];
+        $cid = $cid ? $cid : $path[0]['_child'][0]['class_id'];
         $data = D('Class')->relation(true)->getDetail(array('class_id' => $cid));
         return array('path' => $path, 'data' => $data);
     }
@@ -73,10 +73,10 @@ class ClassModel extends RelationModel {
             $class = $this->getList($args);
             if (count($class) > 1) {
                 foreach ($class as $key => $value) {
-			$data[] = $this->allChild($value['class_id']);
-			$merge[] = '$data["'.$key.'"]';
+                    $data[] = $this->allChild($value['class_id']);
+                    $merge[] = '$data["' . $key . '"]';
                 }
-		eval('$list = array_merge('.implode(',',$merge).');');
+                eval('$list = array_merge(' . implode(',', $merge) . ');');
                 //todo 这里需要修改 将未知个数的数组合并起来
                 //$list = array_merge($data[0], $data[1], $data[2], $data[3]);
                 return $isTree ? list_to_tree($list, 'class_id', 'class_pid') : $list;

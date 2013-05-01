@@ -36,7 +36,7 @@ class IndexAction extends CommonAction {
 
     public function personal() {
         $this->assign('currentNav', '网站管理 > 个人信息');
-        if (IS_POST) {
+        if (!empty($_POST)) {
             echo json_encode(D("Index")->editPersonal($_POST));
         } else {
             $this->display();
@@ -57,7 +57,7 @@ class IndexAction extends CommonAction {
             "Homeruntime" => array("name" => "网站前台runtime.php缓存文件", "path" => RUNTIME_PATH . "/Home/~runtime.php"),
             "Adminruntime" => array("name" => "网站后台runtime.php缓存文件", "path" => RUNTIME_PATH . "/Admin/~runtime.php"),
         );
-        if (IS_POST) {
+        if (!empty($_POST)) {
             foreach ($_POST['cache'] as $path) {
                 if (isset($caches[$path]))
                     deleteFile($caches[$path]['path']);

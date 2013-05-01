@@ -13,7 +13,7 @@ class PublicAction extends Action {
     public function login() {
         header("Content-Type:text/html; charset=utf-8");
         header('Content-Type:application/json; charset=utf-8');
-        if (IS_POST) {
+        if (!empty($_POST)) {
             $verify = $this->_post('verify');
             $username = $this->_post('username');
             $password = $this->_post('password');
@@ -44,7 +44,7 @@ class PublicAction extends Action {
     public function verify() {
         $w = isset($_GET['w']) ? (int) $_GET['w'] : 50;
         $h = isset($_GET['h']) ? (int) $_GET['h'] : 24;
-        import("ORG.Util.Image");
+        import("@.ORG.Util.Image");
         Image::buildImageVerify(4, 1, 'png', $w, $h);
     }
 

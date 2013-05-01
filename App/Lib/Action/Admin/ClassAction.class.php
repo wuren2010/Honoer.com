@@ -12,7 +12,7 @@ class ClassAction extends CommonAction {
     }
 
     public function add() {
-        if (IS_POST) {
+        if (!empty($_POST)) {
             $data = array(
                 'class_name' => $this->_post('class_name'),
                 'class_pid' => $this->_post('class_id'),
@@ -28,7 +28,7 @@ class ClassAction extends CommonAction {
     }
 
     public function edit() {
-        if (IS_POST) {
+        if (!empty($_POST)) {
             $data = array('class_name' => $this->_post('class_name'));
             $where = array('class_id' => $this->_post('class_id'));
             if (M('Class')->where($where)->setField($data)) {
@@ -40,7 +40,7 @@ class ClassAction extends CommonAction {
     }
 
     public function del() {
-        if (IS_POST) {
+        if (!empty($_POST)) {
             $data = array('class_using' => 0);
             $where = array('class_id' => $this->_post('class_id'));
             if (M('Class')->where($where)->delete($data)) {

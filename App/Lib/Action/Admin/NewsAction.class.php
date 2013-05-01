@@ -36,7 +36,7 @@ class NewsAction extends CommonAction {
 
     public function add() {
         $this->assign('currentNav', '产品管理 > 添加产品');
-        if (IS_POST) {
+        if (!empty($_POST)) {
             $result = D("Article")->addArticle($this->_post());
             echo json_encode($result);
         } else {
@@ -47,7 +47,7 @@ class NewsAction extends CommonAction {
 
     public function edit() {
         $this->assign('currentNav', '产品管理 > 编辑产品');
-        if (IS_POST) {
+        if (!empty($_POST)) {
             echo json_encode(D("Article")->editArticle($this->_post()));
         } else {
             $info = D("Article")->getDetail(array('article_id' => $this->_get('aid')));

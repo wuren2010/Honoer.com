@@ -3,7 +3,7 @@
 class ServiceAction extends PublicAction {
 
     public function index() {
-        import('ORG.Util.String');
+        import('@.ORG.Util.String');
         $String = new String();
         $service = D('Class')->getDetail(array('class_module' => MODULE_NAME));
         $data = D('Class')->relation(true)->getList(array('class_pid' => $service['class_id']));

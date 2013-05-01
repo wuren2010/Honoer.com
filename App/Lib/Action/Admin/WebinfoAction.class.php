@@ -9,7 +9,7 @@ class WebinfoAction extends CommonAction {
     }
 
     public function edit() {
-        if (IS_POST) {
+        if (!empty($_POST)) {
             $data = $this->_post();
             $keys = array_map(function($args) {
                         return strtoupper($args);

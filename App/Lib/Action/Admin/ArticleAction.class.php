@@ -12,7 +12,7 @@ class ArticleAction extends CommonAction {
         $order = array('article_id' => 'DESC');
         $count = D("Article")->where($where)->count();
 
-        import("ORG.Util.Page");       //载入分页类
+        import("@.ORG.Util.Page");       //载入分页类
         $Pages = new Page($count, C('PAGE_NUM'));
         $page = $Pages->show();
         $limit = $Pages->firstRow . ',' . $Pages->listRows;
