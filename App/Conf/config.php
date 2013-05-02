@@ -1,10 +1,10 @@
 <?php
 
-$db_config = require SITE_PATH . '/db.config.php';
-$web_config = require SITE_PATH . '/web.config.php';
+$db_config = require  'db.config.php';
+$web_config = require 'web.config.php';
 
 $app_config = array(
-    'URL_MODEL' => 3,
+    'URL_MODEL' => 1,
     'OUTPUT_ENCODE' => false,
     'APP_FILE_CASE' => true,
     'APP_AUTOLOAD_PATH' => '@.TagLib',
