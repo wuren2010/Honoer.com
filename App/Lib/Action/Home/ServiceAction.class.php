@@ -17,6 +17,7 @@ class ServiceAction extends PublicAction {
     }
 
     public function read($aid) {
+        $aid = $this->_get('aid');
         $data = D('Article')->relation(true)->getDetail(array('article_id' => $aid));
         $crumbs = D('Class')->getCrumbs($data['class_path']);
         $this->assign('crumbs', $crumbs);
